@@ -148,6 +148,7 @@ select.theme{padding:5px 10px;margin-top:6px;appearance:auto;text-transform:none
 .simfig svg .fillA{fill:#0b6bab22;stroke:none}.simfig svg .plt{stroke:var(--ink);stroke-width:5;stroke-linecap:butt}.simfig svg .fl{stroke:#c0392b;stroke-width:1.6;fill:none}
 .simfig svg .st.a{fill:var(--accent);font-weight:700}.simfig svg .st.r{fill:#c0392b;font-weight:700}.simfig svg .st.gn{fill:#14803c;font-weight:700}
 .simfig svg .st.pp{fill:#6a3fb0;font-weight:700}.simfig svg .st.am{fill:#b45f00;font-weight:700}
+.back{margin:0 0 14px}
 
 </style></head><body>
 <div class="letterhead" aria-hidden="true"></div>
@@ -962,7 +963,9 @@ CHAPTERS["9"] = { title: "Methods of AC Circuit Analysis", questions: [
   function fmt(x, unit){
     if (!isFinite(x)) return "?";
     if (x === 0) return "0 " + unit;
-    var a = Math.abs(x), i = a >= 1e6 ? 4 : a >= 1e3 ? 3 : a >= 1 ? 2 : a >= 1e-3 ? 1 : 0;
+    var a = Math.abs(x);
+    if (a < 1e-6) return parseFloat((x * (a < 1e-9 ? 1e12 : 1e9)).toPrecision(4)) + " " + (a < 1e-9 ? "p" : "n") + unit;
+    var i = a >= 1e6 ? 4 : a >= 1e3 ? 3 : a >= 1 ? 2 : a >= 1e-3 ? 1 : 0;
     return parseFloat((x / PFX[i][1]).toPrecision(4)) + " " + PFX[i][0] + unit;
   }
   function fl(x, unit, known){ return known === false ? "?" : fmt(x, unit); }
@@ -2716,7 +2719,14 @@ function bar(p, cls){ return '<div class="bar ' + (cls || "") + '"><i style="wid
 function esc2(s){ return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
 function go(page, ch, tab){ S.page = page; if (ch) S.ch = ch; if (tab) S.tab = tab; render(); window.scrollTo(0, 0); }
 
-var NAV = [["dash", "Dashboard"], ["study", "Study"], ["practice", "Practice"], ["quiz", "Quiz"], ["progress", "My progress"]];
+var NAV = [["dash", "Chapters"], ["progress", "My progress"]];
+function addBack(){
+  if (S.page === "dash" || (S.page === "quiz" && QZ && QZ.stage === "run")) return;
+  var pg = $("page"); if (pg.querySelector(".back")) return;
+  var b = document.createElement("button"); b.className = "btn ghost sm back"; b.dataset.a = "go"; b.dataset.v = "dash"; b.textContent = "← Back to chapters";
+  pg.insertBefore(b, pg.firstChild);
+}
+function pStudy(){ pStudy0(); addBack(); } function pPractice(){ pPractice0(); addBack(); } function pQuiz(){ pQuiz0(); addBack(); } function pProgress(){ pProgress0(); addBack(); }
 function render(){
   $("nav").innerHTML = NAV.map(function(n){ return '<button class="nv" data-a="go" data-v="' + n[0] + '" aria-current="' + (S.page === n[0]) + '">' + n[1] + "</button>"; }).join("");
   $("who").textContent = STORE.name ? STORE.name : "Guest";
@@ -2737,19 +2747,19 @@ function pDash(){
   h += '<section class="card trace"><div class="trace-top"><h1>' + (STORE.name ? "Hello, " + esc2(STORE.name.split(" ")[0]) : "Dashboard") + '</h1><div class="read"><b>' + s.seen + "</b> of " + s.total + " questions seen</div></div>" + trace(f, s.seen + " of " + s.total + " questions seen") + "</section>";
   h += '<div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(streak(), "Day streak") + stat(CHAPTER_IDS.length, "Chapters") + "</div>";
   h += '<h2 class="sh">Chapters</h2><div class="chgrid">' + CHAPTER_IDS.map(function(c){ var x = chStats(c); return '<section class="card chc">' + ring(x.acc, "Accuracy " + (x.acc == null ? "none" : x.acc + "%")) + "<div><h3>Chapter " + c + "</h3><p>" + CHAPTERS[c].title + '</p><p class="mut">' + x.seen + " of " + x.total + " questions seen</p>" + bar(Math.round(100 * x.seen / x.total)) +
-    '<div class="row"><button class="btn sm" data-a="study" data-v="' + c + '">Study</button><button class="btn sm ghost" data-a="prac" data-v="' + c + '">Practice</button><button class="btn sm ghost" data-a="quizch" data-v="' + c + '">Quiz</button></div></div></section>'; }).join("") + "</div>";
+    '<div class="row"><button class="btn sm" data-a="study" data-v="' + c + '">Study</button><button class="btn sm ghost" data-a="prac" data-v="' + c + '">Exercises</button><button class="btn sm ghost" data-a="quizch" data-v="' + c + '">Quiz</button></div></div></section>'; }).join("") + "</div>";
   h += '<div class="grid2"><section class="card"><h2 class="sh">Needs work</h2>' + (w.length ? w.map(function(x){ return '<div class="wk"><span><b>' + x.topic + "</b> · Chapter " + x.ch + '</span><span>' + x.acc + '%</span><button class="btn sm ghost" data-a="praction" data-v="' + x.ch + "|" + x.topic + '">Practise</button></div>'; }).join("") : '<p class="mut">Topics below 70% appear here after a few answers.</p>') + '</section><section class="card"><h2 class="sh">Badges</h2><div class="badges">' + badges().map(function(b){ return '<div class="bdg ' + (b[2] ? "on" : "") + '" title="' + b[1] + '"><b>' + b[0] + "</b><span>" + b[1] + "</span></div>"; }).join("") + "</div></section></div>";
   $("page").innerHTML = h;
 }
 function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</span></div>"; }
 
 // ---------- study ----------
-var TABS = [["learn", "Learn"], ["watch", "Watch"], ["calc", "Calculate"], ["error", "Spot the error"], ["order", "Order the steps"]];
-function pStudy(){
+var TABS = [["learn", "Learn"], ["watch", "Watch"], ["calc", "Calculate"]];
+function pStudy0(){
   var x = chStats(S.ch);
-  $("page").innerHTML = '<div class="chpills" role="group" aria-label="Chapter">' + CHAPTER_IDS.map(function(c){ return '<button class="chp" data-a="study" data-v="' + c + '" aria-pressed="' + (S.ch === c) + '">' + c + "</button>"; }).join("") + '</div><div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Practise ' + x.total + ' questions</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Take a quiz</button></div></div>' +
+  $("page").innerHTML = '<div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button></div></div>' +
     '<nav class="tabs" role="tablist">' + TABS.map(function(t){ return '<button class="tab" role="tab" data-a="tab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + '</nav><div id="ctab" class="ctab"></div>';
-  ({ learn: rLearn, watch: rWatch, calc: rCalc, error: rError, order: rOrder })[S.tab]();
+  ({ learn: rLearn, watch: rWatch, calc: rCalc })[S.tab]();
 }
   function rLearn(){
     $("ctab").innerHTML = '<div class="lessons">' + LESSONS[S.ch].map(function(l){
@@ -2804,9 +2814,9 @@ function pStudy(){
 
 
 // ---------- practice ----------
-function pPractice(){
+function pPractice0(){
   var topics = PR.ch === "all" ? [] : topicsOf(PR.ch);
-  $("page").innerHTML = '<h1 class="ph">Practice</h1><section class="card filters"><div class="field2"><label for="fch">Chapter</label><select id="fch" data-a="pf"><option value="all"' + (PR.ch === "all" ? " selected" : "") + ">All chapters</option>" + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (PR.ch === c ? " selected" : "") + ">Chapter " + c + " · " + CH_NAMES[c] + "</option>"; }).join("") + '</select></div>' +
+  $("page").innerHTML = '<h1 class="ph">Exercises</h1><section class="card filters"><div class="field2"><label for="fch">Chapter</label><select id="fch" data-a="pf"><option value="all"' + (PR.ch === "all" ? " selected" : "") + ">All chapters</option>" + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (PR.ch === c ? " selected" : "") + ">Chapter " + c + " · " + CH_NAMES[c] + "</option>"; }).join("") + '</select></div>' +
     '<div class="field2"><label for="ftp">Topic</label><select id="ftp" data-a="pf"' + (PR.ch === "all" ? " disabled" : "") + '><option value="all">All topics</option>' + topics.map(function(t){ return '<option' + (PR.topic === t ? " selected" : "") + ">" + t + "</option>"; }).join("") + '</select></div>' +
     '<div class="field2"><label for="fty">Type</label><select id="fty" data-a="pf"><option value="mixed"' + (PR.type === "mixed" ? " selected" : "") + '>Mixed</option><option value="mcq"' + (PR.type === "mcq" ? " selected" : "") + '>Multiple choice</option><option value="num"' + (PR.type === "num" ? " selected" : "") + '>Numeric (new numbers every time)</option></select></div>' +
     '<div class="sesbox"><b>' + PR.ses.r + " / " + PR.ses.n + '</b><span>this session</span></div></section><div id="qarea"></div>';
@@ -2860,7 +2870,7 @@ function check(){
 
 // ---------- quiz ----------
 var QZCH = "1", QZN = 10;
-function pQuiz(){
+function pQuiz0(){
   if (QZ && QZ.stage === "run") return drawQuiz();
   if (QZ && QZ.stage === "result") return drawResult();
   $("page").innerHTML = '<h1 class="ph">Quiz</h1><section class="card"><p>A quiz mixes multiple-choice and numeric questions. You see the results and the solutions at the end.</p><div class="filters2"><div class="field2"><label for="qch">Chapter</label><select id="qch">' + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (QZCH === c ? " selected" : "") + ">Chapter " + c + " · " + CH_NAMES[c] + "</option>"; }).join("") + '<option value="all"' + (QZCH === "all" ? " selected" : "") + '>All chapters</option></select></div><div class="field2"><label for="qn">Questions</label><select id="qn"><option' + (QZN === 10 ? " selected" : "") + '>10</option><option' + (QZN === 20 ? " selected" : "") + '>20</option></select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
@@ -2900,7 +2910,7 @@ function drawResult(){
 }
 
 // ---------- progress ----------
-function pProgress(){
+function pProgress0(){
   var s = allStats(), h = '<h1 class="ph">My progress</h1><div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(STORE.quizzes.length, "Quizzes taken") + stat(streak(), "Day streak") + "</div>";
   h += CHAPTER_IDS.map(function(c){ var rows = topicsOf(c).map(function(t){ var x = STORE.t[c + "|" + t], p = x && x.n ? Math.round(100 * x.r / x.n) : null; return '<div class="trow"><span>' + t + '</span><span class="mut">' + (x ? x.r + " / " + x.n : "not tried") + "</span>" + bar(p || 0, p == null ? "" : p >= 80 ? "ok" : p < 60 ? "low" : "") + "<span>" + (p == null ? "–" : p + "%") + "</span></div>"; }).join("");
     return '<section class="card"><h2 class="sh">Chapter ' + c + " · " + CHAPTERS[c].title + "</h2>" + rows + "</section>"; }).join("");
