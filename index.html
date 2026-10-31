@@ -1475,7 +1475,8 @@ function flow(pts, ph, cls, gap){
     var f = ((((ph + k / n) % 1) + 1) % 1) * tot, j = 0;
     while (j < L.length - 1 && f > L[j]){ f -= L[j]; j++; }
     var t = L[j] ? f / L[j] : 0;
-    o += '<circle class="dot ' + cls + '" cx="' + (pts[j][0] + (pts[j + 1][0] - pts[j][0]) * t).toFixed(1) + '" cy="' + (pts[j][1] + (pts[j + 1][1] - pts[j][1]) * t).toFixed(1) + '" r="4.2"/>';
+    var px = pts[j][0] + (pts[j + 1][0] - pts[j][0]) * t, py = pts[j][1] + (pts[j + 1][1] - pts[j][1]) * t, dx = pts[j + 1][0] - pts[j][0], dy = pts[j + 1][1] - pts[j][1], dl = Math.hypot(dx, dy) || 1, ux = dx / dl, uy = dy / dl, nx = -uy, ny = ux;
+    o += '<polygon class="dot ' + cls + '" points="' + (px + ux * 6).toFixed(1) + "," + (py + uy * 6).toFixed(1) + " " + (px - ux * 4 + nx * 4.2).toFixed(1) + "," + (py - uy * 4 + ny * 4.2).toFixed(1) + " " + (px - ux * 4 - nx * 4.2).toFixed(1) + "," + (py - uy * 4 - ny * 4.2).toFixed(1) + '"/>';
   }
   return o;
 }
