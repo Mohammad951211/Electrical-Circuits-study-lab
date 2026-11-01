@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0 (2026-11-01)
+- New "Examples" tab in every chapter: 55 book examples solved step by step (one step at a time), plus a "New random example" with fresh numbers.
+- All solutions in exercises and quizzes are shown as numbered steps (formula, values, result).
+- The back button returns to the previous page.
+- Students enter their full name and university ID in white fields. Both appear in the header and on the progress report.
+- 8 more number generators for chapters 5, 6, 8 and 9.
+
 ## 1.5.0 (2026-11-01)
 - Chapter 11 (transformers) and the motors part added: lessons, animations, calculators, questions and drawings.
 - Chapters 5, 6, 8 and 9 checked against the textbook. Examples 8.11 and 8.12 now show the book's peak form. The superposition animation follows Example 5.1.

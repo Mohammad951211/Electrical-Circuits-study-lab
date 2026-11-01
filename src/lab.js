@@ -10,7 +10,7 @@ var PR = { ch: "all", topic: "all", type: "mixed", q: null, done: false, ses: { 
 var QZ = null;
 
 // ---------- store (this device only) ----------
-var STORE = { name: "", a: {}, t: {}, quizzes: [], days: [], seen: 0, help: 1 };
+var STORE = { name: "", sid: "", a: {}, t: {}, quizzes: [], days: [], seen: 0, help: 1 };
 var memOnly = false;
 function loadStore(){ try { var o = JSON.parse(localStorage.getItem("me0212-lab-v2") || "null"); if (o) for (var k in STORE) if (o[k] != null) STORE[k] = o[k]; } catch (e) { memOnly = true; } }
 function saveStore(){ try { localStorage.setItem("me0212-lab-v2", JSON.stringify(STORE)); } catch (e) { memOnly = true; } }
@@ -81,19 +81,25 @@ function ring(p, label){
 }
 function bar(p, cls){ return '<div class="bar ' + (cls || "") + '"><i style="width:' + (p || 0) + '%"></i></div>'; }
 function esc2(s){ return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
-function go(page, ch, tab){ S.page = page; if (ch) S.ch = ch; if (tab) S.tab = tab; render(); window.scrollTo(0, 0); }
+var HIST = [];
+function go(page, ch, tab, noPush){
+  if (!noPush && !(page === S.page && (!ch || ch === S.ch))){ HIST.push({ page: S.page, ch: S.ch, tab: S.tab }); if (HIST.length > 30) HIST.shift(); }
+  if (page === "dash" && !noPush) HIST = [];
+  S.page = page; if (ch) S.ch = ch; if (tab) S.tab = tab; render(); window.scrollTo(0, 0);
+}
+function goBack(){ var h = HIST.pop(); if (!h) return go("dash", null, null, true); if (h.page === "quiz" && QZ && QZ.stage === "run") QZ = null; go(h.page, h.ch, h.tab, true); }
 
 var NAV = [["dash", "Chapters"], ["progress", "My progress"]];
 function addBack(){
   if (S.page === "dash" || (S.page === "quiz" && QZ && QZ.stage === "run")) return;
   var pg = $("page"); if (pg.querySelector(".back")) return;
-  var b = document.createElement("button"); b.className = "btn ghost sm back"; b.dataset.a = "go"; b.dataset.v = "dash"; b.textContent = "← Back to chapters";
+  var b = document.createElement("button"); b.className = "btn ghost sm back"; b.dataset.a = "back"; b.textContent = "← Back";
   pg.insertBefore(b, pg.firstChild);
 }
 function pStudy(){ pStudy0(); addBack(); } function pSheet(){ pSheet0(); addBack(); } function pPractice(){ pPractice0(); addBack(); } function pQuiz(){ pQuiz0(); addBack(); } function pProgress(){ pProgress0(); addBack(); }
 function render(){
   $("nav").innerHTML = NAV.map(function(n){ return '<button class="nv" data-a="go" data-v="' + n[0] + '" aria-current="' + (S.page === n[0]) + '">' + n[1] + "</button>"; }).join("");
-  $("who").textContent = STORE.name ? STORE.name : "Guest";
+  $("who").innerHTML = STORE.name ? esc2(STORE.name) + (STORE.sid ? '<small class="sid">ID ' + esc2(STORE.sid) + "</small>" : "") + ' <button class="linkb" data-a="editid">Edit</button>' : '<button class="linkb" data-a="editid">Enter your name</button>';
   ({ dash: pDash, study: pStudy, practice: pPractice, quiz: pQuiz, progress: pProgress, sheet: pSheet })[S.page]();
 }
 function trace(f, label){
@@ -106,7 +112,7 @@ function trace(f, label){
 // ---------- dashboard ----------
 function pDash(){
   var s = allStats(), w = weak(), h = "";
-  if (!STORE.name) h += '<section class="card hello"><h2>Welcome to the ME0212 Study Lab</h2><p>Enter your name. It stays on this device only.</p><div class="row"><input id="nameIn" type="text" placeholder="Your name" aria-label="Your name" maxlength="40"><button class="btn" data-a="setname">Save</button></div></section>';
+  if (!STORE.name || !STORE.sid || S.editId) h += '<section class="card hello"><h2>Welcome to the ME0212 Study Lab</h2><p>Enter your name and your university ID. They stay on this device only and appear on your progress report.</p><div class="idrow"><label class="idf"><span>Full name</span><input id="nameIn" type="text" placeholder="Your full name" autocomplete="name" maxlength="60" value="' + esc2(STORE.name || "") + '"></label><label class="idf"><span>University ID</span><input id="sidIn" type="text" inputmode="numeric" placeholder="e.g. 20231234" maxlength="20" value="' + esc2(STORE.sid || "") + '"></label><button class="btn" data-a="setname">Save</button></div><p class="msg" id="idmsg" role="alert"></p></section>';
   if (STORE.help) h += '<section class="card howto"><h2 class="sh">How to use the Study Lab</h2><ol><li><b>Pick a chapter</b> from the cards below.</li><li><b>Study:</b> read the lesson, watch the animation, try the calculator.</li><li><b>Exercises:</b> answer questions one by one and see the solution at once.</li><li><b>Quiz:</b> 10 questions in about 10 minutes, with the results at the end.</li></ol><p class="mut">Your progress is saved on this device only. Each answer shows its source in the book or the slides.</p><button class="btn sm ghost" data-a="hidehelp">Hide this</button></section>';
   var f = s.total ? s.seen / s.total : 0;
   h += '<section class="card trace"><div class="trace-top"><h1>' + (STORE.name ? "Hello, " + esc2(STORE.name.split(" ")[0]) : "Dashboard") + '</h1><div class="read"><b>' + s.seen + "</b> of " + s.total + " questions seen</div></div>" + trace(f, s.seen + " of " + s.total + " questions seen") + "</section>";
@@ -119,12 +125,12 @@ function pDash(){
 function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</span></div>"; }
 
 // ---------- study ----------
-var TABS = [["learn", "Learn"], ["watch", "Watch"], ["calc", "Calculate"]];
+var TABS = [["learn", "Learn"], ["examples", "Examples"], ["watch", "Watch"], ["calc", "Calculate"]];
 function pStudy0(){
   var x = chStats(S.ch);
   $("page").innerHTML = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
     '<nav class="tabs" role="tablist">' + TABS.map(function(t){ return '<button class="tab" role="tab" data-a="tab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + '</nav><div id="ctab" class="ctab"></div>';
-  ({ learn: rLearn, watch: rWatch, calc: rCalc })[S.tab]();
+  ({ learn: rLearn, examples: rExamples, watch: rWatch, calc: rCalc })[S.tab]();
 }
   function rLearn(){
     $("ctab").innerHTML = '<div class="lessons">' + LESSONS[S.ch].map(function(l){
@@ -133,6 +139,37 @@ function pStudy0(){
         (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + (l.fig ? fig(l.fig()) : "") + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + (id ? '<p class="slip"><b>Common slip.</b> ' + id.s + "</p>" + (id.w != null ? '<button class="btn sm ghost" data-watch="' + id.w + '">Watch it move</button>' : "") : "") + "</section>";
     }).join("") + "</div>";
     $("ctab").querySelectorAll("[data-watch]").forEach(function(b){ b.onclick = function(){ (WSIM[S.ch] = WSIM[S.ch] || {}).k = +b.dataset.watch; S.tab = "watch"; render(); window.scrollTo(0, 0); }; });
+  }
+
+  var EXS = {};
+  function exLabel(id){ return /^\d+\.\d+N$/.test(id) ? "Example " + id.replace("N", "") + " (Norton)" : /^\d+\.\d+$/.test(id) ? "Example " + id : id; }
+  function exSrc(ch, id){
+    var m = /^(\d+\.\d+)/.exec(id);
+    if (m && EXP[m[1]]) return "Book Example " + m[1] + ", p. " + EXP[m[1]];
+    if (/^Table 5\.1/.test(id)) return "Book Table 5.1, p. 149 · Slide 23";
+    if (/^Slide/.test(id)) return id + " (Chapter " + ch + ")";
+    if (/^§/.test(id)) return "Book " + id;
+    return CHREF[ch] || "";
+  }
+  function rExamples(){
+    var list = EXAMPLES[S.ch] || [], st = EXS[S.ch] || (EXS[S.ch] = { k: 0, n: 0, gen: null }), ex;
+    if (st.k === "gen"){
+      if (!st.gen){ var gl = GENS[S.ch] || [], g = gl[Math.floor(Math.random() * gl.length)], r = g.make(); st.gen = { id: "New example", t: g.topic, q: r.q, steps: String(r.sol).split(/\n+/), ans: nn(r.ans) + " " + r.unit, figH: r.fig, gen: true }; }
+      ex = st.gen;
+    } else ex = list[st.k] || list[0];
+    var pills = list.map(function(e, i){ return '<button class="pill" data-exk="' + i + '" aria-pressed="' + (st.k === i) + '">' + exLabel(e.id) + "</button>"; }).join("") + ((GENS[S.ch] || []).length ? '<button class="pill gen" data-exk="gen" aria-pressed="' + (st.k === "gen") + '">New random example</button>' : "");
+    var fh = ex.figH || (ex.fig ? ex.fig() : ""), steps = ex.steps, n = Math.min(st.n, steps.length), done = n >= steps.length;
+    var h = '<div class="picker">' + pills + '</div><div class="grid2 wide-left exgrid"><section class="card excard"><div class="lbl">' + (ex.gen ? "Generated example · " + ex.t : exLabel(ex.id)) + "</div><h2>" + (ex.gen ? "Worked example with new numbers" : ex.t) + '</h2><p class="exq">' + ex.q + "</p>" + (fh ? fig(fh) : "");
+    if (ex.given) h += '<div class="gf"><div><b>Given</b><span>' + ex.given + "</span></div><div><b>Find</b><span>" + ex.find + "</span></div></div>";
+    h += '</section><section class="card"><h2 class="sh">Solution, step by step</h2><ol class="exsteps">' + steps.slice(0, n).map(function(s, i){ return '<li><span>Step ' + (i + 1) + "</span><div>" + s + "</div></li>"; }).join("") + "</ol>";
+    if (!n) h += '<p class="mut">Try it on paper first. Then open the steps one at a time.</p>';
+    h += '<div class="btnrow">' + (done ? "" : '<button class="btn" id="exNext">' + (n ? "Show next step" : "Show the first step") + '</button><button class="btn ghost" id="exAll">Show all steps</button>') + (n ? '<button class="btn ghost" id="exHide">Hide the steps</button>' : "") + "</div>";
+    if (done) h += '<div class="st2a exans">Answer: ' + ex.ans + "</div>" + (ex.gen ? '<button class="btn sm ghost" id="exNew">Another one</button>' : '<p class="srcl"><span>Source: ' + exSrc(S.ch, ex.id) + "</span></p>");
+    h += '<p class="mut exprog">Step ' + n + " of " + steps.length + "</p></section></div>";
+    $("ctab").innerHTML = h;
+    $("ctab").querySelectorAll("[data-exk]").forEach(function(b){ b.onclick = function(){ var v = b.dataset.exk; st.k = v === "gen" ? "gen" : +v; st.n = 0; if (v === "gen") st.gen = null; rExamples(); }; });
+    var f = function(id, fn){ var e = $(id); if (e) e.onclick = fn; };
+    f("exNext", function(){ st.n++; rExamples(); }); f("exAll", function(){ st.n = steps.length; rExamples(); }); f("exHide", function(){ st.n = 0; rExamples(); }); f("exNew", function(){ st.gen = null; st.n = 0; rExamples(); });
   }
 
   function rCalc(){
@@ -200,6 +237,27 @@ function drawQ(){
   var nx = $("nextBtn"); if (nx) nx.focus({ preventScroll: true });
   var sb = document.querySelector(".sesbox"); if (sb) sb.innerHTML = "<b>" + PR.ses.r + " / " + PR.ses.n + "</b><span>this session</span>";
 }
+function stepsOf(text, finalLabel){
+  var t = String(text || "").trim(), parts = t.indexOf("\n") >= 0 ? t.split(/\n+/) : t.split(/(?<=[.!?])\s+(?=[A-Z0-9(Ccdefghijklmnopqrstuvwxyzαβγδφωπ√ΣIVRPQZ])/);
+  parts = parts.map(function(s){ return s.trim(); }).filter(Boolean);
+  // expand a chained line "X = formula = numbers = result" into formula, values and result steps
+  var out = [];
+  parts.forEach(function(p){
+    var seg = p.replace(/\.$/, "").split(" = ");
+    if (seg.length >= 3 && /[A-Za-zα-ωΩ√]/.test(seg[1]) && seg[0].length < 40 && !/\s(and|so|then|with)\s/.test(seg[0])){
+      out.push("Use the formula: " + seg[0] + " = " + seg[1]);
+      if (seg.length > 3) out.push("Put in the values: " + seg[0] + " = " + seg.slice(2, -1).join(" = "));
+      out.push("Result: " + seg[0] + " = " + seg[seg.length - 1]);
+    } else out.push(p);
+  });
+  parts = out;
+  if (!parts.length) return "";
+  var h = '<div class="steps2"><div class="st2h">Solution, step by step</div><ol>';
+  parts.forEach(function(p, i){ h += "<li" + (i === parts.length - 1 && parts.length > 1 ? ' class="last"' : "") + "><span>Step " + (i + 1) + "</span><div>" + esc2(p) + "</div></li>"; });
+  h += "</ol>";
+  if (finalLabel) h += '<div class="st2a">Answer: ' + esc2(finalLabel) + "</div>";
+  return h + "</div>";
+}
 function srcLine(q){
   var s = srcOf(q.d.ch, q.d.topic, q.text + " " + (q.sol || "") + " " + (q.why || ""));
   var body = "" + chL(q.d.ch) + " · " + q.d.topic + "\nQuestion: " + q.text + "\n\nWhat is wrong:\n\n(App version " + APP_VERSION + ")";
@@ -207,10 +265,10 @@ function srcLine(q){
   return '<p class="srcl">' + (s ? "<span>Source: " + s + "</span>" : "") + '<a href="' + mail + '">Report a problem</a></p>';
 }
 function feedback(q, st){
-  if (q.kind === "bank") return '<div class="fb" role="status"><b>Answer:</b><div class="sol">' + esc2(q.ans) + '</div></div><div class="row"><span class="mut">Did you get it?</span><button class="btn" data-a="self" data-v="1">I got it</button><button class="btn ghost" data-a="self" data-v="0">Not yet</button></div>' + srcLine(q);
+  if (q.kind === "bank") return '<div class="fb" role="status"><b>Worked answer</b>' + stepsOf(q.ans) + '</div><div class="row"><span class="mut">Did you get it?</span><button class="btn" data-a="self" data-v="1">I got it</button><button class="btn ghost" data-a="self" data-v="0">Not yet</button></div>' + srcLine(q);
   var good = st.ok, h = '<div class="fb ' + (good ? "good" : "bad") + '" role="status"><b>' + (good ? "Correct." : "Not quite.") + "</b> ";
-  if (q.kind === "mcq") h += (good ? "" : "The answer is: " + esc2(q.opts[q.correct]) + ". ") + esc2(q.why);
-  if (q.kind === "num") h += (good ? "" : "The answer is " + nn(q.ans) + " " + q.unit + ". ") + '<div class="sol">' + esc2(q.sol) + "</div>";
+  if (q.kind === "mcq") h += (good ? "" : "The answer is: " + esc2(q.opts[q.correct]) + ".") + stepsOf(q.why, q.opts[q.correct]);
+  if (q.kind === "num") h += (good ? "" : "The answer is " + nn(q.ans) + " " + q.unit + ".") + stepsOf(q.sol, nn(q.ans) + " " + q.unit);
   return h + "</div>" + srcLine(q) + '<div class="row"><button class="btn" id="nextBtn" data-a="next">Next question</button></div>';
 }
 var SIPF = { p: 1e-12, n: 1e-9, u: 1e-6, "µ": 1e-6, "μ": 1e-6, m: 1e-3, k: 1e3, K: 1e3, M: 1e6 };
@@ -277,20 +335,20 @@ function qnext(){
 function drawResult(){
   var p = Math.round(100 * QZ.score / QZ.qs.length), h = '<h1 class="ph">Quiz result</h1><section class="card res"><div class="big">' + QZ.score + " / " + QZ.qs.length + "</div><div>" + p + "% · " + Math.floor(QZ.secs / 60) + " min " + (QZ.secs % 60) + ' s</div>' + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + '<div class="row"><button class="btn" data-a="againquiz">New quiz</button><button class="btn ghost" data-a="go" data-v="dash">Dashboard</button></div></section><h2 class="sh">Review</h2>';
   h += QZ.qs.map(function(q, i){ var a = QZ.ans[i], right = q.kind === "mcq" ? q.opts[q.correct] : nn(q.ans) + " " + q.unit, mine = q.kind === "mcq" ? (a.picked == null ? "no answer" : q.opts[a.picked]) : (a.val || "no answer");
-    return '<section class="card rv ' + (a.ok ? "good" : "bad") + '"><div class="qmeta"><span class="chip">' + (a.ok ? "Correct" : "Wrong") + '</span><span class="chip alt">' + q.d.topic + '</span></div><div class="qtext2">' + (i + 1) + ". " + esc2(q.text) + "</div>" + (q.fig && !a.ok ? fig(q.fig) : "") + '<p><b>Your answer:</b> ' + esc2(mine) + "</p>" + (a.ok ? "" : "<p><b>Correct answer:</b> " + esc2(right) + "</p>") + '<div class="sol">' + esc2(q.kind === "mcq" ? q.why : q.sol) + "</div>" + srcLine(q) + "</section>"; }).join("");
+    return '<section class="card rv ' + (a.ok ? "good" : "bad") + '"><div class="qmeta"><span class="chip">' + (a.ok ? "Correct" : "Wrong") + '</span><span class="chip alt">' + q.d.topic + '</span></div><div class="qtext2">' + (i + 1) + ". " + esc2(q.text) + "</div>" + (q.fig && !a.ok ? fig(q.fig) : "") + '<p><b>Your answer:</b> ' + esc2(mine) + "</p>" + (a.ok ? "" : "<p><b>Correct answer:</b> " + esc2(right) + "</p>") + stepsOf(q.kind === "mcq" ? q.why : q.sol, right) + srcLine(q) + "</section>"; }).join("");
   $("page").innerHTML = h;
 }
 
 // ---------- progress ----------
 function pProgress0(){
-  var s = allStats(), h = '<h1 class="ph">My progress</h1><div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(STORE.quizzes.length, "Quizzes taken") + stat(streak(), "Day streak") + "</div>";
+  var s = allStats(), h = '<h1 class="ph">My progress</h1><section class="card idcard"><div><b>' + esc2(STORE.name || "Name not set") + '</b><span class="mut"> · University ID: ' + esc2(STORE.sid || "not set") + '</span></div><button class="btn sm ghost" data-a="editid">Edit name and ID</button></section><div class="stats">'  + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(STORE.quizzes.length, "Quizzes taken") + stat(streak(), "Day streak") + "</div>";
   h += CHAPTER_IDS.map(function(c){ var rows = topicsOf(c).map(function(t){ var x = STORE.t[c + "|" + t], p = x && x.n ? Math.round(100 * x.r / x.n) : null; return '<div class="trow"><span>' + t + '</span><span class="mut">' + (x ? x.r + " / " + x.n : "not tried") + "</span>" + bar(p || 0, p == null ? "" : p >= 80 ? "ok" : p < 60 ? "low" : "") + "<span>" + (p == null ? "–" : p + "%") + "</span></div>"; }).join("");
     return '<section class="card"><h2 class="sh">' + chL(c) + " · " + CHAPTERS[c].title + "</h2>" + rows + "</section>"; }).join("");
   h += quizHistory() + '<section class="card"><h2 class="sh">Share or reset</h2><p class="mut">Your progress is stored in this browser only' + (memOnly ? " (storage is blocked, so it will be lost when you close the page)" : "") + '. To show your instructor, copy or save the summary.</p><div class="row"><button class="btn" data-a="copysum">Copy summary</button><button class="btn ghost" data-a="dlsum">Save as text file</button><button class="btn ghost danger" data-a="reset">Reset all progress</button></div><div id="sumMsg" class="mut"></div></section>';
   $("page").innerHTML = h;
 }
 function summaryText(){
-  var s = allStats(), t = "ME0212 Study Lab progress\nName: " + (STORE.name || "(not set)") + "\nDate: " + today() + "\nAnswers: " + s.n + ", accuracy: " + (s.acc == null ? "-" : s.acc + "%") + ", questions seen: " + s.seen + " of " + s.total + "\n";
+  var s = allStats(), t = "ME0212 Study Lab progress\nName: " + (STORE.name || "(not set)") + "\nUniversity ID: " + (STORE.sid || "(not set)") + "\nDate: " + today() + "\nAnswers: " + s.n + ", accuracy: " + (s.acc == null ? "-" : s.acc + "%") + ", questions seen: " + s.seen + " of " + s.total + "\n";
   CHAPTER_IDS.forEach(function(c){ var x = chStats(c); t += "" + chL(c) + ": " + x.seen + "/" + x.total + " seen, accuracy " + (x.acc == null ? "-" : x.acc + "%") + "\n"; });
   STORE.quizzes.slice(-10).forEach(function(q){ t += "Quiz " + q.date + " " + chL(q.ch) + ": " + q.score + "/" + q.total + "\n"; });
   return t;
@@ -301,13 +359,17 @@ document.addEventListener("click", function(e){
   var b = e.target.closest("[data-a]"); if (!b || b.tagName === "SELECT") return;
   var a = b.dataset.a, v = b.dataset.v;
   if (a === "go") go(v);
+  else if (a === "back") goBack();
   else if (a === "study") go("study", v);
   else if (a === "tab"){ S.tab = v; pStudy(); }
   else if (a === "tool"){ }
   else if (a === "prac"){ PR.ch = v; PR.topic = "all"; PR.q = null; go("practice"); }
   else if (a === "praction"){ var p = v.split("|"); PR.ch = p[0]; PR.topic = p[1]; PR.q = null; go("practice"); }
   else if (a === "quizch"){ QZ = null; QZCH = v; go("quiz"); }
-  else if (a === "setname"){ var n = $("nameIn").value.trim(); if (n){ STORE.name = n; saveStore(); render(); } }
+  else if (a === "setname"){ var n = $("nameIn").value.trim(), id = $("sidIn").value.trim();
+    if (!n || !/^[0-9A-Za-z-]{4,20}$/.test(id)){ $("idmsg").textContent = !n ? "Enter your full name." : "Enter your university ID (digits only, at least 4)."; return; }
+    STORE.name = n; STORE.sid = id; S.editId = false; saveStore(); render(); }
+  else if (a === "editid"){ S.editId = true; go("dash"); }
   else if (a === "opt"){ var i = +v; if (S.page === "quiz"){ QZ.cur = { picked: i }; document.querySelectorAll(".opt").forEach(function(o, k){ o.classList.toggle("pick", k === i); }); }
     else if (!PR.done){ var ok = i === PR.q.correct; PR.done = true; PR.res = { ok: ok, picked: i }; PR.ses.n++; if (ok) PR.ses.r++; record(PR.q.d, ok); drawQ(); } }
   else if (a === "check") check();
@@ -323,7 +385,7 @@ document.addEventListener("click", function(e){
   else if (a === "againquiz"){ QZ = null; render(); }
   else if (a === "copysum"){ var t = summaryText(); function done(){ $("sumMsg").textContent = "Copied."; } if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function(){ $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }); else $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }
   else if (a === "dlsum"){ var bl = new Blob([summaryText()], { type: "text/plain" }), u = URL.createObjectURL(bl), l = document.createElement("a"); l.href = u; l.download = "ME0212_progress.txt"; document.body.appendChild(l); l.click(); l.remove(); setTimeout(function(){ URL.revokeObjectURL(u); }, 500); }
-  else if (a === "reset"){ if (confirm("Delete all your progress on this device?")){ STORE = { name: STORE.name, a: {}, t: {}, quizzes: [], days: [], seen: 0 }; saveStore(); render(); } }
+  else if (a === "reset"){ if (confirm("Delete all your progress on this device?")){ STORE = { name: STORE.name, sid: STORE.sid, help: STORE.help, a: {}, t: {}, quizzes: [], days: [], seen: 0 }; saveStore(); render(); } }
   else if (b.dataset.tool != null){ }
 });
 document.addEventListener("change", function(e){

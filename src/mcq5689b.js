@@ -55,7 +55,7 @@ M("Sine wave","Pulsing DC changes","its amplitude but not its polarity",["its po
 M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is the peak value?","6 V",["25 V","30 V","3 V"],"The number before sin is V_m."),
 M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is ω?","25 rad/s",["6 rad/s","30 rad/s","157 rad/s"],"The number before t is ω."),
 M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is the phase ψ?","−30°",["30°","25°","6°"],"The angle added to ωt is ψ."),
-M("Sine wave","Example 8.1. ω = 25 rad/s. What is f?","3.98 Hz",["25 Hz","157 Hz","0.25 Hz"],"f = ω / 2π = 25 / 6.283 = 3.98 Hz."),
+M("Sine wave","Example 8.1. ω = 25 rad/s. What is f?","About 4 Hz",["25 Hz","157 Hz","0.25 Hz"],"T = 2π / ω = 2π / 25 ≈ 0.25 s. f = 1 / T ≈ 4 Hz (3.98 Hz)."),
 M("Sine wave","Example 8.3. V_m = 5 V. What is v at 135°?","3.54 V",["5 V","2.5 V","−3.54 V"],"v = 5 sin 135° = 3.54 V."),
 M("Sine wave","The instantaneous value is written with","a lowercase letter, for example v or i",["an uppercase letter only","a phasor with a dot","the letter V_m"],"Lowercase letters mark values that change with time."),
 M("RMS value","A meter shows 220 V AC. Which value does it read?","The rms value",["The peak value","The peak-to-peak value","The half-cycle average"],"Meters and ratings use rms values."),
