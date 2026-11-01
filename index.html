@@ -159,6 +159,22 @@ select.theme{padding:5px 10px;margin-top:6px;appearance:auto;text-transform:none
 @media print{.top,.letterhead,.foot,.back,.chead .row,#nav{display:none!important}body{background:#fff!important}.card{box-shadow:none!important;border:0!important;background:#fff!important}.sheet .srow{break-inside:avoid}.main{padding:0!important}}
 @media (max-width:700px){.foot{padding-left:16px;padding-right:16px}}
 
+.idrow{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end}.idf{display:flex;flex-direction:column;gap:4px;font-size:.84rem;font-weight:700;color:var(--mut)}
+.hello input,.idf input,#numIn,.numrow input{background:#fff!important;color:#0c2238!important;border:1px solid #9fb0c2;border-radius:9px;padding:10px 12px;min-width:220px;font:inherit;font-size:1rem}
+.hello input::placeholder,#numIn::placeholder{color:#6b7c8d}
+.who .sid{display:block;font-size:.8rem;color:var(--mut)}.linkb{background:none;border:0;padding:0;color:var(--accent);font:inherit;font-size:.82rem;font-weight:700;text-decoration:underline;cursor:pointer}
+@media(max-width:940px){.who .sid{display:inline;margin-left:6px}}
+.idcard{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.steps2{margin:10px 0 2px;border:1px solid var(--edge);border-radius:10px;background:var(--surf2);padding:10px 12px}.st2h{font-family:var(--f-disp);font-weight:700;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.steps2 ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}.steps2 li{display:grid;grid-template-columns:62px 1fr;gap:8px;font-family:var(--f-mono);font-size:.9rem;line-height:1.5;color:var(--ink)}.steps2 li span{font-family:var(--f-disp);font-weight:700;font-size:.78rem;color:var(--accent);padding-top:2px}
+.steps2 li.last{font-weight:700}.st2a{margin-top:8px;padding-top:8px;border-top:1px dashed var(--edge);font-weight:700;color:var(--good)}
+.excard h2{margin:2px 0 8px;font-family:var(--f-disp);font-size:1.3rem;color:var(--accent)}.exq{font-size:1.02rem;line-height:1.55;margin:0 0 10px}
+.gf{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.gf div{background:var(--surf2);border:1px solid var(--edge);border-radius:10px;padding:8px 10px}.gf b{display:block;font-family:var(--f-disp);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:2px}.gf span{font-family:var(--f-mono);font-size:.88rem}
+.exsteps{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:8px}.exsteps li{display:grid;grid-template-columns:64px 1fr;gap:8px;padding:8px 10px;border-radius:9px;background:var(--surf2);border:1px solid var(--edge);line-height:1.5;animation:stepin .25s ease-out}.exsteps li span{font-family:var(--f-disp);font-weight:700;color:var(--accent);font-size:.82rem;padding-top:2px}
+@keyframes stepin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){.exsteps li{animation:none}}
+.exans{font-size:1.02rem}.exprog{margin:8px 0 0;font-size:.82rem}.pill.gen{border-style:dashed}
+@media(max-width:700px){.gf{grid-template-columns:1fr}.exsteps li{grid-template-columns:1fr}}
+
 </style></head><body>
 <div class="letterhead" aria-hidden="true"></div>
 <header class="top"><div class="wrap">
@@ -168,7 +184,7 @@ select.theme{padding:5px 10px;margin-top:6px;appearance:auto;text-transform:none
   <nav id="nav" aria-label="Main"></nav>
 </div></header>
 <main class="main wrap" id="page" aria-live="polite"></main>
-<footer class="foot wrap"><span>ME0212 Study Lab · version 1.5.0 (2026-11-01)</span><a href="mailto:Mohammad.alghweri@gju.edu.jo?subject=ME0212%20Study%20Lab%20feedback">Send feedback</a></footer>
+<footer class="foot wrap"><span>ME0212 Study Lab · version 1.6.0 (2026-11-01)</span><a href="mailto:Mohammad.alghweri@gju.edu.jo?subject=ME0212%20Study%20Lab%20feedback">Send feedback</a></footer>
 <script>
 (function(){
   // ---------- tiny schematic library: draws every circuit as inline SVG ----------
@@ -1506,6 +1522,84 @@ CHAPTERS["M"] = { title: "Electric Motors", questions: [
       } }
   ];
 
+  // ================= worked examples (book examples, solved step by step) =================
+  function exSeries(E, labs, extra){ var xs = labs.length === 3 ? [130, 190, 250] : [140, 240]; return svg(rect(XL, XR, YT, YB, { l: [B(E)], t: xs.map(function(x, i){ return { t: "r", c: x, lab: labs[i], side: "t" }; }) }) + (extra || "")); }
+  function exPar(top, labs){ var xs = [160, 230, 300], s = vrun(XL, YT, YB, [top.indexOf("A") > 0 ? { t: "isrc", c: YM, dir: "u", lab: top, side: "l" } : B(top)]) + hrun(YT, XL, 300, []) + hrun(YB, 300, XL, []);
+    labs.forEach(function(l, i){ s += vrun(xs[i], YT, YB, [{ t: "r", c: YM, lab: l, side: "l", off: 10 }]); }); return svg(s + dots([[160, YT], [160, YB], [230, YT], [230, YB]])); }
+  var EXAMPLES = {
+    "1": [
+      { id: "1.1", t: "Current from charge and time", q: "A charge of 100 C passes through a given cross-section of wire in 50 s. What is the current?", given: "Q = 100 C, t = 50 s", find: "I", steps: ["Write the definition of current: I = Q / t.", "Put in the values: I = 100 C / 50 s.", "Divide: I = 2 A (2 C pass each second)."], ans: "I = 2 A", fig: function(){ return bankFig("1", 3); } },
+      { id: "1.3", t: "Resistance of a copper wire", q: "A copper wire is 50 m long with a cross-sectional area of 0.13 cm². Find its resistance.", given: "ℓ = 50 m = 5000 cm, A = 0.13 cm², ρ(copper) = 1.68×10⁻⁶ Ω·cm", find: "R", steps: ["Write the formula: R = ρ ℓ / A.", "Use the same length unit everywhere: ℓ = 50 m = 5000 cm and ρ = 1.68×10⁻⁸ Ω·m = 1.68×10⁻⁶ Ω·cm.", "Put in the values: R = (1.68×10⁻⁶ Ω·cm)(5000 cm) / 0.13 cm².", "Calculate: R ≈ 0.0646 Ω.", "Comment: 50 m of copper has a very small resistance, so copper is a good conductor."], ans: "R ≈ 0.0646 Ω" },
+      { id: "1.4", t: "Conductance", q: "What is the conductance if the resistance is 22 Ω?", given: "R = 22 Ω", find: "G", steps: ["Conductance is the reciprocal of resistance: G = 1 / R.", "G = 1 / 22 Ω.", "G ≈ 0.0455 S."], ans: "G ≈ 0.0455 S" },
+      { id: "§1.5.7", t: "Ohm's law in the experimental circuit", q: "A 125 Ω resistor is connected to E = 2.5 V. Find the current.", given: "E = 2.5 V, R = 125 Ω", find: "I", steps: ["Choose the form of Ohm's law for the current: I = E / R.", "Put in the values: I = 2.5 V / 125 Ω.", "I = 0.02 A = 20 mA.", "Check: V = I R = 0.02 × 125 = 2.5 V ✓"], ans: "I = 0.02 A", fig: function(){ return bankFig("1", 5); } },
+      { id: "§1.5.8", t: "Resistance from the I–V line", q: "On an I–V line, V = 10 V gives I = 1 A. Find R.", given: "V = 10 V, I = 1 A", find: "R", steps: ["Use Ohm's law for R: R = V / I.", "R = 10 V / 1 A = 10 Ω.", "A second point on the same line, 5 V and 0.5 A, gives the same 10 Ω, so the line describes one resistor."], ans: "R = 10 Ω" }
+    ],
+    "2": [
+      { id: "2.1", t: "Power by three equations", q: "V = 10 V, I = 1 A and R = 10 Ω. Find the power with the three power equations.", given: "V = 10 V, I = 1 A, R = 10 Ω", find: "P", steps: ["P = I V = (1 A)(10 V) = 10 W.", "P = I² R = (1 A)²(10 Ω) = 10 W.", "P = V² / R = (10 V)² / 10 Ω = 10 W.", "All three give the same result, so the equations are equivalent."], ans: "P = 10 W" },
+      { id: "2.2", t: "Current from power", q: "A 2.5 Ω resistor dissipates 10 W. Find the current.", given: "P = 10 W, R = 2.5 Ω", find: "I", steps: ["From P = I² R, solve for I: I = √(P / R).", "I = √(10 W / 2.5 Ω) = √4.", "I = 2 A."], ans: "I = 2 A" },
+      { id: "2.4", t: "Powers and energy conservation", q: "I = 2 A, V₁ = 6 V, V₂ = 14 V and E = 20 V. Find the powers of R₁, R₂ and of the source.", given: "I = 2 A, V₁ = 6 V, V₂ = 14 V, E = 20 V", find: "P₁, P₂, P₃", steps: ["R₁: P₁ = V₁ I = (6 V)(2 A) = 12 W, absorbed.", "R₂: P₂ = V₂ I = (14 V)(2 A) = 28 W, absorbed.", "Source: the current and voltage are not mutually related, so P₃ = (−E) I = (−20 V)(2 A) = −40 W, released.", "Check: P₁ + P₂ + P₃ = 12 + 28 − 40 = 0 W (energy is conserved) ✓"], ans: "12 W, 28 W and −40 W", fig: function(){ return bankFig("2", 1); } },
+      { id: "2.6", t: "KVL to find a resistor", q: "E = 5 V and I = 0.25 A flow through R₁ = 2.5 Ω, R₂ = 5 Ω, R₃ = ? and R₄ = 4 Ω in series. Find R₃.", given: "E = 5 V, I = 0.25 A, R₁ = 2.5 Ω, R₂ = 5 Ω, R₄ = 4 Ω", find: "R₃", steps: ["KVL #1 around the loop: V₁ + V₂ + V₃ + V₄ − E = 0.", "Known drops with Ohm's law: V₁ = 0.25 × 2.5 = 0.625 V, V₂ = 0.25 × 5 = 1.25 V, V₄ = 0.25 × 4 = 1 V.", "Solve for V₃: V₃ = 5 − 0.625 − 1.25 − 1 = 2.125 V.", "R₃ = V₃ / I = 2.125 V / 0.25 A = 8.5 Ω."], ans: "R₃ = 8.5 Ω", fig: function(){ return bankFig("2", 3); } },
+      { id: "2.7", t: "KVL extension: Vab by two paths", q: "V₁ = 1.5 V, V₂ = 2 V, V₃ = 0.5 V, V₄ = 1 V and E = 5 V. Find Vab.", given: "V₁ = 1.5 V, V₂ = 2 V, V₃ = 0.5 V, V₄ = 1 V, E = 5 V", find: "Vab", steps: ["Path 1 (through the source): V₁ + Vab + V₄ − E = 0, so Vab = 5 − 1.5 − 1 = 2.5 V.", "Path 2 (through R₂ and R₃): V₂ + V₃ − Vab = 0, so Vab = 2 + 0.5 = 2.5 V.", "Both paths give the same voltage: voltage does not depend on the path."], ans: "Vab = 2.5 V", fig: function(){ return bankFig("2", 4); } },
+      { id: "2.12", t: "KCL with a supernode", q: "I₁ = 5 A, I₂ = 6 A, I₅ = 4 A and I₆ = 1 A. Find I₃, I₄ and I₇.", given: "I₁ = 5 A, I₂ = 6 A, I₅ = 4 A, I₆ = 1 A", find: "I₃, I₄, I₇", steps: ["Supernode between A and D: the current in equals the current out, so I₇ = I₁ = 5 A.", "Node A: 5 A enters and 6 A leaves, so I₃ must enter: 5 + I₃ = 6, I₃ = 1 A.", "Node B: 6 A enters and 4 A leaves, so I₄ must leave: 6 = I₄ + 4, I₄ = 2 A.", "Check at node C: I₄ = I₃ + I₆, 2 A = 1 A + 1 A ✓"], ans: "I₃ = 1 A, I₄ = 2 A, I₇ = 5 A", fig: function(){ return bankFig("2", 6); } },
+      { id: "2.14", t: "Terminal voltage of a real source", q: "A 3 V source feeds R_L = 5 Ω. Find V_ab for R_S = 0.005 Ω and for R_S = 50 Ω.", given: "V_S = 3 V, R_L = 5 Ω", find: "V_ab in both cases", steps: ["R_S = 0.005 Ω: I = V_S / (R_S + R_L) = 3 / 5.005 ≈ 0.5994 A.", "V_ab = I R_L = 0.5994 × 5 ≈ 2.997 V, almost the full 3 V.", "R_S = 50 Ω: I = 3 / (50 + 5) ≈ 0.055 A.", "V_ab = 0.055 × 5 ≈ 0.275 V.", "Conclusion: only a small internal resistance keeps the terminal voltage close to V_S."], ans: "2.997 V and 0.275 V" }
+    ],
+    "3": [
+      { id: "3.1", t: "A series circuit", q: "E = 60 V feeds R₁ = 10 kΩ, R₂ = 20 kΩ and R₃ = 30 kΩ in series. Find R_T, I, V₁, V_T and P_T.", given: "E = 60 V, R₁ = 10 kΩ, R₂ = 20 kΩ, R₃ = 30 kΩ", find: "R_T, I, V₁, V_T, P_T", steps: ["R_T = R₁ + R₂ + R₃ = 10 + 20 + 30 = 60 kΩ.", "I = E / R_T = 60 V / 60 kΩ = 1 mA.", "V₁ = I R₁ = 1 mA × 10 kΩ = 10 V.", "V_T = I R_T = 1 mA × 60 kΩ = 60 V = E ✓", "P_T = I E = 1 mA × 60 V = 60 mW. Check: I² R_T = (1 mA)² × 60 kΩ = 60 mW ✓"], ans: "60 kΩ, 1 mA, 10 V, 60 V, 60 mW", fig: function(){ return exSeries("E = 60 V", ["R_1 10 kΩ", "R_2 20 kΩ", "R_3 30 kΩ"]); } },
+      { id: "3.2", t: "Voltage-divider rule", q: "E = 60 V feeds R₁ = 10 kΩ, R₂ = 20 kΩ and R₃ = 10 kΩ in series. Find V₂ and V₃ with the VDR.", given: "E = 60 V, R₁ = 10 kΩ, R₂ = 20 kΩ, R₃ = 10 kΩ", find: "V₂, V₃", steps: ["General VDR: V_x = E R_x / R_T, with R_T = 10 + 20 + 10 = 40 kΩ.", "V₂ = 60 V × 20 / 40 = 30 V.", "V₃ = 60 V × 10 / 40 = 15 V.", "Check: V₁ = 60 × 10 / 40 = 15 V, and 15 + 30 + 15 = 60 V ✓"], ans: "V₂ = 30 V, V₃ = 15 V", fig: function(){ return exSeries("E = 60 V", ["R_1 10 kΩ", "R_2 20 kΩ", "R_3 10 kΩ"]); } },
+      { id: "3.3", t: "Voltages with a ground", q: "E = 120 V feeds R₁ = 10 kΩ, R₂ = 20 kΩ, R₃ = 20 kΩ and R₄ = 10 kΩ in series (points a, b, c, d, e). Point e is ground. Find V_bc, V_be and V_b.", given: "E = 120 V, R₁ = 10, R₂ = 20, R₃ = 20, R₄ = 10 kΩ", find: "V_bc, V_be, V_b", steps: ["R_T = 10 + 20 + 20 + 10 = 60 kΩ.", "V_bc is the drop across R₂: V_bc = 120 × 20 / 60 = 40 V.", "V_be spans R₂, R₃ and R₄: V_be = 120 × (20 + 20 + 10) / 60 = 100 V.", "Point e is ground, so the single-subscript voltage V_b = V_be = 100 V."], ans: "V_bc = 40 V, V_be = V_b = 100 V", fig: function(){ return bankFig("3", 3); } },
+      { id: "3.5", t: "Current-divider rule", q: "I_T = 60 mA divides into R₁ = 10 Ω, R₂ = 20 Ω and R₃ = 30 Ω in parallel. Find I₁, I₂ and I₃.", given: "I_T = 60 mA, R₁ = 10 Ω, R₂ = 20 Ω, R₃ = 30 Ω", find: "I₁, I₂, I₃", steps: ["R_eq = 1 / (1/10 + 1/20 + 1/30) ≈ 5.455 Ω.", "CDR: I_x = I_T R_eq / R_x.", "I₁ = 60 mA × 5.455 / 10 ≈ 32.73 mA.", "I₂ = 60 mA × 5.455 / 20 ≈ 16.37 mA.", "I₃ = 60 mA × 5.455 / 30 ≈ 10.91 mA.", "Check with KCL: 32.73 + 16.37 + 10.91 ≈ 60 mA ✓"], ans: "32.73 mA, 16.37 mA, 10.91 mA", fig: function(){ return exPar("I_T = 60 mA", ["R_1 10 Ω", "R_2 20 Ω", "R_3 30 Ω"]); } },
+      { id: "3.6", t: "Finding a resistor with the CDR", q: "R₁ = 10 Ω, I_T = 30 mA and I₂ = 10 mA. Find R₂.", given: "R₁ = 10 Ω, I_T = 30 mA, I₂ = 10 mA", find: "R₂", steps: ["Two-branch CDR: I₂ = I_T R₁ / (R₁ + R₂).", "Rearrange: I₂ (R₁ + R₂) = I_T R₁, so R₂ = R₁ (I_T − I₂) / I₂.", "R₂ = 10 Ω × (30 − 10) mA / 10 mA = 20 Ω.", "Check: 30 mA × 10 / (10 + 20) = 10 mA ✓"], ans: "R₂ = 20 Ω", fig: function(){ return bankFig("3", 8); } }
+    ],
+    "4": [
+      { id: "4.1", t: "Voltage source to current source", q: "E = 6 V with R_S = 2 Ω feeds R_L = 10 Ω. Convert to a current source and find I_L both ways.", given: "E = 6 V, R_S = 2 Ω, R_L = 10 Ω", find: "I_S, I_L", steps: ["I_S = E / R_S = 6 V / 2 Ω = 3 A, with R_S = 2 Ω moved in parallel.", "Current-source circuit, CDR: I_L = I_S R_S / (R_S + R_L) = 3 × 2 / 12 = 0.5 A.", "Voltage-source circuit, Ohm's law: I_L = E / (R_S + R_L) = 6 / 12 = 0.5 A.", "Same load current, so the two sources are equivalent ✓"], ans: "I_S = 3 A, I_L = 0.5 A", fig: function(){ return bankFig("4", 0); } },
+      { id: "4.2", t: "Current source to voltage source", q: "I_S = 5 A in parallel with R_S = 10 Ω. Find the equivalent voltage source.", given: "I_S = 5 A, R_S = 10 Ω", find: "E_S, R_S", steps: ["R_S keeps its value and moves into series: R_S = 10 Ω.", "E_S = I_S R_S = 5 A × 10 Ω = 50 V.", "The + terminal of E_S is on the side the I_S arrow points to."], ans: "E_S = 50 V with R_S = 10 Ω", fig: function(){ return bankFig("4", 1); } },
+      { id: "4.3", t: "Combining converted sources", q: "After the source conversions of Figure 4.9, the 12 V source aids the current and the 4 V and 2 V sources oppose it. The series resistances are 2 Ω, 2 Ω and 4 Ω, and R_L = 2 Ω. Find V_L.", given: "12 V aiding, 4 V and 2 V opposing, 2 + 2 + 4 Ω, R_L = 2 Ω", find: "V_L", steps: ["Convert the current sources to voltage sources and combine the parallel resistors (8 // 8 = 4 Ω, 4 // 4 = 2 Ω), as in Figure 4.9.", "Add the series sources with their signs: E = 12 − 4 − 2 = 6 V.", "Total series resistance: 2 + 2 + 4 + 2 = 10 Ω.", "VDR for the load: V_L = E R_L / R_T = 6 V × 2 Ω / 10 Ω = 1.2 V."], ans: "V_L = 1.2 V", fig: function(){ return bankFig("4", 6); } },
+      { id: "4.4", t: "Branch current analysis", q: "E₁ = 10 V, E₂ = 5 V, R₁ = 2 Ω, R₂ = 2 Ω and R₃ = 3 Ω. Find the branch currents, P₂ and V₁.", given: "E₁ = 10 V, E₂ = 5 V, R₁ = R₂ = 2 Ω, R₃ = 3 Ω", find: "I₁, I₂, I₃, P₂, V₁", steps: ["Label nodes a and b, choose reference directions and clockwise meshes.", "KCL at node a (n − 1 = 1 equation): I₁ + I₂ = I₃.", "KVL mesh 1: I₁R₁ + I₃R₃ − E₁ = 0, so 2I₁ + 3I₃ = 10.", "KVL mesh 2: −I₂R₂ − I₃R₃ + E₂ = 0, so 2I₂ + 3I₃ = 5.", "Solve (determinants or substitution): I₁ ≈ 2.19 A, I₂ ≈ −0.31 A, I₃ ≈ 1.88 A. The minus sign means I₂ flows opposite to its arrow.", "P₂ = I₂² R₂ = 0.31² × 2 ≈ 0.19 W and V₁ = I₁ R₁ = 2.19 × 2 ≈ 4.38 V.", "Check KCL: 2.19 − 0.31 = 1.88 A ✓"], ans: "I₁ ≈ 2.19 A, I₂ ≈ −0.31 A, I₃ ≈ 1.88 A", fig: function(){ return bankFig("4", 9); } }
+    ],
+    "5": [
+      { id: "5.1", t: "Superposition", q: "E₁ = 48 V, E₂ = 24 V, R₁ = R₂ = R₃ = R₄ = 8 Ω, R₅ = 16 Ω. Find I_c in R₅.", given: "E₁ = 48 V, E₂ = 24 V, R₁…R₄ = 8 Ω, R₅ = 16 Ω", find: "I_c", steps: ["E₁ alone (E₂ shorted): R′eq = R₅ // (R₃ + R₄) + (R₁ + R₂) = 16 // 16 + 16 = 24 Ω.", "I_a′ = E₁ / R′eq = 48 / 24 = 2 A.", "CDR into R₅: I_c′ = 2 × 16 / (16 + 16) = 1 A.", "E₂ alone (E₁ shorted): R″eq = 24 Ω, I_b″ = 24 / 24 = 1 A, I_c″ = 1 × 16 / 32 = 0.5 A.", "Both flow the same way in R₅: I_c = I_c′ + I_c″ = 1.5 A."], ans: "I_c = 1.5 A", fig: function(){ return bankFig("5", 8); } },
+      { id: "5.4", t: "Thevenin's theorem", q: "E = 48 V, R₁ = R₂ = R₃ = 12 Ω, R_L = 8 Ω. Find I_L with Thevenin's theorem.", given: "E = 48 V, R₁ = R₂ = R₃ = 12 Ω, R_L = 8 Ω", find: "I_L", steps: ["Remove R_L and mark the terminals a and b.", "R_TH: short E. R_TH = R₁ // R₂ // R₃ = 12 // 12 // 12 = 4 Ω.", "V_TH = V_ab: VDR on R₁ and R₂ // R₃: V_TH = 48 × 6 / (12 + 6) = 16 V.", "Reconnect R_L to the Thevenin circuit: I_L = V_TH / (R_TH + R_L) = 16 / (4 + 8).", "I_L ≈ 1.33 A."], ans: "I_L ≈ 1.33 A", fig: function(){ return bankFig("5", 1); } },
+      { id: "5.4N", t: "Norton's theorem (same circuit)", q: "Same circuit as Example 5.4. Find I_L with Norton's theorem.", given: "E = 48 V, R₁ = R₂ = R₃ = 12 Ω, R_L = 8 Ω", find: "I_N, I_L", steps: ["R_N = R_TH = 4 Ω.", "Short a and b: the short carries all the current from E through R₁, so I_N = E / R₁ = 48 / 12 = 4 A.", "CDR into the load: I_L = I_N R_N / (R_N + R_L) = 4 × 4 / 12.", "I_L ≈ 1.33 A, the same as with Thevenin ✓"], ans: "I_L ≈ 1.33 A", fig: function(){ return bankFig("5", 4); } },
+      { id: "5.6", t: "Norton with a current source", q: "I = 1 mA, R₁ = R₂ = 200 Ω, R₃ = 400 Ω, R₄ = 500 Ω and R_L = 100 Ω. Find I_L.", given: "I = 1 mA, R₁ = R₂ = 200 Ω, R₃ = 400 Ω, R₄ = 500 Ω, R_L = 100 Ω", find: "I_L", steps: ["Remove R_L. Open the current source to find R_N.", "R_N = (R₁ // R₂ + R₃) // R₄ = (100 + 400) // 500 = 250 Ω.", "Short a and b: all of I flows through the short, so I_N = I = 1 mA.", "I_L = I_N R_N / (R_N + R_L) = 1 mA × 250 / 350 ≈ 0.71 mA."], ans: "I_L ≈ 0.71 mA", fig: function(){ return bankFig("5", 5); } },
+      { id: "Table 5.1", t: "Maximum power transfer", q: "V_S = 10 V and R_S = 30 Ω. Find the load power for R_L = 10, 30 and 50 Ω.", given: "V_S = 10 V, R_S = 30 Ω", find: "P_L", steps: ["P_L = [V_S / (R_S + R_L)]² R_L.", "R_L = 10 Ω: I = 10 / 40 = 0.25 A, P_L = 0.25² × 10 = 0.625 W.", "R_L = 30 Ω: I = 10 / 60 ≈ 0.167 A, P_L ≈ 0.833 W.", "R_L = 50 Ω: I = 10 / 80 = 0.125 A, P_L ≈ 0.781 W.", "The peak is at R_L = R_S = 30 Ω: P_max = V_S² / (4 R_S) = 100 / 120 ≈ 0.833 W."], ans: "P_max ≈ 0.833 W at R_L = 30 Ω", fig: function(){ return bankFig("5", 6); } }
+    ],
+    "6": [
+      { id: "6.1", t: "Voltage from charge", q: "A charge of 50 μC is stored on a 1000 pF capacitor. Find the voltage.", given: "Q = 50 μC, C = 1000 pF", find: "V", steps: ["From Q = C V: V = Q / C.", "Use powers of ten: V = 50×10⁻⁶ C / 1000×10⁻¹² F.", "V = 0.05×10⁶ V = 50 kV."], ans: "V = 50 kV", fig: function(){ return bankFig("6", 0); } },
+      { id: "6.2", t: "Capacitance from the plates", q: "A = 0.004 m², d = 0.006 m and the dielectric is mica. Find C.", given: "A = 0.004 m², d = 0.006 m, k(mica) = 5", find: "C", steps: ["Read k for mica from Table 6.1: k = 5.", "C = 8.85×10⁻¹² k A / d.", "C = 8.85×10⁻¹² × 5 × 0.004 / 0.006.", "C ≈ 29.5×10⁻¹² F = 29.5 pF."], ans: "C ≈ 29.5 pF", fig: function(){ return bankFig("6", 1); } },
+      { id: "6.3", t: "Energy stored in a capacitor", q: "15 V is applied to a 2.2 μF capacitor. Find the stored energy.", given: "V = 15 V, C = 2.2 μF", find: "W_C", steps: ["W_C = ½ C V².", "W_C = ½ × 2.2×10⁻⁶ F × (15 V)² = ½ × 2.2×10⁻⁶ × 225.", "W_C = 247.5×10⁻⁶ J = 247.5 μJ."], ans: "W_C = 247.5 μJ", fig: function(){ return bankFig("6", 2); } },
+      { id: "6.4", t: "Capacitors in series", q: "Four 100 μF capacitors are in series on E = 25 V. Find the charge on each.", given: "C₁ = C₂ = C₃ = C₄ = 100 μF, E = 25 V", find: "Q", steps: ["Series: 1 / C_eq = 1/100 + 1/100 + 1/100 + 1/100 = 4/100 per μF.", "C_eq = 25 μF (smaller than any single capacitor).", "Q = C_eq E = 25 μF × 25 V = 625 μC.", "In series every capacitor carries the same charge: 625 μC each."], ans: "Q = 625 μC on each", fig: function(){ return bankFig("6", 3); } },
+      { id: "6.5", t: "Capacitors in parallel", q: "100, 10, 20 and 320 μF are in parallel on E = 60 V. Find the total charge.", given: "C = 100, 10, 20, 320 μF, E = 60 V", find: "Q_eq", steps: ["Parallel: C_eq = 100 + 10 + 20 + 320 = 450 μF.", "Q_eq = C_eq E = 450 μF × 60 V.", "Q_eq = 27 000 μC = 27 mC."], ans: "Q_eq = 27 mC", fig: function(){ return bankFig("6", 4); } },
+      { id: "6.6", t: "Series–parallel capacitors", q: "C₁ = 6 μF, C₂ = 2 μF, C₃ = 0.6 μF, C₄ = 0.5 μF, C₅ = 2 μF. Find C_eq between a and b.", given: "C₁ = 6, C₂ = 2, C₃ = 0.6, C₄ = 0.5, C₅ = 2 (μF)", find: "C_eq", steps: ["C₄ and C₅ in series: 0.5 × 2 / (0.5 + 2) = 0.4 μF.", "C₂, C₃ and C₄,₅ in parallel: 2 + 0.6 + 0.4 = 3 μF.", "That group is in series with C₁: 6 × 3 / (6 + 3) = 2 μF."], ans: "C_eq = 2 μF", fig: function(){ return bankFig("6", 5); } },
+      { id: "6.8", t: "Inductance from stored energy", q: "E = 20 V, R = 45 Ω and the winding resistance is 5 Ω. In steady state the inductor stores 4 J. Find L.", given: "E = 20 V, R = 45 Ω, R_w = 5 Ω, W_L = 4 J", find: "L", steps: ["In steady state the inductor is a short, so only R and R_w limit the current.", "I = E / (R + R_w) = 20 / 50 = 0.4 A.", "From W_L = ½ L I²: L = 2 W_L / I².", "L = 2 × 4 / 0.4² = 50 H."], ans: "L = 50 H", fig: function(){ return bankFig("6", 6); } },
+      { id: "6.10", t: "Inductors in series–parallel", q: "Three inductors of 40, 40 and 50 H give L_eq = 70 H. How are they connected?", given: "40 H, 40 H, 50 H, L_eq = 70 H", find: "the connection", steps: ["Try two equal inductors in parallel: 40 // 40 = 40 × 40 / 80 = 20 H.", "Add the third in series: 50 + 20 = 70 H ✓", "So the two 40 H inductors are in parallel, and that pair is in series with 50 H."], ans: "40 H // 40 H, in series with 50 H" }
+    ],
+    "8": [
+      { id: "8.1", t: "Reading a sine function", q: "v(t) = 6 sin(25t − 30°) V. Find the peak value, the phase and the frequency.", given: "v(t) = 6 sin(25t − 30°) V", find: "V_m, ψ, f", steps: ["The number in front of sin is the peak: V_m = 6 V.", "The angle added to ωt is the phase: ψ = −30° (the wave is shifted to the right).", "ω = 25 rad/s, so T = 2π / ω = 2π / 25 ≈ 0.25 s.", "f = 1 / T ≈ 4 Hz (more exactly 3.98 Hz)."], ans: "V_m = 6 V, ψ = −30°, f ≈ 4 Hz" },
+      { id: "8.2", t: "Phase difference", q: "(a) v = 20 sin(ωt + 30°), i = 12 sin(ωt + 60°). (b) v = 5 sin(ωt + 60°), i = 2.5 sin(ωt + 20°). Find φ.", given: "the phases ψ_v and ψ_i", find: "φ and lead or lag", steps: ["φ = ψ_v − ψ_i.", "(a) φ = 30° − 60° = −30° < 0, so v lags i by 30°.", "(b) φ = 60° − 20° = 40° > 0, so v leads i by 40°."], ans: "(a) v lags by 30°, (b) v leads by 40°", fig: function(){ return bankFig("8", 3); } },
+      { id: "8.3", t: "Instantaneous value", q: "v(t) = V_m sin ωt with V_m = 5 V. Find v at 30° and at 135°.", given: "V_m = 5 V", find: "v₁, v₂", steps: ["v₁ = 5 sin 30° = 5 × 0.5 = 2.5 V.", "v₂ = 5 sin 135° = 5 × 0.707 ≈ 3.54 V."], ans: "2.5 V and 3.54 V", fig: function(){ return bankFig("8", 0); } },
+      { id: "§8.2.4", t: "RMS and average value", q: "A sine voltage has V_m = 170 V. Find the rms value and the half-cycle average.", given: "V_m = 170 V", find: "V, V_avg", steps: ["RMS: V = V_m / √2 = 0.707 × 170 ≈ 120.2 V.", "Half-cycle average: V_avg = 0.637 V_m = 0.637 × 170 ≈ 108.3 V.", "Note: the full-cycle average of a sine wave is zero."], ans: "≈ 120 V rms, ≈ 108 V average", fig: function(){ return bankFig("8", 2); } },
+      { id: "8.11", t: "AC response of an inductor", q: "v_L = 6√2 sin(60t + 35°) V and L = 0.2 H. Find the current i_L.", given: "V_Lm = 6√2∠35° V, ω = 60 rad/s, L = 0.2 H", find: "i_L", steps: ["X_L = ω L = 60 × 0.2 = 12 Ω, so Z_L = j12 Ω = 12∠90° Ω.", "I_Lm = V_Lm / Z_L = 6√2∠35° / 12∠90°.", "Divide magnitudes and subtract angles: I_Lm = 0.5√2∠−55° A.", "Back to the time domain: i_L = 0.5√2 sin(60t − 55°) A. The current lags v by 90°."], ans: "i_L = 0.5√2 sin(60t − 55°) A", fig: function(){ return bankFig("8", 4); } },
+      { id: "8.12", t: "AC response of a capacitor", q: "v_C = 50√2 sin(ωt − 20°) V, C = 5 μF and f = 500 Hz. Find i_C.", given: "V_Cm = 50√2 V, ψ = −20°, C = 5 μF, f = 500 Hz", find: "i_C", steps: ["ω = 2π f = 2π × 500 ≈ 3142 rad/s.", "X_C = 1 / (ω C) = 1 / (3142 × 5×10⁻⁶) ≈ 63.65 Ω.", "I_Cm = V_Cm / X_C = 50√2 / 63.65 ≈ 786√2 mA.", "The current leads by 90°: i_C = 786√2 sin(ωt − 20° + 90°) = 786√2 sin(ωt + 70°) mA."], ans: "i_C = 786√2 sin(ωt + 70°) mA", fig: function(){ return bankFig("8", 5); } }
+    ],
+    "9": [
+      { id: "9.1", t: "Series impedance", q: "R = 1.5 Ω, X_L = 2.5 Ω and X_C = 3 Ω in series. Find Z.", given: "R = 1.5 Ω, X_L = 2.5 Ω, X_C = 3 Ω", find: "Z", steps: ["Series impedances add: Z = R + j(X_L − X_C).", "Z = 1.5 + j(2.5 − 3) = 1.5 − j0.5 Ω (rectangular).", "|Z| = √(1.5² + 0.5²) ≈ 1.58 Ω and φ = tan⁻¹(−0.5 / 1.5) ≈ −18.44°.", "Z ≈ 1.58∠−18.44° Ω (polar). X < 0, so the circuit is capacitive."], ans: "Z = 1.5 − j0.5 Ω ≈ 1.58∠−18.44° Ω", fig: function(){ return bankFig("9", 0); } },
+      { id: "9.3", t: "Series–parallel impedance and current divider", q: "E = 100∠0° V, Z₁ = 4 kΩ, Z₂ = −j8 kΩ, Z₃ = 4 + j8 kΩ. Find Z_eq and I₃.", given: "E = 100∠0° V, Z₁ = 4 kΩ, Z₂ = −j8 kΩ, Z₃ = 4 + j8 kΩ", find: "Z_eq, I₃", steps: ["Z₃ = 4 + j8 kΩ ≈ 8.94∠63.44° kΩ.", "Z₂ // Z₃ = (−j8)(4 + j8) / (−j8 + 4 + j8) = (64 − j32) / 4 = 16 − j8 kΩ.", "Z_eq = Z₁ + Z₂ // Z₃ = 4 + 16 − j8 = 20 − j8 kΩ ≈ 21.54∠−21.8° kΩ.", "I₁ = E / Z_eq = 100∠0° / 21.54∠−21.8° kΩ ≈ 4.64∠21.8° mA.", "Current divider: I₃ = I₁ Z₂ / (Z₂ + Z₃) = 4.64∠21.8° × 8∠−90° / 4 ≈ 9.28∠−68.2° mA."], ans: "Z_eq ≈ 21.54∠−21.8° kΩ, I₃ ≈ 9.28∠−68.2° mA", fig: function(){ return bankFig("9", 1); } },
+      { id: "9.5", t: "Total power and power factor", q: "Three loads: P₁ = 10 W; P₂ = 30 W with Q_C = 15 var; P₃ = 20 W with Q_L = 70 var. Find P_T, Q_T, S_T and PF.", given: "P = 10, 30, 20 W; Q_C = 15 var; Q_L = 70 var", find: "P_T, Q_T, S_T, PF", steps: ["P_T = 10 + 30 + 20 = 60 W.", "Q_T = Q_LT − Q_CT = 70 − 15 = 55 var.", "S_T = √(P_T² + Q_T²) = √(60² + 55²) ≈ 81.39 VA.", "PF = P_T / S_T = 60 / 81.39 ≈ 0.74, so φ = cos⁻¹ 0.74 ≈ 42.3° (lagging)."], ans: "60 W, 55 var, 81.39 VA, PF ≈ 0.74", fig: function(){ return bankFig("9", 3); } },
+      { id: "9.6", t: "Total power and correction to 0.87", q: "On 110 V, 60 Hz: 5 lamps of 100 W, a heater with R = 5 Ω and X_L = 5 Ω carrying 10 A, and a 6 kW stove at PF 0.75. Find S_T, the PF, the source current and the new Q for PF 0.87.", given: "E = 110 V, 60 Hz; loads as listed", find: "S_T, PF, I, Q′_T", steps: ["Lamps: P₁ = 500 W, Q₁ = 0.", "Heater: P₂ = I² R = 10² × 5 = 500 W, Q₂ = I² X_L = 500 var.", "Stove: φ = cos⁻¹ 0.75 ≈ 41.4°, Q₃ = 6000 × tan 41.4° ≈ 5290 var.", "P_T = 7000 W, Q_T = 5790 var, S_T = √(7000² + 5790²) ≈ 9084.3 VA.", "PF = 7000 / 9084.3 ≈ 0.77 and I = S_T / E = 9084.3 / 110 ≈ 82.6 A.", "For PF 0.87: φ′ = cos⁻¹ 0.87 ≈ 29.5°, Q′_T = 7000 × tan 29.5° ≈ 3960 var. The capacitor must supply about 5790 − 3960 = 1830 var."], ans: "S_T ≈ 9084 VA, PF ≈ 0.77, I ≈ 82.6 A, Q′_T ≈ 3960 var" },
+      { id: "Slide 33", t: "Power factor correction", q: "A load absorbs 4 kW at 120 V rms, 60 Hz and PF 0.8 lagging. Find C that raises the PF to 0.95.", given: "P = 4 kW, V = 120 V, f = 60 Hz, PF₁ = 0.8, PF₂ = 0.95", find: "C", steps: ["φ₁ = cos⁻¹ 0.8 = 36.87°, Q₁ = P tan φ₁ = 4000 × 0.75 = 3000 var.", "φ₂ = cos⁻¹ 0.95 = 18.19°, Q₂ = 4000 × 0.3287 ≈ 1315 var.", "Q_C = Q₁ − Q₂ ≈ 1685 var.", "C = Q_C / (ω V²) = 1685 / (2π × 60 × 120²) ≈ 310.5 μF.", "Note: the slide gives the question. This answer was calculated here."], ans: "C ≈ 310.5 μF", fig: function(){ return bankFig("9", 4); } }
+    ],
+    "11": [
+      { id: "11.1", t: "Ideal transformer quantities", q: "N_P = 40, N_S = 100, V_P = 50 V, I_P = 5 A and Z_L = 2 Ω. Find n, V_S, I_S, Z_P and P_S.", given: "N_P = 40, N_S = 100, V_P = 50 V, I_P = 5 A, Z_L = 2 Ω", find: "n, V_S, I_S, Z_P, P_S", steps: ["Turns ratio (book definition): n = N_S / N_P = 100 / 40 = 2.5.", "V_S = n V_P = 2.5 × 50 = 125 V.", "I_S = I_P / n = 5 / 2.5 = 2 A.", "Z_P = Z_L / n² = 2 / 6.25 = 0.32 Ω.", "P_S = I_S V_S = 2 × 125 = 250 W.", "Note: these are the book's numbers. Z_L = 2 Ω at 125 V would actually draw 62.5 A, so the book's data are not fully consistent."], ans: "2.5, 125 V, 2 A, 0.32 Ω, 250 W", fig: function(){ return bankFig("11", 0); } },
+      { id: "11.2", t: "Step-up or step-down", q: "A transformer has 250 primary turns and 125 secondary turns. Find n and the type.", given: "N_P = 250, N_S = 125", find: "n, type", steps: ["n = N_S / N_P = 125 / 250 = 0.5.", "n < 1 (N_S < N_P), so the secondary voltage is lower.", "It is a step-down transformer."], ans: "n = 0.5, step-down", fig: function(){ return bankFig("11", 3); } },
+      { id: "11.3", t: "Impedance matching", q: "An amplifier with R_S = 100 Ω drives a 4 Ω speaker. Which turns ratio gives the maximum power?", given: "Z_S = 100 Ω, Z_L = 4 Ω", find: "n", steps: ["Maximum power needs the load seen by the source to equal Z_S: Z_P = Z_L / n² = 100 Ω.", "Solve: n = √(Z_L / Z_P) = √(4 / 100) = 0.2 = 1/5.", "Check: 4 / 0.2² = 100 Ω ✓"], ans: "n = 1/5", fig: function(){ return bankFig("11", 4); } },
+      { id: "§11.3.3", t: "Why the voltage is stepped up", q: "100 kW is sent through lines of 5 Ω. Compare the line loss at 2 kV and at 20 kV.", given: "P = 100 kW, R_line = 5 Ω", find: "the line loss", steps: ["At 2 kV: I = P / V = 100 000 / 2000 = 50 A, loss = I² R = 50² × 5 = 12 500 W.", "At 20 kV (step-up × 10): I = 5 A, loss = 5² × 5 = 125 W.", "Ten times the voltage gives one hundredth of the loss."], ans: "12.5 kW at 2 kV, 125 W at 20 kV" }
+    ],
+    "M": [
+      { id: "File example", t: "Reading a torque-speed line", q: "A PM motor has a no-load speed of 1000 rpm (100 mA) and a stall torque of 100 in·oz (260 mA). A 10 oz weight hangs from a 2 in pulley. Find the speed and the current.", given: "ω_NL = 1000 rpm, T_stall = 100 in·oz, F = 10 oz, r = 2 in", find: "T, ω, I", steps: ["No load: the motor turns at 1000 rpm and draws 100 mA.", "Stall: the shaft is clamped, the motor gives 100 in·oz and draws 260 mA.", "Load torque: T = F × r = 10 oz × 2 in = 20 in·oz.", "Read the graph at 20 in·oz: about 800 rpm and 125 mA."], ans: "T = 20 in·oz, ω ≈ 800 rpm, I ≈ 125 mA", fig: function(){ return bankFig("M", 3); } },
+      { id: "Model", t: "Using the PM motor equations", q: "A PM motor has V_in = 12 V, R = 2 Ω and K_T = K_E = 0.05 (SI). Find ω_NL, T_stall and the operating point at ω = 120 rad/s.", given: "V_in = 12 V, R = 2 Ω, K = 0.05", find: "ω_NL, T_stall, I, T, P", steps: ["ω_NL = V_in / K_E = 12 / 0.05 = 240 rad/s.", "T_stall = K_T V_in / R = 0.05 × 12 / 2 = 0.3 N·m.", "At ω = 120 rad/s: V_bemf = K_E ω = 6 V, I = (12 − 6) / 2 = 3 A.", "T = K_T I = 0.05 × 3 = 0.15 N·m, P = T ω = 0.15 × 120 = 18 W.", "120 rad/s is half of ω_NL, so 18 W is the maximum power. Efficiency = 18 / (12 × 3) = 50%.", "Note: these values are chosen for practice. The motors file gives the equations."], ans: "240 rad/s, 0.3 N·m, 18 W at 50%", fig: function(){ return bankFig("M", 0); } }
+    ]
+  };
+
 // ---------- Watch tab: animated, interactive simulations ----------
 var SIMS = {};
 function nf(x, d){ var s = (+x).toFixed(d == null ? 2 : d); if (s.indexOf(".") >= 0) s = s.replace(/0+$/, "").replace(/\.$/, ""); return s === "-0" ? "0" : s; }
@@ -2685,7 +2779,7 @@ M("Sine wave","Pulsing DC changes","its amplitude but not its polarity",["its po
 M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is the peak value?","6 V",["25 V","30 V","3 V"],"The number before sin is V_m."),
 M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is ω?","25 rad/s",["6 rad/s","30 rad/s","157 rad/s"],"The number before t is ω."),
 M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is the phase ψ?","−30°",["30°","25°","6°"],"The angle added to ωt is ψ."),
-M("Sine wave","Example 8.1. ω = 25 rad/s. What is f?","3.98 Hz",["25 Hz","157 Hz","0.25 Hz"],"f = ω / 2π = 25 / 6.283 = 3.98 Hz."),
+M("Sine wave","Example 8.1. ω = 25 rad/s. What is f?","About 4 Hz",["25 Hz","157 Hz","0.25 Hz"],"T = 2π / ω = 2π / 25 ≈ 0.25 s. f = 1 / T ≈ 4 Hz (3.98 Hz)."),
 M("Sine wave","Example 8.3. V_m = 5 V. What is v at 135°?","3.54 V",["5 V","2.5 V","−3.54 V"],"v = 5 sin 135° = 3.54 V."),
 M("Sine wave","The instantaneous value is written with","a lowercase letter, for example v or i",["an uppercase letter only","a phasor with a dot","the letter V_m"],"Lowercase letters mark values that change with time."),
 M("RMS value","A meter shows 220 V AC. Which value does it read?","The rms value",["The peak value","The peak-to-peak value","The half-cycle average"],"Meters and ratings use rms values."),
@@ -3050,6 +3144,23 @@ G("9", "g9-7", "Power", function(){ var S = pk([100, 500, 1000, 2000]), pf = pk(
   return { q: "A load has S = " + S + " VA and a power factor of " + pf + " lagging. Find the active power P.", unit: "W", ans: r3(P), fig: null, sol: "P = S cos φ = " + S + " × " + pf + " = " + nn(r3(P)) + " W" }; });
 G("9", "g9-8", "Power", function(){ var Pw = pk([1, 2, 4, 5]) * 1000, pf1 = pk([0.6, 0.7, 0.8]), pf2 = 0.95, Q1 = Pw * Math.tan(Math.acos(pf1)), Q2 = Pw * Math.tan(Math.acos(pf2)), Qc = Q1 - Q2;
   return { q: "A " + (Pw / 1000) + " kW load has a lagging power factor of " + pf1 + ". Find the reactive power Q_C of the capacitor that raises the power factor to 0.95.", unit: "var", ans: r3(Qc), fig: null, sol: "Q₁ = P tan(cos⁻¹ " + pf1 + ") = " + nn(r3(Q1)) + " var\nQ₂ = P tan(cos⁻¹ 0.95) = " + nn(r3(Q2)) + " var\nQ_C = Q₁ − Q₂ = " + nn(r3(Qc)) + " var" }; });
+// ---------- more worked-example generators ----------
+G("5", "g5-8", "Superposition", function(){ var E1 = pk([24, 36, 48, 60]), E2 = pk([12, 24, 36]), a = E1 / 48, b = E2 / 48;
+  return { q: "Example 5.1 circuit (R₁ = R₂ = R₃ = R₄ = 8 Ω, R₅ = 16 Ω) with E₁ = " + E1 + " V and E₂ = " + E2 + " V. Find I_c in R₅.", unit: "A", ans: r3(a + b), fig: null, sol: "E₁ alone: R′eq = 16 // 16 + 16 = 24 Ω, I_a′ = " + E1 + " / 24 = " + nn(E1 / 24) + " A, I_c′ = half of it = " + nn(a) + " A\nE₂ alone: I_b″ = " + E2 + " / 24 = " + nn(E2 / 24) + " A, I_c″ = " + nn(b) + " A\nI_c = I_c′ + I_c″ = " + nn(r3(a + b)) + " A" }; });
+G("5", "g5-9", "Norton", function(){ var IN = pk([0.5, 1, 2, 3, 4]), RN = pk([4, 5, 10, 20]), V = rd(IN * RN);
+  return { q: "A Norton equivalent has I_N = " + IN + " A and R_N = " + RN + " Ω. Find the Thevenin voltage V_TH.", unit: "V", ans: V, fig: figNorton("I_N = " + IN + " A", "R_N = " + RN + " Ω", "R_L"), sol: "R_TH = R_N = " + RN + " Ω\nV_TH = I_N R_N = " + IN + " × " + RN + " = " + nn(V) + " V" }; });
+G("6", "g6-9", "Charge and energy", function(){ var Q = pk([10, 50, 100, 220]), C = pk([1, 2, 5, 10]), V = rd(Q / C);
+  return { q: "A charge of " + Q + " μC is stored on a " + C + " μF capacitor. Find the voltage.", unit: "V", ans: V, fig: figCapLoop("E = ?", "C = " + C + " μF"), sol: "V = Q / C\nV = " + Q + " μC / " + C + " μF = " + nn(V) + " V" }; });
+G("6", "g6-10", "Inductor", function(){ var a = pk([2, 4, 6, 12]), b = pk([3, 6, 12]), L = rd(a * b / (a + b));
+  return { q: "Inductors of " + a + " H and " + b + " H are in parallel. Find L_eq.", unit: "H", ans: r3(L), fig: null, sol: "Parallel inductors combine like parallel resistors\nL_eq = L₁ L₂ / (L₁ + L₂) = " + a + " × " + b + " / " + (a + b) + "\nL_eq = " + nn(r3(L)) + " H" }; });
+G("8", "g8-9", "Frequency", function(){ var f = pk([50, 60, 100, 200, 400]), T = rd(1000 / f);
+  return { q: "A sine wave has f = " + f + " Hz. Find the period T.", unit: "ms", ans: r3(T), fig: null, sol: "T = 1 / f\nT = 1 / " + f + " Hz = " + nn(r3(T / 1000)) + " s\nT = " + nn(r3(T)) + " ms" }; });
+G("8", "g8-10", "RMS value", function(){ var Vm = pk([10, 50, 100, 170, 311]), Va = rd(0.637 * Vm);
+  return { q: "A sine voltage has V_m = " + Vm + " V. Find the half-cycle average value.", unit: "V", ans: r3(Va), fig: null, sol: "The full-cycle average of a sine wave is zero, so the half cycle is used\nV_avg = 0.637 V_m = 0.637 × " + Vm + "\nV_avg = " + nn(r3(Va)) + " V" }; });
+G("9", "g9-9", "Power", function(){ var p = [pk([10, 20]), pk([30, 40]), pk([20, 50])], qc = pk([10, 15, 20]), ql = pk([40, 60, 70]), P = p[0] + p[1] + p[2], Q = ql - qc, S = Math.sqrt(P * P + Q * Q);
+  return { q: "Three loads take P = " + p.join(", ") + " W. One capacitor load gives Q_C = " + qc + " var and one inductive load takes Q_L = " + ql + " var. Find the power factor.", unit: "", ans: r3(P / S), fig: null, sol: "P_T = " + p.join(" + ") + " = " + P + " W\nQ_T = Q_L − Q_C = " + ql + " − " + qc + " = " + Q + " var\nS_T = √(" + P + "² + " + Q + "²) = " + nn(r3(S)) + " VA\nPF = P_T / S_T = " + nn(r3(P / S)) + " (lagging)" }; });
+G("9", "g9-10", "Power factor", function(){ var Qc = pk([500, 1000, 1685, 2000]), V = pk([120, 230]), f = pk([50, 60]), C = Qc / (2 * Math.PI * f * V * V) * 1e6;
+  return { q: "A capacitor must supply Q_C = " + Qc + " var on " + V + " V rms, " + f + " Hz. Find C.", unit: "μF", ans: r3(C), fig: null, sol: "ω = 2π f = " + nn(r3(2 * Math.PI * f)) + " rad/s\nC = Q_C / (ω V²) = " + Qc + " / (" + nn(r3(2 * Math.PI * f)) + " × " + V + "²)\nC = " + nn(r3(C)) + " μF" }; });
 
 // ===== number generators: Chapter 11 and Motors =====
 GENS["11"] = []; GENS["M"] = [];
@@ -3086,7 +3197,7 @@ var PR = { ch: "all", topic: "all", type: "mixed", q: null, done: false, ses: { 
 var QZ = null;
 
 // ---------- store (this device only) ----------
-var STORE = { name: "", a: {}, t: {}, quizzes: [], days: [], seen: 0, help: 1 };
+var STORE = { name: "", sid: "", a: {}, t: {}, quizzes: [], days: [], seen: 0, help: 1 };
 var memOnly = false;
 function loadStore(){ try { var o = JSON.parse(localStorage.getItem("me0212-lab-v2") || "null"); if (o) for (var k in STORE) if (o[k] != null) STORE[k] = o[k]; } catch (e) { memOnly = true; } }
 function saveStore(){ try { localStorage.setItem("me0212-lab-v2", JSON.stringify(STORE)); } catch (e) { memOnly = true; } }
@@ -3157,19 +3268,25 @@ function ring(p, label){
 }
 function bar(p, cls){ return '<div class="bar ' + (cls || "") + '"><i style="width:' + (p || 0) + '%"></i></div>'; }
 function esc2(s){ return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
-function go(page, ch, tab){ S.page = page; if (ch) S.ch = ch; if (tab) S.tab = tab; render(); window.scrollTo(0, 0); }
+var HIST = [];
+function go(page, ch, tab, noPush){
+  if (!noPush && !(page === S.page && (!ch || ch === S.ch))){ HIST.push({ page: S.page, ch: S.ch, tab: S.tab }); if (HIST.length > 30) HIST.shift(); }
+  if (page === "dash" && !noPush) HIST = [];
+  S.page = page; if (ch) S.ch = ch; if (tab) S.tab = tab; render(); window.scrollTo(0, 0);
+}
+function goBack(){ var h = HIST.pop(); if (!h) return go("dash", null, null, true); if (h.page === "quiz" && QZ && QZ.stage === "run") QZ = null; go(h.page, h.ch, h.tab, true); }
 
 var NAV = [["dash", "Chapters"], ["progress", "My progress"]];
 function addBack(){
   if (S.page === "dash" || (S.page === "quiz" && QZ && QZ.stage === "run")) return;
   var pg = $("page"); if (pg.querySelector(".back")) return;
-  var b = document.createElement("button"); b.className = "btn ghost sm back"; b.dataset.a = "go"; b.dataset.v = "dash"; b.textContent = "← Back to chapters";
+  var b = document.createElement("button"); b.className = "btn ghost sm back"; b.dataset.a = "back"; b.textContent = "← Back";
   pg.insertBefore(b, pg.firstChild);
 }
 function pStudy(){ pStudy0(); addBack(); } function pSheet(){ pSheet0(); addBack(); } function pPractice(){ pPractice0(); addBack(); } function pQuiz(){ pQuiz0(); addBack(); } function pProgress(){ pProgress0(); addBack(); }
 function render(){
   $("nav").innerHTML = NAV.map(function(n){ return '<button class="nv" data-a="go" data-v="' + n[0] + '" aria-current="' + (S.page === n[0]) + '">' + n[1] + "</button>"; }).join("");
-  $("who").textContent = STORE.name ? STORE.name : "Guest";
+  $("who").innerHTML = STORE.name ? esc2(STORE.name) + (STORE.sid ? '<small class="sid">ID ' + esc2(STORE.sid) + "</small>" : "") + ' <button class="linkb" data-a="editid">Edit</button>' : '<button class="linkb" data-a="editid">Enter your name</button>';
   ({ dash: pDash, study: pStudy, practice: pPractice, quiz: pQuiz, progress: pProgress, sheet: pSheet })[S.page]();
 }
 function trace(f, label){
@@ -3182,7 +3299,7 @@ function trace(f, label){
 // ---------- dashboard ----------
 function pDash(){
   var s = allStats(), w = weak(), h = "";
-  if (!STORE.name) h += '<section class="card hello"><h2>Welcome to the ME0212 Study Lab</h2><p>Enter your name. It stays on this device only.</p><div class="row"><input id="nameIn" type="text" placeholder="Your name" aria-label="Your name" maxlength="40"><button class="btn" data-a="setname">Save</button></div></section>';
+  if (!STORE.name || !STORE.sid || S.editId) h += '<section class="card hello"><h2>Welcome to the ME0212 Study Lab</h2><p>Enter your name and your university ID. They stay on this device only and appear on your progress report.</p><div class="idrow"><label class="idf"><span>Full name</span><input id="nameIn" type="text" placeholder="Your full name" autocomplete="name" maxlength="60" value="' + esc2(STORE.name || "") + '"></label><label class="idf"><span>University ID</span><input id="sidIn" type="text" inputmode="numeric" placeholder="e.g. 20231234" maxlength="20" value="' + esc2(STORE.sid || "") + '"></label><button class="btn" data-a="setname">Save</button></div><p class="msg" id="idmsg" role="alert"></p></section>';
   if (STORE.help) h += '<section class="card howto"><h2 class="sh">How to use the Study Lab</h2><ol><li><b>Pick a chapter</b> from the cards below.</li><li><b>Study:</b> read the lesson, watch the animation, try the calculator.</li><li><b>Exercises:</b> answer questions one by one and see the solution at once.</li><li><b>Quiz:</b> 10 questions in about 10 minutes, with the results at the end.</li></ol><p class="mut">Your progress is saved on this device only. Each answer shows its source in the book or the slides.</p><button class="btn sm ghost" data-a="hidehelp">Hide this</button></section>';
   var f = s.total ? s.seen / s.total : 0;
   h += '<section class="card trace"><div class="trace-top"><h1>' + (STORE.name ? "Hello, " + esc2(STORE.name.split(" ")[0]) : "Dashboard") + '</h1><div class="read"><b>' + s.seen + "</b> of " + s.total + " questions seen</div></div>" + trace(f, s.seen + " of " + s.total + " questions seen") + "</section>";
@@ -3195,12 +3312,12 @@ function pDash(){
 function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</span></div>"; }
 
 // ---------- study ----------
-var TABS = [["learn", "Learn"], ["watch", "Watch"], ["calc", "Calculate"]];
+var TABS = [["learn", "Learn"], ["examples", "Examples"], ["watch", "Watch"], ["calc", "Calculate"]];
 function pStudy0(){
   var x = chStats(S.ch);
   $("page").innerHTML = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
     '<nav class="tabs" role="tablist">' + TABS.map(function(t){ return '<button class="tab" role="tab" data-a="tab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + '</nav><div id="ctab" class="ctab"></div>';
-  ({ learn: rLearn, watch: rWatch, calc: rCalc })[S.tab]();
+  ({ learn: rLearn, examples: rExamples, watch: rWatch, calc: rCalc })[S.tab]();
 }
   function rLearn(){
     $("ctab").innerHTML = '<div class="lessons">' + LESSONS[S.ch].map(function(l){
@@ -3209,6 +3326,37 @@ function pStudy0(){
         (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + (l.fig ? fig(l.fig()) : "") + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + (id ? '<p class="slip"><b>Common slip.</b> ' + id.s + "</p>" + (id.w != null ? '<button class="btn sm ghost" data-watch="' + id.w + '">Watch it move</button>' : "") : "") + "</section>";
     }).join("") + "</div>";
     $("ctab").querySelectorAll("[data-watch]").forEach(function(b){ b.onclick = function(){ (WSIM[S.ch] = WSIM[S.ch] || {}).k = +b.dataset.watch; S.tab = "watch"; render(); window.scrollTo(0, 0); }; });
+  }
+
+  var EXS = {};
+  function exLabel(id){ return /^\d+\.\d+N$/.test(id) ? "Example " + id.replace("N", "") + " (Norton)" : /^\d+\.\d+$/.test(id) ? "Example " + id : id; }
+  function exSrc(ch, id){
+    var m = /^(\d+\.\d+)/.exec(id);
+    if (m && EXP[m[1]]) return "Book Example " + m[1] + ", p. " + EXP[m[1]];
+    if (/^Table 5\.1/.test(id)) return "Book Table 5.1, p. 149 · Slide 23";
+    if (/^Slide/.test(id)) return id + " (Chapter " + ch + ")";
+    if (/^§/.test(id)) return "Book " + id;
+    return CHREF[ch] || "";
+  }
+  function rExamples(){
+    var list = EXAMPLES[S.ch] || [], st = EXS[S.ch] || (EXS[S.ch] = { k: 0, n: 0, gen: null }), ex;
+    if (st.k === "gen"){
+      if (!st.gen){ var gl = GENS[S.ch] || [], g = gl[Math.floor(Math.random() * gl.length)], r = g.make(); st.gen = { id: "New example", t: g.topic, q: r.q, steps: String(r.sol).split(/\n+/), ans: nn(r.ans) + " " + r.unit, figH: r.fig, gen: true }; }
+      ex = st.gen;
+    } else ex = list[st.k] || list[0];
+    var pills = list.map(function(e, i){ return '<button class="pill" data-exk="' + i + '" aria-pressed="' + (st.k === i) + '">' + exLabel(e.id) + "</button>"; }).join("") + ((GENS[S.ch] || []).length ? '<button class="pill gen" data-exk="gen" aria-pressed="' + (st.k === "gen") + '">New random example</button>' : "");
+    var fh = ex.figH || (ex.fig ? ex.fig() : ""), steps = ex.steps, n = Math.min(st.n, steps.length), done = n >= steps.length;
+    var h = '<div class="picker">' + pills + '</div><div class="grid2 wide-left exgrid"><section class="card excard"><div class="lbl">' + (ex.gen ? "Generated example · " + ex.t : exLabel(ex.id)) + "</div><h2>" + (ex.gen ? "Worked example with new numbers" : ex.t) + '</h2><p class="exq">' + ex.q + "</p>" + (fh ? fig(fh) : "");
+    if (ex.given) h += '<div class="gf"><div><b>Given</b><span>' + ex.given + "</span></div><div><b>Find</b><span>" + ex.find + "</span></div></div>";
+    h += '</section><section class="card"><h2 class="sh">Solution, step by step</h2><ol class="exsteps">' + steps.slice(0, n).map(function(s, i){ return '<li><span>Step ' + (i + 1) + "</span><div>" + s + "</div></li>"; }).join("") + "</ol>";
+    if (!n) h += '<p class="mut">Try it on paper first. Then open the steps one at a time.</p>';
+    h += '<div class="btnrow">' + (done ? "" : '<button class="btn" id="exNext">' + (n ? "Show next step" : "Show the first step") + '</button><button class="btn ghost" id="exAll">Show all steps</button>') + (n ? '<button class="btn ghost" id="exHide">Hide the steps</button>' : "") + "</div>";
+    if (done) h += '<div class="st2a exans">Answer: ' + ex.ans + "</div>" + (ex.gen ? '<button class="btn sm ghost" id="exNew">Another one</button>' : '<p class="srcl"><span>Source: ' + exSrc(S.ch, ex.id) + "</span></p>");
+    h += '<p class="mut exprog">Step ' + n + " of " + steps.length + "</p></section></div>";
+    $("ctab").innerHTML = h;
+    $("ctab").querySelectorAll("[data-exk]").forEach(function(b){ b.onclick = function(){ var v = b.dataset.exk; st.k = v === "gen" ? "gen" : +v; st.n = 0; if (v === "gen") st.gen = null; rExamples(); }; });
+    var f = function(id, fn){ var e = $(id); if (e) e.onclick = fn; };
+    f("exNext", function(){ st.n++; rExamples(); }); f("exAll", function(){ st.n = steps.length; rExamples(); }); f("exHide", function(){ st.n = 0; rExamples(); }); f("exNew", function(){ st.gen = null; st.n = 0; rExamples(); });
   }
 
   function rCalc(){
@@ -3276,6 +3424,27 @@ function drawQ(){
   var nx = $("nextBtn"); if (nx) nx.focus({ preventScroll: true });
   var sb = document.querySelector(".sesbox"); if (sb) sb.innerHTML = "<b>" + PR.ses.r + " / " + PR.ses.n + "</b><span>this session</span>";
 }
+function stepsOf(text, finalLabel){
+  var t = String(text || "").trim(), parts = t.indexOf("\n") >= 0 ? t.split(/\n+/) : t.split(/(?<=[.!?])\s+(?=[A-Z0-9(Ccdefghijklmnopqrstuvwxyzαβγδφωπ√ΣIVRPQZ])/);
+  parts = parts.map(function(s){ return s.trim(); }).filter(Boolean);
+  // expand a chained line "X = formula = numbers = result" into formula, values and result steps
+  var out = [];
+  parts.forEach(function(p){
+    var seg = p.replace(/\.$/, "").split(" = ");
+    if (seg.length >= 3 && /[A-Za-zα-ωΩ√]/.test(seg[1]) && seg[0].length < 40 && !/\s(and|so|then|with)\s/.test(seg[0])){
+      out.push("Use the formula: " + seg[0] + " = " + seg[1]);
+      if (seg.length > 3) out.push("Put in the values: " + seg[0] + " = " + seg.slice(2, -1).join(" = "));
+      out.push("Result: " + seg[0] + " = " + seg[seg.length - 1]);
+    } else out.push(p);
+  });
+  parts = out;
+  if (!parts.length) return "";
+  var h = '<div class="steps2"><div class="st2h">Solution, step by step</div><ol>';
+  parts.forEach(function(p, i){ h += "<li" + (i === parts.length - 1 && parts.length > 1 ? ' class="last"' : "") + "><span>Step " + (i + 1) + "</span><div>" + esc2(p) + "</div></li>"; });
+  h += "</ol>";
+  if (finalLabel) h += '<div class="st2a">Answer: ' + esc2(finalLabel) + "</div>";
+  return h + "</div>";
+}
 function srcLine(q){
   var s = srcOf(q.d.ch, q.d.topic, q.text + " " + (q.sol || "") + " " + (q.why || ""));
   var body = "" + chL(q.d.ch) + " · " + q.d.topic + "\nQuestion: " + q.text + "\n\nWhat is wrong:\n\n(App version " + APP_VERSION + ")";
@@ -3283,10 +3452,10 @@ function srcLine(q){
   return '<p class="srcl">' + (s ? "<span>Source: " + s + "</span>" : "") + '<a href="' + mail + '">Report a problem</a></p>';
 }
 function feedback(q, st){
-  if (q.kind === "bank") return '<div class="fb" role="status"><b>Answer:</b><div class="sol">' + esc2(q.ans) + '</div></div><div class="row"><span class="mut">Did you get it?</span><button class="btn" data-a="self" data-v="1">I got it</button><button class="btn ghost" data-a="self" data-v="0">Not yet</button></div>' + srcLine(q);
+  if (q.kind === "bank") return '<div class="fb" role="status"><b>Worked answer</b>' + stepsOf(q.ans) + '</div><div class="row"><span class="mut">Did you get it?</span><button class="btn" data-a="self" data-v="1">I got it</button><button class="btn ghost" data-a="self" data-v="0">Not yet</button></div>' + srcLine(q);
   var good = st.ok, h = '<div class="fb ' + (good ? "good" : "bad") + '" role="status"><b>' + (good ? "Correct." : "Not quite.") + "</b> ";
-  if (q.kind === "mcq") h += (good ? "" : "The answer is: " + esc2(q.opts[q.correct]) + ". ") + esc2(q.why);
-  if (q.kind === "num") h += (good ? "" : "The answer is " + nn(q.ans) + " " + q.unit + ". ") + '<div class="sol">' + esc2(q.sol) + "</div>";
+  if (q.kind === "mcq") h += (good ? "" : "The answer is: " + esc2(q.opts[q.correct]) + ".") + stepsOf(q.why, q.opts[q.correct]);
+  if (q.kind === "num") h += (good ? "" : "The answer is " + nn(q.ans) + " " + q.unit + ".") + stepsOf(q.sol, nn(q.ans) + " " + q.unit);
   return h + "</div>" + srcLine(q) + '<div class="row"><button class="btn" id="nextBtn" data-a="next">Next question</button></div>';
 }
 var SIPF = { p: 1e-12, n: 1e-9, u: 1e-6, "µ": 1e-6, "μ": 1e-6, m: 1e-3, k: 1e3, K: 1e3, M: 1e6 };
@@ -3353,20 +3522,20 @@ function qnext(){
 function drawResult(){
   var p = Math.round(100 * QZ.score / QZ.qs.length), h = '<h1 class="ph">Quiz result</h1><section class="card res"><div class="big">' + QZ.score + " / " + QZ.qs.length + "</div><div>" + p + "% · " + Math.floor(QZ.secs / 60) + " min " + (QZ.secs % 60) + ' s</div>' + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + '<div class="row"><button class="btn" data-a="againquiz">New quiz</button><button class="btn ghost" data-a="go" data-v="dash">Dashboard</button></div></section><h2 class="sh">Review</h2>';
   h += QZ.qs.map(function(q, i){ var a = QZ.ans[i], right = q.kind === "mcq" ? q.opts[q.correct] : nn(q.ans) + " " + q.unit, mine = q.kind === "mcq" ? (a.picked == null ? "no answer" : q.opts[a.picked]) : (a.val || "no answer");
-    return '<section class="card rv ' + (a.ok ? "good" : "bad") + '"><div class="qmeta"><span class="chip">' + (a.ok ? "Correct" : "Wrong") + '</span><span class="chip alt">' + q.d.topic + '</span></div><div class="qtext2">' + (i + 1) + ". " + esc2(q.text) + "</div>" + (q.fig && !a.ok ? fig(q.fig) : "") + '<p><b>Your answer:</b> ' + esc2(mine) + "</p>" + (a.ok ? "" : "<p><b>Correct answer:</b> " + esc2(right) + "</p>") + '<div class="sol">' + esc2(q.kind === "mcq" ? q.why : q.sol) + "</div>" + srcLine(q) + "</section>"; }).join("");
+    return '<section class="card rv ' + (a.ok ? "good" : "bad") + '"><div class="qmeta"><span class="chip">' + (a.ok ? "Correct" : "Wrong") + '</span><span class="chip alt">' + q.d.topic + '</span></div><div class="qtext2">' + (i + 1) + ". " + esc2(q.text) + "</div>" + (q.fig && !a.ok ? fig(q.fig) : "") + '<p><b>Your answer:</b> ' + esc2(mine) + "</p>" + (a.ok ? "" : "<p><b>Correct answer:</b> " + esc2(right) + "</p>") + stepsOf(q.kind === "mcq" ? q.why : q.sol, right) + srcLine(q) + "</section>"; }).join("");
   $("page").innerHTML = h;
 }
 
 // ---------- progress ----------
 function pProgress0(){
-  var s = allStats(), h = '<h1 class="ph">My progress</h1><div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(STORE.quizzes.length, "Quizzes taken") + stat(streak(), "Day streak") + "</div>";
+  var s = allStats(), h = '<h1 class="ph">My progress</h1><section class="card idcard"><div><b>' + esc2(STORE.name || "Name not set") + '</b><span class="mut"> · University ID: ' + esc2(STORE.sid || "not set") + '</span></div><button class="btn sm ghost" data-a="editid">Edit name and ID</button></section><div class="stats">'  + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(STORE.quizzes.length, "Quizzes taken") + stat(streak(), "Day streak") + "</div>";
   h += CHAPTER_IDS.map(function(c){ var rows = topicsOf(c).map(function(t){ var x = STORE.t[c + "|" + t], p = x && x.n ? Math.round(100 * x.r / x.n) : null; return '<div class="trow"><span>' + t + '</span><span class="mut">' + (x ? x.r + " / " + x.n : "not tried") + "</span>" + bar(p || 0, p == null ? "" : p >= 80 ? "ok" : p < 60 ? "low" : "") + "<span>" + (p == null ? "–" : p + "%") + "</span></div>"; }).join("");
     return '<section class="card"><h2 class="sh">' + chL(c) + " · " + CHAPTERS[c].title + "</h2>" + rows + "</section>"; }).join("");
   h += quizHistory() + '<section class="card"><h2 class="sh">Share or reset</h2><p class="mut">Your progress is stored in this browser only' + (memOnly ? " (storage is blocked, so it will be lost when you close the page)" : "") + '. To show your instructor, copy or save the summary.</p><div class="row"><button class="btn" data-a="copysum">Copy summary</button><button class="btn ghost" data-a="dlsum">Save as text file</button><button class="btn ghost danger" data-a="reset">Reset all progress</button></div><div id="sumMsg" class="mut"></div></section>';
   $("page").innerHTML = h;
 }
 function summaryText(){
-  var s = allStats(), t = "ME0212 Study Lab progress\nName: " + (STORE.name || "(not set)") + "\nDate: " + today() + "\nAnswers: " + s.n + ", accuracy: " + (s.acc == null ? "-" : s.acc + "%") + ", questions seen: " + s.seen + " of " + s.total + "\n";
+  var s = allStats(), t = "ME0212 Study Lab progress\nName: " + (STORE.name || "(not set)") + "\nUniversity ID: " + (STORE.sid || "(not set)") + "\nDate: " + today() + "\nAnswers: " + s.n + ", accuracy: " + (s.acc == null ? "-" : s.acc + "%") + ", questions seen: " + s.seen + " of " + s.total + "\n";
   CHAPTER_IDS.forEach(function(c){ var x = chStats(c); t += "" + chL(c) + ": " + x.seen + "/" + x.total + " seen, accuracy " + (x.acc == null ? "-" : x.acc + "%") + "\n"; });
   STORE.quizzes.slice(-10).forEach(function(q){ t += "Quiz " + q.date + " " + chL(q.ch) + ": " + q.score + "/" + q.total + "\n"; });
   return t;
@@ -3377,13 +3546,17 @@ document.addEventListener("click", function(e){
   var b = e.target.closest("[data-a]"); if (!b || b.tagName === "SELECT") return;
   var a = b.dataset.a, v = b.dataset.v;
   if (a === "go") go(v);
+  else if (a === "back") goBack();
   else if (a === "study") go("study", v);
   else if (a === "tab"){ S.tab = v; pStudy(); }
   else if (a === "tool"){ }
   else if (a === "prac"){ PR.ch = v; PR.topic = "all"; PR.q = null; go("practice"); }
   else if (a === "praction"){ var p = v.split("|"); PR.ch = p[0]; PR.topic = p[1]; PR.q = null; go("practice"); }
   else if (a === "quizch"){ QZ = null; QZCH = v; go("quiz"); }
-  else if (a === "setname"){ var n = $("nameIn").value.trim(); if (n){ STORE.name = n; saveStore(); render(); } }
+  else if (a === "setname"){ var n = $("nameIn").value.trim(), id = $("sidIn").value.trim();
+    if (!n || !/^[0-9A-Za-z-]{4,20}$/.test(id)){ $("idmsg").textContent = !n ? "Enter your full name." : "Enter your university ID (digits only, at least 4)."; return; }
+    STORE.name = n; STORE.sid = id; S.editId = false; saveStore(); render(); }
+  else if (a === "editid"){ S.editId = true; go("dash"); }
   else if (a === "opt"){ var i = +v; if (S.page === "quiz"){ QZ.cur = { picked: i }; document.querySelectorAll(".opt").forEach(function(o, k){ o.classList.toggle("pick", k === i); }); }
     else if (!PR.done){ var ok = i === PR.q.correct; PR.done = true; PR.res = { ok: ok, picked: i }; PR.ses.n++; if (ok) PR.ses.r++; record(PR.q.d, ok); drawQ(); } }
   else if (a === "check") check();
@@ -3399,7 +3572,7 @@ document.addEventListener("click", function(e){
   else if (a === "againquiz"){ QZ = null; render(); }
   else if (a === "copysum"){ var t = summaryText(); function done(){ $("sumMsg").textContent = "Copied."; } if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function(){ $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }); else $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }
   else if (a === "dlsum"){ var bl = new Blob([summaryText()], { type: "text/plain" }), u = URL.createObjectURL(bl), l = document.createElement("a"); l.href = u; l.download = "ME0212_progress.txt"; document.body.appendChild(l); l.click(); l.remove(); setTimeout(function(){ URL.revokeObjectURL(u); }, 500); }
-  else if (a === "reset"){ if (confirm("Delete all your progress on this device?")){ STORE = { name: STORE.name, a: {}, t: {}, quizzes: [], days: [], seen: 0 }; saveStore(); render(); } }
+  else if (a === "reset"){ if (confirm("Delete all your progress on this device?")){ STORE = { name: STORE.name, sid: STORE.sid, help: STORE.help, a: {}, t: {}, quizzes: [], days: [], seen: 0 }; saveStore(); render(); } }
   else if (b.dataset.tool != null){ }
 });
 document.addEventListener("change", function(e){
