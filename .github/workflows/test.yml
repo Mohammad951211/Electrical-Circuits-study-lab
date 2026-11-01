@@ -1,0 +1,31 @@
+name: Tests
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install
+        run: |
+          pip install playwright==1.49.1
+          python -m playwright install --with-deps chromium
+          npm install --no-save axe-core@4.10.2
+      - name: Build check (index.html must match the sources)
+        run: |
+          cp index.html /tmp/committed.html
+          python build.py
+          sed -E 's/\(20[0-9]{2}-[0-9]{2}-[0-9]{2}\)//' index.html > /tmp/a.html
+          sed -E 's/\(20[0-9]{2}-[0-9]{2}-[0-9]{2}\)//' /tmp/committed.html > /tmp/b.html
+          cmp /tmp/a.html /tmp/b.html || (echo "index.html is out of date. Run python build.py and commit." && exit 1)
+      - name: Run tests
+        run: |
+          python build.py --test
+          python tests/run_tests.py
