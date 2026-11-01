@@ -1,5 +1,5 @@
 MCQ["11"] = [
-M("Transformer","Which principle does a transformer use?","Mutual inductance",["Self-capacitance","Ohm's law only","The photoelectric effect"],"A changing current in one coil induces a voltage in the other coil."),
+M("Transformer","How does a transformer pass energy from the primary to the secondary?","A changing flux in the common core induces a voltage in the secondary",["A direct wire between the two coils","Charge stored on the core","Friction between the coils"],"The primary current changes the flux, and by Faraday's law the changing flux induces the secondary voltage."),
 M("Transformer","Which coil is connected to the source?","The primary winding",["The secondary winding","The core","The load"],"The secondary is connected to the load."),
 M("Transformer","Can a transformer work on steady DC?","No, it needs a changing current to change the flux",["Yes, always","Only with an iron core","Only as a step-up"],"Faraday's law needs a changing flux."),
 M("Transformer","Where are air-core transformers usually used?","High-frequency circuits such as radio and TV",["Power stations","Electric locomotives","Car batteries"],"Book §11.2.2."),

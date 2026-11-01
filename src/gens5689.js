@@ -23,7 +23,7 @@ G("6", "g6-1", "Charge and energy", function(){ var C = pk([10, 22, 47, 100, 220
   return { q: "A capacitor of " + C + " μF is charged to " + V + " V. Find the charge Q.", unit: "μC", ans: Q, fig: figCapLoop("E = " + V + " V", "C = " + C + " μF"), sol: "Q = C V = " + C + " μF × " + V + " V = " + Q + " μC" }; });
 G("6", "g6-2", "Charge and energy", function(){ var C = pk([2.2, 4.7, 10, 22, 100]), V = pk([5, 10, 15, 24]), W = rd(0.5 * C * V * V);
   return { q: "A capacitor of " + C + " μF is charged to " + V + " V. Find the stored energy W.", unit: "μJ", ans: W, fig: figCapLoop("E = " + V + " V", "C = " + C + " μF"), sol: "W = ½ C V² = ½ × " + C + " μF × " + V + "² V² = " + nn(W) + " μJ" }; });
-G("6", "g6-3", "Capacitance", function(){ var k = pk([1, 5, 7, 80]), A = pk([0.002, 0.004, 0.01]), d = pk([0.002, 0.005, 0.01]), C = 8.85e-12 * k * A / d;
+G("6", "g6-3", "Capacitance", function(){ var k = pk([1, 2, 5, 10]), A = pk([0.002, 0.004, 0.01]), d = pk([0.002, 0.005, 0.01]), C = 8.85e-12 * k * A / d;
   return { q: "A capacitor has plates of area " + A + " m², a gap d = " + d + " m and a dielectric with k = " + k + ". Find C. Use C = 8.85×10⁻¹² k A / d.", unit: "pF", ans: r3(C * 1e12), fig: null, sol: "C = 8.85×10⁻¹² × " + k + " × " + A + " / " + d + " = " + nn(r3(C * 1e12)) + " pF" }; });
 G("6", "g6-4", "Series and parallel", function(){ var n = pk([2, 4, 5]), C = pk([10, 20, 50, 100]), Ce = rd(C / n);
   return { q: n + " capacitors of " + C + " μF each are connected in series. Find C_eq.", unit: "μF", ans: Ce, fig: null, sol: "C_eq = C / n = " + C + " / " + n + " = " + nn(Ce) + " μF" }; });
