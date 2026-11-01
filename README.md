@@ -1,7 +1,8 @@
 # ME0212 Study Lab
 
 Interactive study platform for ME0212 Electrical Circuits and Machines, German Jordanian University.
-The live site is the single file `index.html` (GitHub Pages). It works offline and stores progress only on the student's device.
+The live site is the single file `index.html` (GitHub Pages).
+Content: chapters 1, 2, 3, 4, 5, 6, 8, 9 and 11 of the textbook, plus the motors part (Introduction to Motors.pdf). Chapters 7 and 10 have no slides yet. It works offline and stores progress only on the student's device.
 
 ## Edit and release
 1. Change the files in `src/` (content, figures, animations) or `assets/`.

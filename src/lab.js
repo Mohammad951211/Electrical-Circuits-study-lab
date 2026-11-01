@@ -1,6 +1,7 @@
 // ================= platform =================
 var APP_VERSION = "@@VERSION@@";
-var CH_NAMES = { "1": "Basic Concepts", "2": "Basic Laws", "3": "Series–Parallel", "4": "DC Analysis Methods", "5": "Network Theorems", "6": "Capacitors & Inductors", "8": "AC Fundamentals", "9": "AC Analysis" };
+function chL(c){ return c === "M" ? "Motors" : "Chapter " + c; }
+var CH_NAMES = { "1": "Basic Concepts", "2": "Basic Laws", "3": "Series–Parallel", "4": "DC Analysis Methods", "5": "Network Theorems", "6": "Capacitors & Inductors", "8": "AC Fundamentals", "9": "AC Analysis", "11": "Transformers", "M": "Electric Motors" };
 var MCQ = {}; function M(topic, q, ok, wrong, why){ return { topic: topic, q: q, ok: ok, wrong: wrong, why: why }; }
 //@@MCQ@@
 //@@GENS@@
@@ -69,7 +70,7 @@ function badges(){
   var best = {}; STORE.quizzes.forEach(function(q){ var p = Math.round(100 * q.score / q.total); if (!best[q.ch] || p > best[q.ch]) best[q.ch] = p; });
   b.push(["First steps", "Answer 10 questions", s.n >= 10]); b.push(["Century", "Answer 100 questions", s.n >= 100]);
   b.push(["Sharp", "80% accuracy over 30 answers", s.n >= 30 && s.acc >= 80]); b.push(["3-day streak", "Study 3 days in a row", streak() >= 3]);
-  CHAPTER_IDS.forEach(function(c){ b.push(["Chapter " + c + " master", "Score 80% in a Chapter " + c + " quiz", (best[c] || 0) >= 80]); });
+  CHAPTER_IDS.forEach(function(c){ b.push(["" + chL(c) + " master", "Score 80% in a " + chL(c) + " quiz", (best[c] || 0) >= 80]); });
   return b;
 }
 
@@ -110,9 +111,9 @@ function pDash(){
   var f = s.total ? s.seen / s.total : 0;
   h += '<section class="card trace"><div class="trace-top"><h1>' + (STORE.name ? "Hello, " + esc2(STORE.name.split(" ")[0]) : "Dashboard") + '</h1><div class="read"><b>' + s.seen + "</b> of " + s.total + " questions seen</div></div>" + trace(f, s.seen + " of " + s.total + " questions seen") + "</section>";
   h += '<div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(streak(), "Day streak") + stat(CHAPTER_IDS.length, "Chapters") + "</div>";
-  h += '<h2 class="sh">Chapters</h2><div class="chgrid">' + CHAPTER_IDS.map(function(c){ var x = chStats(c); return '<section class="card chc">' + ring(x.acc, "Accuracy " + (x.acc == null ? "none" : x.acc + "%")) + "<div><h3>Chapter " + c + "</h3><p>" + CHAPTERS[c].title + '</p><p class="mut">' + x.seen + " of " + x.total + " questions seen</p>" + bar(Math.round(100 * x.seen / x.total)) +
+  h += '<h2 class="sh">Chapters</h2><div class="chgrid">' + CHAPTER_IDS.map(function(c){ var x = chStats(c); return '<section class="card chc">' + ring(x.acc, "Accuracy " + (x.acc == null ? "none" : x.acc + "%")) + "<div><h3>" + chL(c) + "</h3><p>" + CHAPTERS[c].title + '</p><p class="mut">' + x.seen + " of " + x.total + " questions seen</p>" + bar(Math.round(100 * x.seen / x.total)) +
     '<div class="row"><button class="btn sm" data-a="study" data-v="' + c + '">Study</button><button class="btn sm ghost" data-a="prac" data-v="' + c + '">Exercises</button><button class="btn sm ghost" data-a="quizch" data-v="' + c + '">Quiz</button></div></div></section>'; }).join("") + "</div>";
-  h += '<div class="grid2"><section class="card"><h2 class="sh">Needs work</h2>' + (w.length ? w.map(function(x){ return '<div class="wk"><span><b>' + x.topic + "</b> · Chapter " + x.ch + '</span><span>' + x.acc + '%</span><button class="btn sm ghost" data-a="praction" data-v="' + x.ch + "|" + x.topic + '">Practise</button></div>'; }).join("") : '<p class="mut">Topics below 70% appear here after a few answers.</p>') + '</section><section class="card"><h2 class="sh">Badges</h2><div class="badges">' + badges().map(function(b){ return '<div class="bdg ' + (b[2] ? "on" : "") + '" title="' + b[1] + '"><b>' + b[0] + "</b><span>" + b[1] + "</span></div>"; }).join("") + "</div></section></div>";
+  h += '<div class="grid2"><section class="card"><h2 class="sh">Needs work</h2>' + (w.length ? w.map(function(x){ return '<div class="wk"><span><b>' + x.topic + "</b> · " + chL(x.ch) + '</span><span>' + x.acc + '%</span><button class="btn sm ghost" data-a="praction" data-v="' + x.ch + "|" + x.topic + '">Practise</button></div>'; }).join("") : '<p class="mut">Topics below 70% appear here after a few answers.</p>') + '</section><section class="card"><h2 class="sh">Badges</h2><div class="badges">' + badges().map(function(b){ return '<div class="bdg ' + (b[2] ? "on" : "") + '" title="' + b[1] + '"><b>' + b[0] + "</b><span>" + b[1] + "</span></div>"; }).join("") + "</div></section></div>";
   $("page").innerHTML = h;
 }
 function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</span></div>"; }
@@ -121,7 +122,7 @@ function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</
 var TABS = [["learn", "Learn"], ["watch", "Watch"], ["calc", "Calculate"]];
 function pStudy0(){
   var x = chStats(S.ch);
-  $("page").innerHTML = '<div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
+  $("page").innerHTML = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
     '<nav class="tabs" role="tablist">' + TABS.map(function(t){ return '<button class="tab" role="tab" data-a="tab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + '</nav><div id="ctab" class="ctab"></div>';
   ({ learn: rLearn, watch: rWatch, calc: rCalc })[S.tab]();
 }
@@ -154,7 +155,7 @@ function pStudy0(){
 
 // ---------- formula sheet ----------
 function pSheet0(){
-  var h = '<div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">Formula sheet · ' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="print">Print or save as PDF</button></div></div><section class="card sheet">';
+  var h = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">Formula sheet · ' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="print">Print or save as PDF</button></div></div><section class="card sheet">';
   h += LESSONS[S.ch].map(function(l){ return '<div class="srow"><h2>' + l.t + "</h2>" + (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + "</div>"; }).join("");
   $("page").innerHTML = h + '</section><p class="mut printnote">ME0212 Study Lab · version ' + APP_VERSION + "</p>";
 }
@@ -162,7 +163,7 @@ function pSheet0(){
 // ---------- practice ----------
 function pPractice0(){
   var topics = PR.ch === "all" ? [] : topicsOf(PR.ch);
-  $("page").innerHTML = '<h1 class="ph">Exercises</h1><section class="card filters"><div class="field2"><label for="fch">Chapter</label><select id="fch" data-a="pf"><option value="all"' + (PR.ch === "all" ? " selected" : "") + ">All chapters</option>" + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (PR.ch === c ? " selected" : "") + ">Chapter " + c + " · " + CH_NAMES[c] + "</option>"; }).join("") + '</select></div>' +
+  $("page").innerHTML = '<h1 class="ph">Exercises</h1><section class="card filters"><div class="field2"><label for="fch">Chapter</label><select id="fch" data-a="pf"><option value="all"' + (PR.ch === "all" ? " selected" : "") + ">All chapters</option>" + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (PR.ch === c ? " selected" : "") + ">" + chL(c) + " · " + CH_NAMES[c] + "</option>"; }).join("") + '</select></div>' +
     '<div class="field2"><label for="ftp">Topic</label><select id="ftp" data-a="pf"' + (PR.ch === "all" ? " disabled" : "") + '><option value="all">All topics</option>' + topics.map(function(t){ return '<option' + (PR.topic === t ? " selected" : "") + ">" + t + "</option>"; }).join("") + '</select></div>' +
     '<div class="field2"><label for="fty">Type</label><select id="fty" data-a="pf"><option value="mixed"' + (PR.type === "mixed" ? " selected" : "") + '>Mixed</option><option value="mcq"' + (PR.type === "mcq" ? " selected" : "") + '>Multiple choice</option><option value="num"' + (PR.type === "num" ? " selected" : "") + '>Numeric (new numbers every time)</option></select></div>' +
     '<div class="sesbox"><b>' + PR.ses.r + " / " + PR.ses.n + '</b><span>this session</span></div></section><div id="qarea"></div>';
@@ -179,7 +180,7 @@ function nextPractice(){
   var l = poolPractice(); if (!l.length){ $("qarea").innerHTML = '<section class="card"><p>No questions match this filter.</p></section>'; return; }
   var d = pickQ(l, PR.last); PR.last = d.id; PR.q = instantiate(d); PR.done = false; PR.res = null; drawQ();
 }
-function qhead(q){ return '<div class="qmeta"><span class="chip">Chapter ' + q.d.ch + '</span><span class="chip alt">' + q.d.topic + "</span>" + (q.kind === "num" ? '<span class="chip">Numeric</span>' : q.kind === "mcq" ? '<span class="chip">Multiple choice</span>' : '<span class="chip">Drawing</span>') + "</div>"; }
+function qhead(q){ return '<div class="qmeta"><span class="chip">' + chL(q.d.ch) + '</span><span class="chip alt">' + q.d.topic + "</span>" + (q.kind === "num" ? '<span class="chip">Numeric</span>' : q.kind === "mcq" ? '<span class="chip">Multiple choice</span>' : '<span class="chip">Drawing</span>') + "</div>"; }
 function qbody(q, st){
   // st: { done, picked, val, review }
   var h = qhead(q) + '<div class="qtext2">' + esc2(q.text) + "</div>" + (q.fig ? fig(q.fig) : "");
@@ -201,8 +202,8 @@ function drawQ(){
 }
 function srcLine(q){
   var s = srcOf(q.d.ch, q.d.topic, q.text + " " + (q.sol || "") + " " + (q.why || ""));
-  var body = "Chapter " + q.d.ch + " · " + q.d.topic + "\nQuestion: " + q.text + "\n\nWhat is wrong:\n\n(App version " + APP_VERSION + ")";
-  var mail = "mailto:Mohammad.alghweri@gju.edu.jo?subject=" + encodeURIComponent("ME0212 Study Lab: problem in Chapter " + q.d.ch) + "&body=" + encodeURIComponent(body);
+  var body = "" + chL(q.d.ch) + " · " + q.d.topic + "\nQuestion: " + q.text + "\n\nWhat is wrong:\n\n(App version " + APP_VERSION + ")";
+  var mail = "mailto:Mohammad.alghweri@gju.edu.jo?subject=" + encodeURIComponent("ME0212 Study Lab: problem in " + chL(q.d.ch)) + "&body=" + encodeURIComponent(body);
   return '<p class="srcl">' + (s ? "<span>Source: " + s + "</span>" : "") + '<a href="' + mail + '">Report a problem</a></p>';
 }
 function feedback(q, st){
@@ -237,11 +238,11 @@ var QZCH = "1", QZN = 10;
 function pQuiz0(){
   if (QZ && QZ.stage === "run") return drawQuiz();
   if (QZ && QZ.stage === "result") return drawResult();
-  $("page").innerHTML = '<h1 class="ph">Quiz</h1><section class="card"><p>A quiz mixes multiple-choice and numeric questions. A 10-question quiz is planned for 10 minutes, like the course quizzes. You see the results, the solutions and the sources at the end.</p><div class="filters2"><div class="field2"><label for="qch">Chapter</label><select id="qch">' + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (QZCH === c ? " selected" : "") + ">Chapter " + c + " · " + CH_NAMES[c] + "</option>"; }).join("") + '<option value="all"' + (QZCH === "all" ? " selected" : "") + '>All chapters</option></select></div><div class="field2"><label for="qn">Questions</label><select id="qn"><option' + (QZN === 10 ? " selected" : "") + '>10</option><option' + (QZN === 20 ? " selected" : "") + '>20</option></select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
+  $("page").innerHTML = '<h1 class="ph">Quiz</h1><section class="card"><p>A quiz mixes multiple-choice and numeric questions. A 10-question quiz is planned for 10 minutes, like the course quizzes. You see the results, the solutions and the sources at the end.</p><div class="filters2"><div class="field2"><label for="qch">Chapter</label><select id="qch">' + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (QZCH === c ? " selected" : "") + ">" + chL(c) + " · " + CH_NAMES[c] + "</option>"; }).join("") + '<option value="all"' + (QZCH === "all" ? " selected" : "") + '>All chapters</option></select></div><div class="field2"><label for="qn">Questions</label><select id="qn"><option' + (QZN === 10 ? " selected" : "") + '>10</option><option' + (QZN === 20 ? " selected" : "") + '>20</option></select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
 }
 function quizHistory(){
   var q = STORE.quizzes.slice(-5).reverse(); if (!q.length) return "";
-  return '<section class="card"><h2 class="sh">Recent quizzes</h2>' + q.map(function(x){ var p = Math.round(100 * x.score / x.total); return '<div class="wk"><span>' + x.date + " · " + (x.ch === "all" ? "All chapters" : "Chapter " + x.ch) + "</span><span>" + x.score + " / " + x.total + " (" + p + "%)</span>" + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + "</div>"; }).join("") + "</section>";
+  return '<section class="card"><h2 class="sh">Recent quizzes</h2>' + q.map(function(x){ var p = Math.round(100 * x.score / x.total); return '<div class="wk"><span>' + x.date + " · " + (x.ch === "all" ? "All chapters" : "" + chL(x.ch)) + "</span><span>" + x.score + " / " + x.total + " (" + p + "%)</span>" + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + "</div>"; }).join("") + "</section>";
 }
 function startQuiz(){
   QZCH = $("qch").value; QZN = +$("qn").value;
@@ -284,14 +285,14 @@ function drawResult(){
 function pProgress0(){
   var s = allStats(), h = '<h1 class="ph">My progress</h1><div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(STORE.quizzes.length, "Quizzes taken") + stat(streak(), "Day streak") + "</div>";
   h += CHAPTER_IDS.map(function(c){ var rows = topicsOf(c).map(function(t){ var x = STORE.t[c + "|" + t], p = x && x.n ? Math.round(100 * x.r / x.n) : null; return '<div class="trow"><span>' + t + '</span><span class="mut">' + (x ? x.r + " / " + x.n : "not tried") + "</span>" + bar(p || 0, p == null ? "" : p >= 80 ? "ok" : p < 60 ? "low" : "") + "<span>" + (p == null ? "–" : p + "%") + "</span></div>"; }).join("");
-    return '<section class="card"><h2 class="sh">Chapter ' + c + " · " + CHAPTERS[c].title + "</h2>" + rows + "</section>"; }).join("");
+    return '<section class="card"><h2 class="sh">' + chL(c) + " · " + CHAPTERS[c].title + "</h2>" + rows + "</section>"; }).join("");
   h += quizHistory() + '<section class="card"><h2 class="sh">Share or reset</h2><p class="mut">Your progress is stored in this browser only' + (memOnly ? " (storage is blocked, so it will be lost when you close the page)" : "") + '. To show your instructor, copy or save the summary.</p><div class="row"><button class="btn" data-a="copysum">Copy summary</button><button class="btn ghost" data-a="dlsum">Save as text file</button><button class="btn ghost danger" data-a="reset">Reset all progress</button></div><div id="sumMsg" class="mut"></div></section>';
   $("page").innerHTML = h;
 }
 function summaryText(){
   var s = allStats(), t = "ME0212 Study Lab progress\nName: " + (STORE.name || "(not set)") + "\nDate: " + today() + "\nAnswers: " + s.n + ", accuracy: " + (s.acc == null ? "-" : s.acc + "%") + ", questions seen: " + s.seen + " of " + s.total + "\n";
-  CHAPTER_IDS.forEach(function(c){ var x = chStats(c); t += "Chapter " + c + ": " + x.seen + "/" + x.total + " seen, accuracy " + (x.acc == null ? "-" : x.acc + "%") + "\n"; });
-  STORE.quizzes.slice(-10).forEach(function(q){ t += "Quiz " + q.date + " Chapter " + q.ch + ": " + q.score + "/" + q.total + "\n"; });
+  CHAPTER_IDS.forEach(function(c){ var x = chStats(c); t += "" + chL(c) + ": " + x.seen + "/" + x.total + " seen, accuracy " + (x.acc == null ? "-" : x.acc + "%") + "\n"; });
+  STORE.quizzes.slice(-10).forEach(function(q){ t += "Quiz " + q.date + " " + chL(q.ch) + ": " + q.score + "/" + q.total + "\n"; });
   return t;
 }
 

@@ -82,7 +82,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 /* practice / quiz */
 .filters,.filters2{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}.field2{display:flex;flex-direction:column;gap:4px}.field2 label{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}.field2 select{padding:9px 10px;border:1px solid var(--edge);border-radius:9px;background:var(--surf);min-width:180px}
 .sesbox{margin-left:auto;text-align:center}.sesbox b{display:block;font-family:var(--f-mono);font-size:1.5rem;color:var(--ink);line-height:1}.sesbox span{font-size:.8rem;color:var(--mut)}
-.qcard{padding:20px 22px}.qmeta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.chip{font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--soft);color:var(--accent);padding:3px 10px;border-radius:99px}.chip.alt{background:#eef1f5;color:var(--mut)}
+.qcard{padding:20px 22px}.qmeta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.chip{font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--soft);color:var(--accent);padding:3px 10px;border-radius:99px}.chip.alt{background:var(--surf2);color:var(--mut);border:1px solid var(--edge)}
 .qtext2{font-family:var(--f-body);font-size:1.28rem;font-weight:700;line-height:1.35;margin:4px 0 10px}
 .opts{display:grid;gap:8px;margin-top:10px}.opt{text-align:left;padding:12px 14px;background:var(--surf);border:1.5px solid var(--edge);border-radius:10px}.opt:hover:not(:disabled){border-color:var(--accent);background:var(--soft)}.opt.pick{border-color:var(--accent);background:var(--soft)}.opt.right{background:var(--goodsoft);border-color:var(--good)}.opt.wrong{background:var(--badsoft);border-color:var(--bad)}
 .numrow{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}.numrow input{padding:12px 14px;border:1.5px solid var(--edge);border-radius:10px;width:200px;font-size:1.1rem}.numrow input[aria-invalid="true"]{border-color:var(--bad)}.un{font-weight:700;font-size:1.1rem}
@@ -157,6 +157,7 @@ select.theme{padding:5px 10px;margin-top:6px;appearance:auto;text-transform:none
 .clock{font-family:var(--f-mono);font-size:.9rem;color:var(--mut)}.clock.over{color:var(--bad);font-weight:700}
 .sheet .srow{padding:10px 0;border-bottom:1px solid var(--edge)}.sheet .srow:last-child{border-bottom:0}.sheet h2{margin:0 0 6px;font-family:var(--f-disp);font-size:1.15rem;color:var(--accent)}.sheet ul{margin:6px 0;padding-left:20px}
 @media print{.top,.letterhead,.foot,.back,.chead .row,#nav{display:none!important}body{background:#fff!important}.card{box-shadow:none!important;border:0!important;background:#fff!important}.sheet .srow{break-inside:avoid}.main{padding:0!important}}
+@media (max-width:700px){.foot{padding-left:16px;padding-right:16px}}
 
 </style></head><body>
 <div class="letterhead" aria-hidden="true"></div>
@@ -167,7 +168,7 @@ select.theme{padding:5px 10px;margin-top:6px;appearance:auto;text-transform:none
   <nav id="nav" aria-label="Main"></nav>
 </div></header>
 <main class="main wrap" id="page" aria-live="polite"></main>
-<footer class="foot wrap"><span>ME0212 Study Lab · version 1.4.0 (2026-11-01)</span><a href="mailto:Mohammad.alghweri@gju.edu.jo?subject=ME0212%20Study%20Lab%20feedback">Send feedback</a></footer>
+<footer class="foot wrap"><span>ME0212 Study Lab · version 1.5.0 (2026-11-01)</span><a href="mailto:Mohammad.alghweri@gju.edu.jo?subject=ME0212%20Study%20Lab%20feedback">Send feedback</a></footer>
 <script>
 (function(){
   // ---------- tiny schematic library: draws every circuit as inline SVG ----------
@@ -968,6 +969,62 @@ CHAPTERS["9"] = { title: "Methods of AC Circuit Analysis", questions: [
   { tag: "Concept", q: "In the power triangle, which side is P, which is Q and which is S? Give the formulas.", a: "P is the horizontal side, Q is the vertical side and S is the hypotenuse.\nP = S cos φ, Q = S sin φ, S = √(P² + Q²), S = P + jQ", fig: function(){ return svg(P.w([[90, 118], [290, 118], [290, 34], [90, 118]]) + P.t(190, 136, "P (W)") + P.t(300, 80, "Q (var)", "start") + P.t(172, 66, "S (VA)", "end", "acc") + P.t(122, 112, "φ", "start", "acc")); } }
 ] };
 
+// ================= Chapter 11 (transformers) and Motors: figures and drawing questions =================
+CHAPTER_IDS.push("11", "M");
+function figXfmr(vp, np, ns, zl, ip){
+  var xp = 158, xs = 214, s = "";
+  s += vrun(XL, YT, YB, [{ t: "acs", c: YM, lab: String(vp).replace(" = ", " =|"), side: "r", off: 22 }]) + hrun(YT, XL, xp, ip ? [] : []) + hrun(YB, xp, XL, []);
+  s += run(xp, YT, xp, YB, [{ t: "ind", p: (YB - YT) / 2 }]) + run(xs, YB, xs, YT, [{ t: "ind", p: (YB - YT) / 2 }]);
+  s += '<line class="w" x1="182" y1="50" x2="182" y2="116"/><line class="w" x1="190" y1="50" x2="190" y2="116"/>';
+  s += hrun(YT, xs, XR, []) + hrun(YB, XR, xs, []) + vrun(XR, YT, YB, [{ t: "r", c: YM, lab: zl, side: "l", off: 10 }]);
+  s += P.t(xp - 18, 148, np, "end") + P.t(xs + 18, 148, ns, "start");
+  if (ip) s += P.arr(100, 26, 140, 26, ip, 120, 20);
+  return svg(s);
+}
+function figMatch(n){
+  var s = vrun(XL, YT, YB, [{ t: "acs", c: YM, lab: "e", side: "l" }]) + hrun(YT, XL, 158, [{ t: "r", c: 118, lab: "R_S = 100 Ω", side: "t" }]) + hrun(YB, 158, XL, []);
+  s += run(158, YT, 158, YB, [{ t: "ind", p: 45 }]) + run(214, YB, 214, YT, [{ t: "ind", p: 45 }]) + '<line class="w" x1="182" y1="50" x2="182" y2="116"/><line class="w" x1="190" y1="50" x2="190" y2="116"/>';
+  s += hrun(YT, 214, XR, []) + hrun(YB, XR, 214, []) + vrun(XR, YT, YB, [{ t: "r", c: YM, lab: "R_L = 4 Ω|(speaker)", side: "l", off: 10 }]) + P.t(186, 150, n);
+  return svg(s);
+}
+function figMotor(vin, r, eb, I){
+  var s = vrun(XL, YT, YB, [B(vin)]) + hrun(YT, XL, XR, [{ t: "r", c: 190, lab: r, side: "t" }]) + vrun(XR, YT, YB, [{ t: "bat", c: YM, plus: "u", lab: eb, side: "l" }]) + hrun(YB, XR, XL, []);
+  if (I) s += P.arr(118, 26, 158, 26, I, 138, 20);
+  return svg(s);
+}
+function figTS(ts, wnl, mark){
+  var x0 = 70, y0 = 130, W = 250, H = 100, s = "";
+  s += '<line class="w" x1="' + x0 + '" y1="' + y0 + '" x2="' + (x0 + W + 10) + '" y2="' + y0 + '"/><line class="w" x1="' + x0 + '" y1="' + y0 + '" x2="' + x0 + '" y2="' + (y0 - H - 10) + '"/>';
+  s += '<polyline class="wave" points="' + x0 + "," + (y0 - H) + " " + (x0 + W) + "," + y0 + '"/>';
+  s += P.t(x0 - 6, y0 - H + 4, ts, "end", "acc") + P.t(x0 + W, y0 + 16, wnl, "middle", "acc") + P.t(x0 - 6, 22, "T", "end") + P.t(x0 + W + 14, y0 + 4, "ω", "start");
+  if (mark) s += '<line class="dash" x1="' + (x0 + W / 2) + '" y1="' + y0 + '" x2="' + (x0 + W / 2) + '" y2="' + (y0 - H / 2) + '"/><circle cx="' + (x0 + W / 2) + '" cy="' + (y0 - H / 2) + '" r="4" class="mesh"/>' + P.t(x0 + W / 2 + 8, y0 - H / 2 - 8, mark, "start", "acc");
+  return svg(s);
+}
+function figWound(kind){
+  // field winding F and armature A, connected in series or in parallel (shunt) to the supply
+  var s = vrun(XL, YT, YB, [B("V")]);
+  if (kind === "series") s += hrun(YT, XL, XR, [{ t: "ind", c: 190, lab: "field", side: "t" }]) + vrun(XR, YT, YB, [{ t: "m", c: YM, ch: "A", lab: "armature", side: "l" }]) + hrun(YB, XR, XL, []);
+  else s += hrun(YT, XL, XR, []) + hrun(YB, XR, XL, []) + vrun(190, YT, YB, [{ t: "ind", c: YM, lab: "field", side: "l" }]) + vrun(XR, YT, YB, [{ t: "m", c: YM, ch: "A", lab: "armature", side: "l" }]) + dots([[190, YT], [190, YB]]);
+  return svg(s);
+}
+
+CHAPTERS["11"] = { title: "Transformers", questions: [
+  { tag: "Calculation", q: "Example 11.1. N_P = 40, N_S = 100, V_P = 50 V, I_P = 5 A, Z_L = 2 Ω. Find the turns ratio n.", a: "n = N_S / N_P = 100 / 40 = 2.5", fig: function(){ return figXfmr("V_P = 50 V", "N_P = 40", "N_S = 100", "Z_L = 2 Ω", "I_P = 5 A"); } },
+  { tag: "Calculation", q: "Example 11.1. Find the secondary voltage and current.", a: "V_S = n V_P = 2.5 × 50 = 125 V\nI_S = I_P / n = 5 / 2.5 = 2 A", fig: function(){ return figXfmr("V_P = 50 V", "N_P = 40", "N_S = 100", "Z_L = 2 Ω", "I_P = 5 A"); } },
+  { tag: "Calculation", q: "Example 11.1. Find the primary impedance Z_P reflected from the secondary and the power.", a: "Z_P = Z_L / n² = 2 / 2.5² = 0.32 Ω\nP_S = I_S V_S = 2 × 125 = 250 W", fig: function(){ return figXfmr("V_P = 50 V", "N_P = 40", "N_S = 100", "Z_L = 2 Ω", "I_P = 5 A"); } },
+  { tag: "Concept", q: "Example 11.2. N_S = 125 and N_P = 250. Find n. Is it a step-up or a step-down transformer?", a: "n = N_S / N_P = 125 / 250 = 0.5\nn < 1, so it is a step-down transformer.", fig: function(){ return figXfmr("V_P", "N_P = 250", "N_S = 125", "Z_L"); } },
+  { tag: "Calculation", q: "Example 11.3. An amplifier with R_S = 100 Ω drives a 4 Ω speaker. Find n for maximum power.", a: "n = √(Z_L / Z_P) = √(4 / 100) = 0.2 = 1/5\nThe speaker then looks like 4 / 0.2² = 100 Ω to the amplifier.", fig: function(){ return figMatch("n = ?"); } },
+  { tag: "Concept", q: "Why is the voltage stepped up before long transmission lines?", a: "For the same power P = V I, a higher V needs a smaller I.\nThe line loss I² R_w falls, so the efficiency rises.", fig: function(){ return figXfmr("G", "N_P", "N_S > N_P", "line"); } }
+] };
+CHAPTERS["M"] = { title: "Electric Motors", questions: [
+  { tag: "Concept", q: "Draw the model of a PM brushed DC motor. Write the current equation.", a: "The coil is a resistor R in series with the back EMF V_bemf = K_E ω (the inductance is neglected).\nI = (V_in − V_bemf) / R", fig: function(){ return figMotor("V_in", "R", "V_bemf = K_E ω", "I"); } },
+  { tag: "Concept", q: "Read the torque-speed line of a PM DC motor. What are T_s and ω_NL?", a: "T_s (stall torque) is the torque at ω = 0: T_s = K_T V_in / R.\nω_NL (no-load speed) is the speed at T = 0: ω_NL = V_in / K_E.", fig: function(){ return figTS("T_stall", "ω_NL"); } },
+  { tag: "Concept", q: "At which point does the motor give its maximum mechanical power?", a: "At half the no-load speed, where T = T_stall / 2.\nP = T ω is largest there.", fig: function(){ return figTS("T_stall", "ω_NL", "P_max"); } },
+  { tag: "Calculation", q: "Motors file example. No-load speed 1000 rpm, stall torque 100 in·oz. A 10 oz weight hangs from a 2 in pulley. Find the torque and the speed.", a: "T = F × r = 10 oz × 2 in = 20 in·oz\nFrom the line: ω = 1000 × (1 − 20/100) = 800 rpm (the file reads 800 rpm and 125 mA from the graph).", fig: function(){ return figTS("100 in·oz", "1000 rpm", "20 in·oz"); } },
+  { tag: "Concept", q: "Which winding connection is this? Name one application.", a: "Series-wound: the field and the armature are in series.\nVery large torque at low speed, for example elevators, conveyors and electric locomotives.", fig: function(){ return figWound("series"); } },
+  { tag: "Concept", q: "Which winding connection is this? How does its speed behave?", a: "Shunt-wound: the field is in parallel with the armature.\nThe speed is almost constant with varying load, for example fans, blowers and machine tools.", fig: function(){ return figWound("shunt"); } }
+] };
+
   // ================= helpers =================
   var PFX = [["µ", 1e-6], ["m", 1e-3], ["", 1], ["k", 1e3], ["M", 1e6]];
   function fmt(x, unit){
@@ -1374,6 +1431,78 @@ CHAPTERS["9"] = { title: "Methods of AC Circuit Analysis", questions: [
         s += line("Line current falls from " + fmt(S1 / V, "A") + " to " + fmt(S2 / V, "A") + ".");
         s += line(ok("Check: √(P² + Q₂²) = " + fmt(Math.sqrt(P * P + Q2 * Q2), "VA") + " = S₂ ✓"));
         return { fig: figPFC(), steps: s };
+      } }
+  ];
+
+  // ================= Chapter 11 (transformers) and Motors: lessons and calculators =================
+  LESSONS["11"] = [
+    { t: "The transformer", pts: ["Two coils share one core. A changing current in the primary coil changes the flux, and the flux induces a voltage in the secondary coil (mutual inductance).", "The primary is connected to the source. The secondary is connected to the load Z_L.", "Air-core transformers are used in high-frequency circuits (instruments, radio, TV). Iron-core transformers are used in audio circuits and power systems."], fig: function(){ return bankFig("11", 5); } },
+    { t: "The ideal transformer", pts: ["An ideal transformer has full coupling (k = 1), no winding resistance and no magnetic loss. An iron-core transformer is close to ideal.", "The book defines the turns ratio as n = N_S / N_P.", "The input power equals the output power: V_P I_P = V_S I_S.", "The load seen from the primary is the reflected impedance Z_P = Z_L / n²."], f: ["n = N_S / N_P = V_S / V_P = I_P / I_S", "Z_P = Z_L / n²"], fig: function(){ return bankFig("11", 0); } },
+    { t: "Step-up and step-down transformers", pts: ["Step-up: N_S > N_P, n > 1, V_S > V_P.", "Step-down: N_S < N_P, n < 1, V_S < V_P.", "Power stations step the voltage up for transmission. A higher voltage carries the same power with less current, so the I² R_w loss in the lines falls. Local stations step it down again."], f: ["V_S = n V_P", "I_S = I_P / n"], fig: function(){ return bankFig("11", 3); } },
+    { t: "Other types of transformers", pts: ["Center-tapped: a tap in the middle of the secondary gives two equal output voltages.", "Multiple-tapped: several taps give several output voltages.", "Adjustable (variable): the output voltage can be set from zero to the maximum.", "Auto-transformer: one winding serves as both primary and secondary. It is smaller and lighter."] },
+    { t: "Impedance matching", pts: ["Maximum power reaches the load when Z_L = Z_S (Chapter 5 for AC).", "When the load does not match the source, a transformer with the right turns ratio is placed between them.", "Example 11.3: a 100 Ω amplifier and a 4 Ω speaker need n = 1/5."], f: ["n = √(Z_L / Z_P)"], fig: function(){ return bankFig("11", 4); } }
+  ];
+  LESSONS["M"] = [
+    { t: "How a DC motor works", pts: ["A wire carrying a current in a magnetic field feels a force normal to the plane of the field and the current (F = I × B on the slide).", "The rotor (armature) carries the current-carrying windings and turns the shaft. The stator makes the fixed magnetic field with permanent magnets or electromagnets.", "In a brushed motor, graphite brushes feed current to the rotating coil through the commutator. When the armature becomes horizontal, the commutator reverses the connection and the rotation continues."] },
+    { t: "Types of brushed DC motors", pts: ["Permanent magnet (PM): stator of permanent magnets, rotor of coils. Linear torque-speed line. Used in wipers, toys, toothbrushes, mixers and portable drills.", "Series-wound: field and armature in series. Very large torque at low speed, for example elevators, trolley cars, conveyors and locomotives. It must not run without load, because the speed rises out of control.", "Shunt-wound: field and armature in parallel. Almost constant speed with varying load, for example fans, blowers and machine tools.", "Compound-wound: both series and shunt fields. High starting torque and a controlled no-load speed, for example punch presses and cranes."], fig: function(){ return bankFig("M", 4); } },
+    { t: "The PM DC motor model", pts: ["The coil is a resistor R in series with the back EMF. The inductance is neglected.", "The torque is proportional to the current. The back EMF is proportional to the speed.", "Together they give a straight torque-speed line: T = T_s − α ω."], f: ["I = (V_in − V_bemf) / R", "T = K_T I", "V_bemf = K_E ω", "T_s = K_T V_in / R, α = K_T K_E / R"], fig: function(){ return bankFig("M", 0); } },
+    { t: "Torque-speed curve, power and efficiency", pts: ["No load (T = 0): ω_NL = V_in / K_E. Stall (ω = 0): T_stall = K_T V_in / R.", "The mechanical power P = T ω is largest at half the no-load speed, where T = T_stall / 2.", "K_T = K_E when K_T is in N·m/A and K_E in V/(rad/s).", "Example in the file: 1000 rpm and 100 mA at no load, 100 in·oz and 260 mA at stall."], f: ["η = P_mech / P_elec = T ω / (V I)"], fig: function(){ return bankFig("M", 2); } },
+    { t: "AC motors", pts: ["The AC induction motor is the most widely used motor. It is efficient, needs little maintenance and costs little. The rotor gets its power by induction, with no brushes.", "Three-phase power comes from a generator with three windings spaced 120° apart. One end of each coil goes to the neutral N, the other ends are the phases A, B and C.", "The stator field rotates and pulls the rotor along. AC motors are by nature constant-speed machines.", "Torque-speed curve: the speed changes little over a wide load range. At the pull-out torque the torque drops sharply."] }
+  ];
+
+  TOOLS["11"] = [
+    { name: "Ideal transformer",
+      hint: "Example 11.1 values are filled in. The book uses n = N_S / N_P.",
+      fields: function(){ return fld("np", "N_P", "turns", 40) + fld("ns", "N_S", "turns", 100) + fld("vp", "V_P", "V", 50) + fld("ip", "I_P", "A", 5) + fld("zl", "Z_L", "Ω", 2); },
+      run: function(){
+        var Np = val("np"), Ns = val("ns"), Vp = val("vp"), Ip = val("ip"), Zl = val("zl");
+        if (!pos([Np, Ns, Vp, Ip, Zl])) return bad("All values must be positive.");
+        var n = Ns / Np, Vs = n * Vp, Is = Ip / n, Zp = Zl / (n * n);
+        var s = line("n = N_S / N_P = " + nf(Ns) + " / " + nf(Np) + " = " + nf(n, 4) + (n > 1 ? " (step-up)" : n < 1 ? " (step-down)" : " (1:1)")) + line(res("V_S = n V_P = " + fmt(Vs, "V"))) + line(res("I_S = I_P / n = " + fmt(Is, "A"))) + line(res("Z_P = Z_L / n² = " + fmt(Zp, "Ω")));
+        s += line("P_P = V_P I_P = " + fmt(Vp * Ip, "W")) + line(ok("Check: P_S = V_S I_S = " + fmt(Vs * Is, "W") + (close(Vp * Ip, Vs * Is) ? " ✓" : "")));
+        return { fig: figXfmr("V_P = " + fmt(Vp, "V"), "N_P = " + nf(Np), "N_S = " + nf(Ns), "Z_L = " + fmt(Zl, "Ω"), "I_P = " + fmt(Ip, "A")), steps: s };
+      } },
+    { name: "Impedance matching",
+      hint: "Example 11.3 values are filled in. The turns ratio makes the load look equal to the source resistance.",
+      fields: function(){ return fld("zs", "Z_S (source)", "Ω", 100) + fld("zl", "Z_L (load)", "Ω", 4) + fld("e", "E (source)", "V", 10); },
+      run: function(){
+        var Zs = val("zs"), Zl = val("zl"), E = val("e");
+        if (!pos([Zs, Zl, E])) return bad("All values must be positive.");
+        var n = Math.sqrt(Zl / Zs), Pd = E * E * Zl / Math.pow(Zs + Zl, 2), Pm = E * E / (4 * Zs);
+        var s = line("Matched when Z_P = Z_S, so n = √(Z_L / Z_S) = √(" + nf(Zl) + " / " + nf(Zs) + ")") + line(res("n = " + nf(n, 4) + (n < 1 ? " = 1/" + nf(1 / n, 3) : "")));
+        s += line("Direct connection: P_L = E² Z_L / (Z_S + Z_L)² = " + fmt(Pd, "W")) + line(res("With the transformer: P_L = E² / (4 Z_S) = " + fmt(Pm, "W")));
+        s += line(ok("Check: Z_L / n² = " + fmt(Zl / (n * n), "Ω") + " = Z_S ✓"));
+        return { fig: figMatch("n = " + nf(n, 3)), steps: s };
+      } }
+  ];
+  TOOLS["M"] = [
+    { name: "PM DC motor",
+      hint: "K_T = K_E = K in SI units. Enter the speed to find the operating point.",
+      fields: function(){ return fld("v", "V_in", "V", 12) + fld("r", "R", "Ω", 2) + fld("k", "K", "N·m/A", 0.05) + fld("w", "ω", "rad/s", 120); },
+      run: function(){
+        var V = val("v"), R = val("r"), K = val("k"), w = val("w");
+        if (!pos([V, R, K]) || !(w >= 0)) return bad("V_in, R and K must be positive. ω must be zero or more.");
+        var wnl = V / K, Ts = K * V / R;
+        if (w > wnl) return bad("ω is above the no-load speed " + nf(wnl, 4) + " rad/s.");
+        var Eb = K * w, I = (V - Eb) / R, T = K * I, Pm = T * w, Pe = V * I;
+        var s = line("V_bemf = K_E ω = " + fmt(Eb, "V")) + line("I = (V_in − V_bemf) / R = " + fmt(I, "A")) + line(res("T = K_T I = " + nf(T, 4) + " N·m"));
+        s += line("No-load speed ω_NL = V_in / K_E = " + nf(wnl, 4) + " rad/s (" + nf(wnl * 60 / (2 * Math.PI), 4) + " rpm)") + line("Stall torque T_stall = K_T V_in / R = " + nf(Ts, 4) + " N·m");
+        s += line(res("P_mech = T ω = " + fmt(Pm, "W") + ", P_elec = V I = " + fmt(Pe, "W") + ", η = " + nf(Pe ? 100 * Pm / Pe : 0, 3) + "%"));
+        s += line("Maximum power at ω = ω_NL / 2 = " + nf(wnl / 2, 4) + " rad/s: P_max = " + fmt(Ts * wnl / 4, "W"));
+        s += line(ok("Check: T = T_s − α ω = " + nf(Ts - K * K / R * w, 4) + " N·m" + (close(T, Ts - K * K / R * w) ? " ✓" : "")));
+        return { fig: figMotor("V_in = " + fmt(V, "V"), "R = " + fmt(R, "Ω"), "V_bemf = " + fmt(Eb, "V"), "I = " + fmt(I, "A")), steps: s };
+      } },
+    { name: "Torque-speed line",
+      hint: "Read T_stall and ω_NL from a datasheet line. The load torque gives the speed. The file example is filled in.",
+      fields: function(){ return fld("ts", "T_stall", "in·oz", 100) + fld("wn", "ω_NL", "rpm", 1000) + fld("t", "T (load)", "in·oz", 20); },
+      run: function(){
+        var Ts = val("ts"), wn = val("wn"), T = val("t");
+        if (!pos([Ts, wn]) || !(T >= 0) || T > Ts) return bad("T_stall and ω_NL must be positive, and 0 ≤ T ≤ T_stall.");
+        var w = wn * (1 - T / Ts);
+        var s = line("ω = ω_NL (1 − T / T_stall) = " + nf(wn) + " × (1 − " + nf(T) + " / " + nf(Ts) + ")") + line(res("ω = " + nf(w, 4) + " rpm"));
+        s += line("Maximum power at T = T_stall / 2 = " + nf(Ts / 2) + " and ω = ω_NL / 2 = " + nf(wn / 2) + " rpm");
+        s += line(ok("Check: the point lies on the straight line between (0, T_stall) and (ω_NL, 0) ✓"));
+        return { fig: figTS(nf(Ts) + " in·oz", nf(wn) + " rpm", nf(T) + " in·oz"), steps: s };
       } }
   ];
 
@@ -1916,6 +2045,125 @@ SIMS["9"] = [
     tryit: [["P = 4 kW, PF = 0.8. What is Q₁?", "Q₁ = 3 kvar."], ["How much Q_C gives PF 0.95 for that load?", "About 1.685 kvar (C ≈ 310 μF)."]] }
 ];
 
+// ===== Watch tab: Chapter 11 and Motors =====
+function coilV(x, y1, y2, n, side){
+  // a winding drawn as n loops on a vertical core leg at x; side = -1 (left) or 1 (right) for the lead side
+  var o = "", h = (y2 - y1) / n, i;
+  for (i = 0; i < n; i++) o += '<ellipse cx="' + x + '" cy="' + (y1 + h * (i + 0.5)).toFixed(1) + '" rx="16" ry="' + Math.max(2.5, h / 2 - 0.5).toFixed(1) + '" class="fl" fill="none" stroke-width="2.4"/>';
+  return o;
+}
+function osc(ph, amp){ return amp * Math.sin(2 * Math.PI * ph); }
+SIMS["11"] = [
+  { t: "Ideal transformer", d: "An ideal transformer feeds a load Z_L. Change the turns and watch the voltage and the current change in opposite ways. The turns ratio is the book's n = N_S / N_P.",
+    ctl: [{ id: "np", label: "N_P", min: 20, max: 200, step: 20, val: 40, unit: "turns" }, { id: "ns", label: "N_S", min: 20, max: 200, step: 20, val: 100, unit: "turns" }, { id: "vp", label: "V_P", min: 10, max: 100, step: 10, val: 50, unit: "V" }, { id: "zl", label: "Z_L", min: 5, max: 50, step: 5, val: 25, unit: "Ω" }],
+    q: function(v){ var n = v.ns / v.np, Vs = n * v.vp, Is = Vs / v.zl, Ip = n * Is; return { n: n, Vs: Vs, Is: Is, Ip: Ip }; },
+    spd: function(){ return [0.5]; },
+    draw: function(v, ph){
+      var q = this.q(v), o = "", a1 = Math.min(0.35, 0.02 * q.Ip), a2 = Math.min(0.35, 0.02 * q.Is);
+      o += '<rect x="178" y="52" width="124" height="156" rx="6" fill="none" stroke="#5b6b7b" stroke-width="10"/>';
+      o += coilV(178, 70, 190, Math.round(v.np / 20)) + coilV(302, 70, 190, Math.round(v.ns / 20));
+      o += acsrc(60, 130) + wr("60,114 60,70 162,70") + wr("60,146 60,190 162,190") + wr("318,70 430,70 430,105") + zig(430, 105, 430, 155) + wr("430,155 430,190 318,190");
+      o += flow([[60, 146], [60, 190], [162, 190]], osc(ph[0], a1), "c", 30) + flow([[162, 70], [60, 70], [60, 114]], osc(ph[0], a1), "c", 30) + flow([[318, 70], [430, 70], [430, 190], [318, 190]], osc(ph[0], a2), "c", 34);
+      o += tx(60, 222, "V_P = " + v.vp + " V") + tx(178, 228, "N_P = " + v.np) + tx(302, 228, "N_S = " + v.ns) + tx(414, 134, "Z_L " + v.zl + " Ω", "end") + tx(240, 36, "n = N_S / N_P = " + nf(q.n, 3) + (q.n > 1 ? " (step-up)" : q.n < 1 ? " (step-down)" : " (1:1)"), "middle", "a") + tx(380, 222, "V_S = " + nf(q.Vs, 3) + " V") + tx(110, 58, "I_P = " + nf(q.Ip, 3) + " A") + tx(380, 58, "I_S = " + nf(q.Is, 3) + " A");
+      return o;
+    },
+    out: function(v){ var q = this.q(v); return ["n = N_S / N_P = " + nf(q.n, 4), "V_S = n V_P = " + nf(q.Vs, 4) + " V", "I_S = V_S / Z_L = " + nf(q.Is, 4) + " A, I_P = n I_S = " + nf(q.Ip, 4) + " A", "Z_P = Z_L / n² = " + nf(v.zl / (q.n * q.n), 4) + " Ω", "P_P = P_S = " + nf(v.vp * q.Ip, 4) + " W"]; },
+    look: ["The arrows swing back and forth: the current is AC.", "More secondary turns give more voltage and less current on that side.", "The power is the same on both sides."],
+    tryit: [["N_P = 40, N_S = 100, V_P = 50 V. What is V_S?", "125 V (Example 11.1)."], ["Make N_S smaller than N_P. Which type is it now?", "A step-down transformer."]] },
+  { t: "Power transmission", d: "100 kW leaves a 2 kV generator through lines of 5 Ω in total. A step-up transformer raises the voltage k times. A higher voltage needs less current, so the line loss I² R falls.",
+    ctl: [{ id: "k", label: "Step-up ratio k", min: 1, max: 20, step: 1, val: 1, unit: "" }],
+    q: function(v){ var V = 2000 * v.k, I = 100000 / V, L = I * I * 5; return { V: V, I: I, L: L }; },
+    spd: function(v){ var q = this.q(v); return [Math.min(0.9, q.I / 50)]; },
+    draw: function(v, ph){
+      var q = this.q(v), o = "", w = Math.max(2, Math.min(280, q.L / 12500 * 280));
+      o += '<circle class="srcc" cx="45" cy="110" r="22"/>' + tx(45, 115, "G") + tx(45, 150, "2 kV") + wr("67,110 100,110") + '<rect x="100" y="92" width="36" height="36" rx="4" fill="none" stroke="#5b6b7b" stroke-width="3"/>' + tx(118, 115, "↑") + tx(118, 150, "×" + v.k);
+      o += wr("136,110 360,110") + flow([[136, 110], [360, 110]], ph[0], "c", 34) + '<rect x="360" y="92" width="36" height="36" rx="4" fill="none" stroke="#5b6b7b" stroke-width="3"/>' + tx(378, 115, "↓") + wr("396,110 430,110") + '<rect x="430" y="88" width="34" height="44" rx="3" fill="none" stroke="#5b6b7b" stroke-width="2.4"/>' + tx(447, 150, "town");
+      o += tx(248, 84, "line: V = " + nf(q.V / 1000, 3) + " kV, I = " + nf(q.I, 3) + " A") + tx(248, 136, "R_line = 5 Ω", "middle", "mut");
+      o += tx(40, 200, "line loss", "start") + '<rect x="130" y="188" width="' + w.toFixed(1) + '" height="16" rx="3" fill="#c0392b"/>' + tx(130, 230, nf(q.L, 4) + " W, which is " + nf(q.L / 1000, 3) + "% of the 100 kW sent", "start", "r");
+      return o;
+    },
+    out: function(v){ var q = this.q(v); return ["Line voltage V = 2 kV × " + v.k + " = " + nf(q.V / 1000, 3) + " kV", "I = P / V = 100 kW / " + nf(q.V / 1000, 3) + " kV = " + nf(q.I, 4) + " A", "Loss = I² R = " + nf(q.I, 4) + "² × 5 = " + nf(q.L, 4) + " W"]; },
+    look: ["Each step up of the voltage cuts the current by the same factor.", "The loss falls with the square of the current: k = 10 cuts it 100 times.", "The arrows slow down as the current falls."],
+    tryit: [["k = 1. What is the loss?", "I = 50 A, loss = 12.5 kW."], ["k = 10. What is the loss?", "I = 5 A, loss = 125 W."]] },
+  { t: "Impedance matching", d: "Example 11.3: an amplifier with R_S = 100 Ω drives a 4 Ω speaker through a transformer with turns ratio n. The speaker power peaks when 4 / n² = 100 Ω.",
+    ctl: [{ id: "n", label: "n = N_S / N_P", min: 0.05, max: 0.6, step: 0.05, val: 0.2, unit: "" }],
+    P: function(n){ var Zp = 4 / (n * n); return 100 * Zp / Math.pow(100 + Zp, 2); },
+    spd: function(){ return []; },
+    draw: function(v){
+      var x0 = 70, y0 = 210, gx = 360, gy = 150, pts = [], n, o = "", Pm = 0.25, i;
+      for (n = 0.05; n <= 0.601; n += 0.005) pts.push([x0 + gx * (n - 0.05) / 0.55, y0 - gy * this.P(n) / Pm]);
+      for (i = 1; i <= 6; i++){ var nn2 = i / 10; o += tx(x0 + gx * (nn2 - 0.05) / 0.55, y0 + 16, nf(nn2, 2)); }
+      o += '<line class="axis2" x1="' + x0 + '" y1="' + y0 + '" x2="' + (x0 + gx) + '" y2="' + y0 + '"/><line class="axis2" x1="' + x0 + '" y1="' + y0 + '" x2="' + x0 + '" y2="' + (y0 - gy - 10) + '"/>' + poly(pts, "line");
+      var px = x0 + gx * (v.n - 0.05) / 0.55, py = y0 - gy * this.P(v.n) / Pm, mx = x0 + gx * (0.2 - 0.05) / 0.55;
+      o += '<line class="dash" x1="' + mx.toFixed(1) + '" y1="' + y0 + '" x2="' + mx.toFixed(1) + '" y2="' + (y0 - gy) + '"/>' + tx(mx + 6, y0 - gy - 4, "n = 1/5", "start", "a") + '<circle class="nd big" cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="5.5"/>';
+      o += tx(x0 + gx / 2, 252, "turns ratio n") + tx(x0 - 6, 40, "P (W)", "end") + tx(x0 + 8, 40, "speaker power for E = 10 V", "start", "mut");
+      return o;
+    },
+    out: function(v){ var Zp = 4 / (v.n * v.n), P = this.P(v.n); return ["The speaker seen from the primary: Z_P = 4 / n² = " + nf(Zp, 4) + " Ω", "P = E² Z_P / (R_S + Z_P)² = " + nf(P, 4) + " W (E = 10 V)", "Maximum 0.25 W at n = √(4 / 100) = 0.2"]; },
+    look: ["The curve peaks when the reflected load equals R_S = 100 Ω.", "A smaller n makes the speaker look larger. A larger n makes it look smaller.", "Without a transformer (n = 1) the 4 Ω speaker gets only 0.037 W."],
+    tryit: [["What n gives the peak?", "n = 0.2 = 1/5."], ["At n = 0.2, what does the amplifier see?", "100 Ω, equal to its own resistance."]] }
+];
+SIMS["M"] = [
+  { t: "PM DC motor", d: "A PM motor with R = 2 Ω and K_T = K_E = 0.05. Raise the load torque: the speed falls, the current rises and the back EMF falls.",
+    ctl: [{ id: "V", label: "V_in", min: 4, max: 24, step: 2, val: 12, unit: "V" }, { id: "T", label: "Load T", min: 0, max: 0.6, step: 0.02, val: 0.1, unit: "N·m" }],
+    q: function(v){ var K = 0.05, R = 2, Ts = K * v.V / R, T = Math.min(v.T, Ts), w = (Ts - T) / (K * K / R), I = T / K; return { Ts: Ts, w: w, I: I, Eb: K * w, T: T, stall: v.T >= Ts }; },
+    spd: function(v){ var q = this.q(v); return [q.w / (2 * Math.PI) / 30, spd1(q.I * 2)]; },
+    draw: function(v, ph){
+      var q = this.q(v), o = "", cx = 330, cy = 130, a = 2 * Math.PI * ph[0], i;
+      o += '<rect x="250" y="70" width="30" height="120" rx="4" fill="#c0392b"/><rect x="380" y="70" width="30" height="120" rx="4" fill="#0b6bab"/>' + tx(265, 135, "N", "middle") + tx(395, 135, "S", "middle");
+      o += '<circle cx="' + cx + '" cy="' + cy + '" r="44" fill="none" stroke="#5b6b7b" stroke-width="3"/>';
+      for (i = 0; i < 2; i++){ var b = a + i * Math.PI; o += '<line class="w thick" x1="' + cx + '" y1="' + cy + '" x2="' + (cx + 40 * Math.cos(b)).toFixed(1) + '" y2="' + (cy + 40 * Math.sin(b)).toFixed(1) + '"/>'; }
+      o += '<circle cx="' + cx + '" cy="' + cy + '" r="6" fill="#5b6b7b"/>';
+      o += bat(40, 70, 190) + wr("40,70 160,70") + zig(160, 70, 210, 70) + wr("210,70 230,70 230,190 40,190") + flow([[40, 115], [40, 70], [230, 70], [230, 190], [40, 190], [40, 145]], ph[1], q.I ? "c" : "off", 34);
+      o += tx(40, 212, "V_in " + v.V + " V") + tx(185, 56, "R 2 Ω") + tx(330, 210, q.stall ? "stalled: ω = 0" : "ω = " + nf(q.w, 1) + " rad/s (" + Math.round(q.w * 60 / (2 * Math.PI)) + " rpm)", "middle", q.stall ? "r" : "a") + tx(330, 232, "I = " + nf(q.I, 3) + " A, V_bemf = " + nf(q.Eb, 3) + " V");
+      return o;
+    },
+    out: function(v){ var q = this.q(v), Pm = q.T * q.w, Pe = v.V * q.I; return ["T_stall = K_T V_in / R = " + nf(q.Ts, 3) + " N·m, ω_NL = V_in / K_E = " + nf(v.V / 0.05, 4) + " rad/s", q.stall ? "The load is above the stall torque: the motor stops." : "ω = (T_s − T) / α = " + nf(q.w, 4) + " rad/s", "I = T / K_T = " + nf(q.I, 3) + " A", "P_mech = T ω = " + nf(Pm, 4) + " W, P_elec = V I = " + nf(Pe, 4) + " W, η = " + (Pe ? nf(100 * Pm / Pe, 3) : "0") + "%"]; },
+    look: ["With no load the rotor spins fastest and the current is smallest.", "A heavier load slows the rotor and draws more current.", "At the stall torque the rotor stops and the current is largest."],
+    tryit: [["V_in = 12 V. What is the no-load speed?", "ω_NL = 12 / 0.05 = 240 rad/s."], ["V_in = 12 V. What is the stall torque?", "T_stall = 0.05 × 12 / 2 = 0.3 N·m."]] },
+  { t: "Torque-speed and power", d: "The straight torque-speed line of a PM motor and the power curve P = T ω. The power peaks at half the no-load speed.",
+    ctl: [{ id: "V", label: "V_in", min: 6, max: 24, step: 2, val: 12, unit: "V" }, { id: "f", label: "Load (% of stall)", min: 0, max: 100, step: 5, val: 30, unit: "%" }],
+    spd: function(){ return []; },
+    draw: function(v){
+      var K = 0.05, R = 2, Ts = K * v.V / R, wn = v.V / K, Tm = 0.6, Wm = 480, Pm = 0.6 * 480 / 4, x0 = 60, y0 = 215, gx = 380, gy = 165, o = "", a = [], b = [], w, i;
+      for (w = 0; w <= wn + 0.01; w += wn / 40){ var T = Ts * (1 - w / wn); a.push([x0 + gx * w / Wm, y0 - gy * T / Tm]); b.push([x0 + gx * w / Wm, y0 - gy * (T * w) / Pm]); }
+      for (i = 0; i <= 4; i++) o += tx(x0 + gx * i / 4, y0 + 16, Wm * i / 4);
+      o += '<line class="axis2" x1="' + x0 + '" y1="' + y0 + '" x2="' + (x0 + gx) + '" y2="' + y0 + '"/><line class="axis2" x1="' + x0 + '" y1="' + y0 + '" x2="' + x0 + '" y2="' + (y0 - gy - 8) + '"/>' + poly(a, "line") + poly(b, "line l2");
+      var T0 = Ts * v.f / 100, w0 = wn * (1 - v.f / 100), px = x0 + gx * w0 / Wm;
+      o += '<circle class="nd big" cx="' + px.toFixed(1) + '" cy="' + (y0 - gy * T0 / Tm).toFixed(1) + '" r="5.5"/><circle cx="' + px.toFixed(1) + '" cy="' + (y0 - gy * T0 * w0 / Pm).toFixed(1) + '" r="5" fill="#c0392b"/>';
+      var hx = x0 + gx * (wn / 2) / Wm;
+      o += '<line class="dash" x1="' + hx.toFixed(1) + '" y1="' + y0 + '" x2="' + hx.toFixed(1) + '" y2="' + (y0 - gy * (Ts * wn / 4) / Pm).toFixed(1) + '"/>' + tx(hx + 6, y0 - gy * (Ts * wn / 4) / Pm - 8, "P_max at ω_NL / 2", "start", "r");
+      o += tx(x0 + gx, 250, "ω (rad/s)", "end") + tx(x0 + 6, 30, "T (blue), P (red)", "start", "mut");
+      return o;
+    },
+    out: function(v){ var K = 0.05, R = 2, Ts = K * v.V / R, wn = v.V / K, T0 = Ts * v.f / 100, w0 = wn * (1 - v.f / 100); return ["T_stall = " + nf(Ts, 3) + " N·m, ω_NL = " + nf(wn, 4) + " rad/s", "Operating point: T = " + nf(T0, 3) + " N·m, ω = " + nf(w0, 4) + " rad/s", "P = T ω = " + nf(T0 * w0, 4) + " W", "P_max = T_stall ω_NL / 4 = " + nf(Ts * wn / 4, 4) + " W at 50% load"]; },
+    look: ["The torque line falls from T_stall to zero at ω_NL.", "The power is zero at both ends of the line and peaks in the middle.", "A higher V_in shifts the whole line outward."],
+    tryit: [["At which load percentage is P largest?", "At 50% of the stall torque."], ["Double V_in. What happens to P_max?", "It becomes four times larger."]] },
+  { t: "Three-phase field", d: "Three windings 120° apart carry three currents 120° apart. Their fields add to one field of constant size that rotates. This rotating field drives the induction motor.",
+    ctl: [{ id: "s", label: "Speed", min: 1, max: 5, step: 1, val: 2, unit: "" }],
+    spd: function(v){ return [0.05 * v.s]; },
+    draw: function(v, ph){
+      var th = 2 * Math.PI * ph[0], cx = 120, cy = 130, o = "", cols = ["#c0392b", "#14803c", "#0b6bab"], names = ["A", "B", "C"], i, sx = 0, sy = 0, x0 = 250, gx = 210, cyw = 130, A = 70;
+      o += '<circle cx="' + cx + '" cy="' + cy + '" r="80" fill="none" stroke="#8aa0b4" stroke-width="1.2" stroke-dasharray="3 4"/>';
+      for (i = 0; i < 3; i++){
+        var ang = i * 2 * Math.PI / 3, c = Math.cos(th - ang), ux = Math.cos(ang), uy = -Math.sin(ang);
+        o += '<line x1="' + cx + '" y1="' + cy + '" x2="' + (cx + 80 * ux).toFixed(1) + '" y2="' + (cy + 80 * uy).toFixed(1) + '" stroke="' + cols[i] + '" stroke-width="1" stroke-dasharray="4 3"/>' + tx(cx + 92 * ux, cy + 92 * uy + 4, names[i]);
+        o += vec(cx, cy, cx + 50 * c * ux, cy + 50 * c * uy, ["l2", "l3", ""][i]);
+        sx += c * ux; sy += c * uy;
+        var pts = [], d;
+        for (d = 0; d <= 360; d += 6) pts.push([x0 + gx * d / 360, cyw - A * Math.cos(d * Math.PI / 180 - ang)]);
+        o += '<polyline points="' + pts.map(function(p){ return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ") + '" fill="none" stroke="' + cols[i] + '" stroke-width="2.2"/>';
+      }
+      o += vec(cx, cy, cx + 50 * sx, cy + 50 * sy, "l4");
+      var px = x0 + gx * ((th / (2 * Math.PI)) % 1);
+      o += '<line class="axis2" x1="' + x0 + '" y1="' + cyw + '" x2="' + (x0 + gx) + '" y2="' + cyw + '"/><line class="dash" x1="' + px.toFixed(1) + '" y1="50" x2="' + px.toFixed(1) + '" y2="210"/>' + tx(x0 + gx / 2, 236, "A red, B green, C blue") + tx(cx, 236, "purple: total field");
+      return o;
+    },
+    out: function(){ return ["Each phase current is cos(ωt − 0°), cos(ωt − 120°) or cos(ωt − 240°).", "The sum of the three fields has a constant size of 1.5 times one phase.", "The total field turns once per cycle of the supply."]; },
+    look: ["Each coloured arrow only grows and shrinks along its own winding axis.", "The purple total keeps the same length and turns round.", "The rotor is pulled along by this turning field."],
+    tryit: [["How far apart are the windings?", "120°."], ["Does the total field change its size?", "No. Only its direction turns."]] }
+];
+
 var IDEAS = {"The basic circuit": {"i": "Think of a loop of pipe with a pump (source) and a narrow part (load). Water moves only if the loop is closed.", "s": "Forgetting that an open switch breaks the loop, so no current flows anywhere.", "w": 0}, "Current": {"i": "Current counts how much charge passes a point each second, like litres per second in a pipe.", "s": "Drawing the arrow from − to +. Conventional current leaves the + terminal.", "w": 0}, "Voltage": {"i": "Voltage is the push per unit charge, like water pressure. It is always measured between two points.", "s": "Placing the voltmeter in series. It goes in parallel with the part.", "w": null}, "Resistance and conductance": {"i": "Resistance is the narrowness of the pipe. A long, thin pipe resists more. Conductance G is the reverse view.", "s": "Mixing up R and G. G = 1 / R and its unit is the siemens.", "w": 2}, "Ohm's law": {"i": "For a resistor, double the push and the flow doubles. The graph is a straight line.", "s": "Using V = I R with a wrong reference direction and getting the wrong sign.", "w": 1}, "Resistor colour code": {"i": "Read the first two bands as digits and the third as a power of ten.", "s": "Reading the code from the tolerance end.", "w": 3}, "Power and energy": {"i": "Power is how fast energy is moved or turned into heat and light.", "s": "Treating the source power as positive. In the reference direction it is negative.", "w": 2}, "Kirchhoff's voltage law (KVL)": {"i": "Walk round a loop and come back to the start. You must be at the same height, so the rises and drops cancel.", "s": "Mixing the signs of rises and drops on the same loop.", "w": 1}, "Kirchhoff's current law (KCL)": {"i": "A node is a junction with no storage. Whatever flows in must flow out.", "s": "Counting an arrow as positive in both the 'in' and the 'out' side.", "w": 0}, "Node, branch, mesh, loop": {"i": "A branch holds one element. A node joins branches. A mesh is a loop with no other loop inside it.", "s": "Calling every loop a mesh.", "w": null}, "Real voltage source": {"i": "A real battery has a small resistance inside. Under load some voltage is lost there.", "s": "Assuming the terminal voltage always equals E.", "w": 3}, "Current source": {"i": "An ideal current source pushes a fixed current, whatever the voltage across it.", "s": "Shorting a current source to find its current. It is opened to remove it.", "w": null}, "Metric prefixes": {"i": "Prefixes shift the decimal point in steps of three.", "s": "Using kΩ in a formula and forgetting the factor 10³.", "w": null}, "Series circuit": {"i": "One path. The same current passes every part, like cars on one road.", "s": "Adding currents in series. The current is the same.", "w": 0}, "Voltage-divider rule (VDR)": {"i": "The larger resistor takes the larger share of the source voltage.", "s": "Putting the wrong resistor on top of the fraction.", "w": 0}, "Circuit ground": {"i": "Ground is the zero reference. Voltages are measured against it.", "s": "Thinking ground must carry current.", "w": null}, "Parallel circuit": {"i": "Several paths between the same two nodes. Each path sees the same voltage.", "s": "Adding resistances directly in parallel.", "w": 1}, "Current-divider rule (CDR)": {"i": "The smaller resistor takes the larger share of the current.", "s": "Using the VDR fraction for currents.", "w": 1}, "Series–parallel circuits": {"i": "Reduce step by step, then work back to find each current and voltage.", "s": "Reducing in the wrong order or skipping the check.", "w": 2}, "Source conversion": {"i": "Two models can look identical from the load side. Only the inside differs.", "s": "Changing the value of Rs during the conversion.", "w": 0}, "The polarity rule": {"i": "The arrow of the current source points to the + end of the equivalent voltage source.", "s": "Reversing the polarity after converting.", "w": 0}, "Sources in series and parallel": {"i": "Series voltage sources add with signs. Parallel current sources add with signs.", "s": "Adding the voltages without checking the polarity.", "w": 1}, "Branch current analysis": {"i": "Write one KCL and enough KVL equations for the unknown branch currents, then solve.", "s": "Not marking reference directions before writing the equations.", "w": 2}, "A circuit with a current source": {"i": "A current source fixes its branch current. Its voltage is then an unknown.", "s": "Writing a voltage drop across a current source as zero.", "w": null}};
 
 IDEAS["Superposition theorem"] = { i: "Ask each source alone what it would do. Then add the answers. It works because the circuit is linear.", s: "Leaving a voltage source open instead of shorted when it is turned off.", w: 2 };
@@ -1937,6 +2185,17 @@ IDEAS["Series and parallel impedances"] = { i: "The rules are the same as for re
 IDEAS["The impedance triangle"] = { i: "R and X are two sides of a right triangle. |Z| is the long side and φ is its angle.", s: "Adding R and X as plain numbers.", w: 1 };
 IDEAS["Active, reactive and apparent power"] = { i: "P does the work. Q only moves back and forth. S is what the supply must carry.", s: "Adding P and Q as plain numbers. They form a right triangle.", w: 2 };
 IDEAS["Power factor and its correction"] = { i: "A capacitor in parallel supplies the reactive power the motor needs, so the line carries less current.", s: "Changing P when correcting the power factor. Only Q changes.", w: 2 };
+
+IDEAS["The transformer"] = { i: "Two coils on one core. A changing current in the first coil makes a changing flux, and the flux makes a voltage in the second coil.", s: "Expecting a transformer to work on steady DC. It needs a changing current.", w: 0 };
+IDEAS["The ideal transformer"] = { i: "What goes in comes out: the power is the same on both sides. The voltage goes up by n and the current goes down by n.", s: "Using n = N_P / N_S. The book defines n = N_S / N_P.", w: 0 };
+IDEAS["Step-up and step-down transformers"] = { i: "More turns on the secondary give more volts there. High voltage lets the same power travel with less current and less heating of the lines.", s: "Thinking a step-up transformer also raises the power. Only the voltage goes up.", w: 1 };
+IDEAS["Other types of transformers"] = { i: "Taps on the secondary give several voltages. An auto-transformer shares one winding.", s: "Mixing up the center-tapped and the multiple-tapped transformer.", w: null };
+IDEAS["Impedance matching"] = { i: "The transformer makes a small load look large (or a large load look small) to the source, so the two match.", s: "Using n = Z_L / Z_P without the square root.", w: 2 };
+IDEAS["How a DC motor works"] = { i: "A current in a magnetic field gets a push. The commutator flips the current each half turn so the push keeps turning the rotor the same way.", s: "Mixing up the rotor (turns) and the stator (fixed).", w: 0 };
+IDEAS["Types of brushed DC motors"] = { i: "The way the field winding is connected sets the behaviour: series gives big torque, shunt gives steady speed.", s: "Running a series-wound motor without load. Its speed runs away.", w: null };
+IDEAS["The PM DC motor model"] = { i: "As the motor speeds up it makes its own opposing voltage, the back EMF, so the current drops.", s: "Adding the back EMF to V_in instead of subtracting it.", w: 0 };
+IDEAS["Torque-speed curve, power and efficiency"] = { i: "No load: fast but no torque. Stall: big torque but no speed. Power needs both, so it peaks in the middle.", s: "Expecting the maximum power at the no-load speed.", w: 1 };
+IDEAS["AC motors"] = { i: "Three currents 120° apart make one field that turns round. The rotor follows it without any brushes.", s: "Thinking the induction motor rotor needs brushes like a DC motor.", w: 2 };
 
 // ===== sources: book page and slide numbers for lessons, examples and topics =====
 // Book: Wang, Understandable Electric Circuits (IET 2010). Slides: the ME0212 chapter decks.
@@ -1982,9 +2241,25 @@ function srcOf(ch, topic, text){
   return CHREF[ch] || "";
 }
 
+LREF["The transformer"] = "Book §11.2.1–11.2.3, p. 336 · Slides 2–5";
+LREF["The ideal transformer"] = "Book §11.2.4, p. 338 · Slides 6–9";
+LREF["Step-up and step-down transformers"] = "Book §11.3, p. 340 · Slides 10–12";
+LREF["Other types of transformers"] = "Book §11.3.4, p. 343 · Slides 13–16";
+LREF["Impedance matching"] = "Book §11.4, p. 344 · Slides 17–19";
+LREF["How a DC motor works"] = "Introduction to Motors.pdf: Basic principle, Motor construction, Brushed DC motor";
+LREF["Types of brushed DC motors"] = "Introduction to Motors.pdf: Common configurations, Series, Shunt and Compound-wound motors";
+LREF["The PM DC motor model"] = "Introduction to Motors.pdf: Electromechanical and Mathematical model";
+LREF["Torque-speed curve, power and efficiency"] = "Introduction to Motors.pdf: PM DC motor, Useful relationships, Example, Motor efficiency";
+LREF["AC motors"] = "Introduction to Motors.pdf: AC motors, Three-phase AC motor, Induction motor, Torque-speed curve";
+TREF["11"] = { "Transformer": "The transformer", "Ideal transformer": "The ideal transformer", "Step-up and step-down": "Step-up and step-down transformers", "Transformer types": "Other types of transformers", "Impedance matching": "Impedance matching" };
+TREF["M"] = { "DC motor basics": "How a DC motor works", "Motor types": "Types of brushed DC motors", "Motor model": "The PM DC motor model", "Torque and power": "Torque-speed curve, power and efficiency", "AC motors": "AC motors" };
+CHREF["11"] = "Book Chapter 11, p. 333 · Chapter 11 slides";
+CHREF["M"] = "Introduction to Motors.pdf";
+
 // ================= platform =================
 var APP_VERSION = "@@VERSION@@";
-var CH_NAMES = { "1": "Basic Concepts", "2": "Basic Laws", "3": "Series–Parallel", "4": "DC Analysis Methods", "5": "Network Theorems", "6": "Capacitors & Inductors", "8": "AC Fundamentals", "9": "AC Analysis" };
+function chL(c){ return c === "M" ? "Motors" : "Chapter " + c; }
+var CH_NAMES = { "1": "Basic Concepts", "2": "Basic Laws", "3": "Series–Parallel", "4": "DC Analysis Methods", "5": "Network Theorems", "6": "Capacitors & Inductors", "8": "AC Fundamentals", "9": "AC Analysis", "11": "Transformers", "M": "Electric Motors" };
 var MCQ = {}; function M(topic, q, ok, wrong, why){ return { topic: topic, q: q, ok: ok, wrong: wrong, why: why }; }
 MCQ["1"] = [
 M("Circuit basics","Which three parts form a basic electric circuit?","Power supply, load and wires",["Switch, fuse and meter","Resistor, capacitor and inductor","Source, ground and fuse"],"A basic circuit has a source, a load and wires that join them."),
@@ -2458,6 +2733,71 @@ M("Power","After PF correction, what happens to the source current?","It falls",
 M("Power","Slide 33. Q₁ = 3000 var and Q₂ = 1315 var. What Q_C must the capacitor supply?","1685 var",["4315 var","3000 var","1315 var"],"Q_C = Q₁ − Q₂.")
 ]);
 
+MCQ["11"] = [
+M("Transformer","Which principle does a transformer use?","Mutual inductance",["Self-capacitance","Ohm's law only","The photoelectric effect"],"A changing current in one coil induces a voltage in the other coil."),
+M("Transformer","Which coil is connected to the source?","The primary winding",["The secondary winding","The core","The load"],"The secondary is connected to the load."),
+M("Transformer","Can a transformer work on steady DC?","No, it needs a changing current to change the flux",["Yes, always","Only with an iron core","Only as a step-up"],"Faraday's law needs a changing flux."),
+M("Transformer","Where are air-core transformers usually used?","High-frequency circuits such as radio and TV",["Power stations","Electric locomotives","Car batteries"],"Book §11.2.2."),
+M("Transformer","Where are iron-core transformers usually used?","Audio circuits and power systems",["Radio-frequency circuits only","Batteries","Solar cells"],"Book §11.2.3."),
+M("Transformer","How is the core of an iron-core transformer built?","From laminated ferromagnetic sheets insulated from each other",["From one solid copper block","From plastic or wood","From an empty air gap"],"Book §11.2.3: the coils are wound on laminated sheets that are insulated from each other."),
+M("Ideal transformer","What is the coupling coefficient k of an ideal transformer?","1",["0","0.5","Infinity"],"All the flux of the primary links the secondary."),
+M("Ideal transformer","Which losses does an ideal transformer neglect?","Winding resistance and magnetic losses",["Only the load","The source voltage","The turns ratio"],"Book §11.2.4."),
+M("Ideal transformer","How does the book define the turns ratio n?","n = N_S / N_P",["n = N_P / N_S","n = N_P + N_S","n = N_P N_S"],"Book §11.2.4. Some other books use the inverse."),
+M("Ideal transformer","n = 2. V_P = 120 V. What is V_S?","240 V",["60 V","120 V","480 V"],"V_S = n V_P."),
+M("Ideal transformer","n = 2. I_P = 4 A. What is I_S?","2 A",["8 A","4 A","16 A"],"I_S = I_P / n."),
+M("Ideal transformer","In an ideal transformer, how are the input and output power related?","They are equal",["The output is larger","The input is zero","The output is half"],"V_P I_P = V_S I_S."),
+M("Ideal transformer","n = 2.5 and Z_L = 2 Ω. What is Z_P?","0.32 Ω",["5 Ω","12.5 Ω","0.8 Ω"],"Z_P = Z_L / n² = 2 / 6.25 (Example 11.1)."),
+M("Ideal transformer","Example 11.1. V_S = 125 V and I_S = 2 A. What is P_S?","250 W",["62.5 W","127 W","500 W"],"P_S = V_S I_S."),
+M("Ideal transformer","The voltage is stepped up by n. What happens to the current?","It is divided by n",["It is multiplied by n","It stays the same","It is multiplied by n²"],"The power stays the same."),
+M("Ideal transformer","An impedance is moved from the secondary to the primary. It is","divided by n²",["multiplied by n","divided by n","unchanged"],"Z_P = Z_L / n²."),
+M("Step-up and step-down","N_S > N_P. Which type is it?","Step-up",["Step-down","Isolation 1:1","Auto-transformer"],"n > 1 and V_S > V_P."),
+M("Step-up and step-down","Example 11.2. N_S = 125 and N_P = 250. What is n?","0.5, step-down",["2, step-up","0.5, step-up","2, step-down"],"n = 125 / 250."),
+M("Step-up and step-down","Why is a step-up transformer placed after a power plant generator?","To lower the line current and the I² R loss",["To raise the line current","To change the frequency","To store energy"],"Same power, higher voltage, lower current."),
+M("Step-up and step-down","Which transformer is used at a local distribution station?","Step-down",["Step-up","Air-core","Impedance matching"],"It brings the high voltage down for homes and businesses."),
+M("Step-up and step-down","The line current is halved. The line resistance stays the same. What happens to the line loss?","It falls to one quarter",["It halves","It doubles","It stays the same"],"P_loss = I² R_w."),
+M("Transformer types","Which transformer gives two equal output voltages?","Center-tapped",["Auto-transformer","Adjustable","Air-core"],"The tap sits in the middle of the secondary."),
+M("Transformer types","Which transformer has one winding for both primary and secondary?","Auto-transformer",["Center-tapped","Multiple-tapped","Iron-core"],"It is smaller and lighter."),
+M("Transformer types","Which transformer gives an output from zero to its maximum?","Adjustable (variable)",["Center-tapped","Step-down only","Air-core"],"Book §11.3.4."),
+M("Transformer types","Which transformer gives several different output voltages?","Multiple-tapped",["Auto-transformer","Ideal","Air-core"],"It has several taps on the secondary."),
+M("Impedance matching","When does the load receive maximum power in AC?","When Z_L = Z_S",["When Z_L = 0","When Z_L is very large","When Z_L = 2 Z_S"],"The AC form of the Chapter 5 theorem."),
+M("Impedance matching","Which turns ratio matches a load Z_L to a source Z_S?","n = √(Z_L / Z_S)",["n = Z_L / Z_S","n = Z_S / Z_L","n = Z_L Z_S"],"Then Z_L / n² = Z_S."),
+M("Impedance matching","Example 11.3. R_S = 100 Ω and the speaker is 4 Ω. What is n?","1/5",["5","1/25","25"],"n = √(4 / 100) = 0.2."),
+M("Impedance matching","Example 11.3. With n = 1/5, what does the amplifier see?","100 Ω",["4 Ω","20 Ω","0.16 Ω"],"4 / 0.2² = 100 Ω, equal to R_S."),
+M("Impedance matching","Which transformer is used to match an amplifier to a speaker?","An audio (iron-core) transformer",["An air-core radio transformer","An auto-transformer for power lines","No transformer"],"Example 11.3 chooses an audio transformer.")
+];
+MCQ["M"] = [
+M("DC motor basics","What produces the force in a DC motor?","A current-carrying wire in a magnetic field",["A charged capacitor","A changing resistance","Friction in the bearings"],"The force is normal to the plane of the field and the current."),
+M("DC motor basics","Which part of the motor turns the shaft?","The rotor (armature)",["The stator","The brushes","The frame"],"The rotor carries the current-carrying windings."),
+M("DC motor basics","What does the stator provide?","The fixed magnetic field",["The rotating current","The shaft","The commutation"],"Permanent magnets or electromagnets."),
+M("DC motor basics","What are the brushes of a brushed DC motor made of?","Graphite",["Copper wire","Iron sheets","Plastic"],"They press on the commutator."),
+M("DC motor basics","What does the commutator do?","It reverses the coil connection so the rotation continues",["It stores energy","It measures the speed","It cools the motor"],"It reverses when the armature becomes horizontal."),
+M("Motor types","Which motor has a stator made of permanent magnets?","PM DC motor",["Series-wound motor","Shunt-wound motor","Induction motor"],"The rotor is made of coils."),
+M("Motor types","In a series-wound motor, how are field and armature connected?","In series",["In parallel","Not connected","Through a transformer"],"Same current in both."),
+M("Motor types","Why must a series-wound motor not run without load?","Its speed rises out of control",["It stops at once","It reverses","Its current falls to zero"],"The motors file warns of this."),
+M("Motor types","Which motor suits elevators and electric locomotives?","Series-wound",["Shunt-wound","PM toy motor","None of them"],"Very large torque at low speed."),
+M("Motor types","Which motor keeps an almost constant speed under varying load?","Shunt-wound",["Series-wound","PM motor at stall","None"],"Used for fans, blowers and machine tools."),
+M("Motor types","Which motor has both series and shunt fields?","Compound-wound",["PM motor","Induction motor","Series-wound"],"High starting torque and controlled no-load speed."),
+M("Motor types","Where is a PM DC motor typical?","Windshield wipers and electric toothbrushes",["Electric locomotives","Large cranes","Power stations"],"Small, low-cost drives."),
+M("Motor model","In the motor model, what represents the back EMF?","A voltage source V_bemf = K_E ω",["A capacitor","A current source","A second resistor"],"It opposes the supply voltage."),
+M("Motor model","Which element is neglected in the model?","The coil inductance",["The coil resistance","The back EMF","The supply"],"It is usually small."),
+M("Motor model","Which equation gives the motor current?","I = (V_in − V_bemf) / R",["I = V_in R","I = (V_in + V_bemf) / R","I = K_E ω"],"The back EMF opposes V_in."),
+M("Motor model","Which equation gives the torque?","T = K_T I",["T = K_E ω","T = I / K_T","T = V I"],"Torque is proportional to the current."),
+M("Motor model","What happens to the back EMF when the speed rises?","It rises",["It falls","It stays the same","It becomes negative"],"V_bemf = K_E ω."),
+M("Motor model","What is the starting (stall) torque T_s?","K_T V_in / R",["V_in / K_E","K_T K_E / R","Zero"],"At ω = 0 the back EMF is zero."),
+M("Motor model","In T = T_s − α ω, what is α?","K_T K_E / R",["K_T V_in / R","V_in / K_E","R / K_T"],"From the combined motor equations."),
+M("Torque and power","What is the no-load speed ω_NL?","V_in / K_E",["K_T V_in / R","Zero","T_s / α²"],"At T = 0 the back EMF equals V_in."),
+M("Torque and power","Where is the mechanical power of a PM motor largest?","At half the no-load speed",["At stall","At the no-load speed","At one quarter of the no-load speed"],"P = T ω peaks in the middle of the line."),
+M("Torque and power","Which unit pairs give K_T = K_E?","N·m/A and V/(rad/s)",["N·m/A and V/rpm","in·oz/A and V/rpm","W and J"],"In SI units the two constants are equal."),
+M("Torque and power","What is the motor efficiency?","T ω / (V I)",["V I / (T ω)","T / ω","V / I"],"Mechanical output over electrical input."),
+M("Torque and power","Motors file example. What is the stall torque?","100 in·oz",["20 in·oz","1000 in·oz","260 in·oz"],"Read where the line meets the torque axis."),
+M("Torque and power","Motors file example. What is the current at stall?","260 mA",["100 mA","125 mA","0 mA"],"Stall gives the largest current."),
+M("Torque and power","A 10 oz weight hangs from a 2 in pulley. What torque is needed?","20 in·oz",["5 in·oz","12 in·oz","200 in·oz"],"T = F × r."),
+M("AC motors","Which motor is the most widely used in the world?","The AC induction motor",["The series DC motor","The PM toy motor","The stepper motor"],"High efficiency, low maintenance, low cost."),
+M("AC motors","How does the rotor of an induction motor get its power?","By electromagnetic induction, with no brushes",["Through graphite brushes","From a battery on the shaft","Through a commutator"],"The rotor is a passive part."),
+M("AC motors","How far apart are the windings of a three-phase generator?","120°",["90°","180°","60°"],"Three windings spaced 120° apart."),
+M("AC motors","What happens at the pull-out torque of an induction motor?","The torque drops sharply",["The speed jumps to twice","The motor reverses","The current becomes zero"],"Beyond it the motor cannot carry more load.")
+];
+
 // ===== number generators: every call makes a new question with new values =====
 var GENS = { "1": [], "2": [], "3": [], "4": [] };
 function ri(a, b){ return a + Math.floor(Math.random() * (b - a + 1)); }
@@ -2711,6 +3051,36 @@ G("9", "g9-7", "Power", function(){ var S = pk([100, 500, 1000, 2000]), pf = pk(
 G("9", "g9-8", "Power", function(){ var Pw = pk([1, 2, 4, 5]) * 1000, pf1 = pk([0.6, 0.7, 0.8]), pf2 = 0.95, Q1 = Pw * Math.tan(Math.acos(pf1)), Q2 = Pw * Math.tan(Math.acos(pf2)), Qc = Q1 - Q2;
   return { q: "A " + (Pw / 1000) + " kW load has a lagging power factor of " + pf1 + ". Find the reactive power Q_C of the capacitor that raises the power factor to 0.95.", unit: "var", ans: r3(Qc), fig: null, sol: "Q₁ = P tan(cos⁻¹ " + pf1 + ") = " + nn(r3(Q1)) + " var\nQ₂ = P tan(cos⁻¹ 0.95) = " + nn(r3(Q2)) + " var\nQ_C = Q₁ − Q₂ = " + nn(r3(Qc)) + " var" }; });
 
+// ===== number generators: Chapter 11 and Motors =====
+GENS["11"] = []; GENS["M"] = [];
+G("11", "g11-1", "Ideal transformer", function(){ var Np = pk([40, 50, 100, 200]), Ns = pk([100, 200, 400, 25, 20]), Vp = pk([12, 50, 120, 230]), n = Ns / Np, Vs = rd(n * Vp);
+  return { q: "An ideal transformer has N_P = " + Np + " and N_S = " + Ns + ". V_P = " + Vp + " V. Find V_S.", unit: "V", ans: r3(Vs), fig: figXfmr("V_P = " + Vp + " V", "N_P = " + Np, "N_S = " + Ns, "Z_L"), sol: "n = N_S / N_P = " + nn(n) + "\nV_S = n V_P = " + nn(n) + " × " + Vp + " = " + nn(r3(Vs)) + " V" }; });
+G("11", "g11-2", "Ideal transformer", function(){ var n = pk([0.5, 2, 2.5, 4, 0.25]), Ip = pk([1, 2, 4, 5, 10]), Is = rd(Ip / n);
+  return { q: "An ideal transformer has n = N_S / N_P = " + n + ". I_P = " + Ip + " A. Find I_S.", unit: "A", ans: Is, fig: null, sol: "I_S = I_P / n = " + Ip + " / " + n + " = " + nn(Is) + " A" }; });
+G("11", "g11-3", "Ideal transformer", function(){ var n = pk([0.5, 2, 2.5, 4, 5]), Zl = pk([2, 4, 8, 50, 100]), Zp = rd(Zl / (n * n));
+  return { q: "n = " + n + " and Z_L = " + Zl + " Ω. Find the impedance Z_P seen from the primary.", unit: "Ω", ans: r3(Zp), fig: null, sol: "Z_P = Z_L / n² = " + Zl + " / " + n + "² = " + nn(r3(Zp)) + " Ω" }; });
+G("11", "g11-4", "Step-up and step-down", function(){ var Np = pk([100, 200, 250, 500]), Ns = pk([25, 50, 125, 1000, 2000]), n = rd(Ns / Np);
+  return { q: "N_P = " + Np + " and N_S = " + Ns + ". Find the turns ratio n (the book's n = N_S / N_P).", unit: "", ans: n, fig: figXfmr("V_P", "N_P = " + Np, "N_S = " + Ns, "Z_L"), sol: "n = " + Ns + " / " + Np + " = " + nn(n) + (n > 1 ? " > 1: step-up" : " < 1: step-down") }; });
+G("11", "g11-5", "Impedance matching", function(){ var Zs = pk([100, 400, 800, 1600]), Zl = pk([4, 8, 16]), n = Math.sqrt(Zl / Zs);
+  return { q: "A source with Z_S = " + Zs + " Ω drives a " + Zl + " Ω speaker. Find the turns ratio n that matches them.", unit: "", ans: r3(n), fig: null, sol: "n = √(Z_L / Z_S) = √(" + Zl + " / " + Zs + ") = " + nn(r3(n)) }; });
+G("11", "g11-6", "Step-up and step-down", function(){ var P = pk([10, 20, 50]) * 1000, V1 = pk([1000, 2000]), k = pk([5, 10, 20]), R = pk([1, 2, 5]), I1 = P / V1, I2 = I1 / k, L1 = I1 * I1 * R, L2 = I2 * I2 * R;
+  return { q: P / 1000 + " kW is sent at " + V1 + " V through lines of " + R + " Ω. A transformer raises the voltage " + k + " times. Find the new line loss.", unit: "W", ans: r3(L2), fig: null, sol: "Before: I = " + nn(I1) + " A, loss = " + nn(r3(L1)) + " W\nAfter: I = " + nn(I1) + " / " + k + " = " + nn(I2) + " A\nLoss = I² R = " + nn(r3(L2)) + " W" }; });
+G("M", "gM-1", "Torque and power", function(){ var V = pk([6, 12, 24]), K = pk([0.02, 0.05, 0.1]), w = rd(V / K);
+  return { q: "A PM DC motor has V_in = " + V + " V and K_E = " + K + " V/(rad/s). Find the no-load speed.", unit: "rad/s", ans: r3(w), fig: null, sol: "ω_NL = V_in / K_E = " + V + " / " + K + " = " + nn(r3(w)) + " rad/s" }; });
+G("M", "gM-2", "Torque and power", function(){ var V = pk([6, 12, 24]), K = pk([0.02, 0.05, 0.1]), R = pk([1, 2, 4]), T = rd(K * V / R);
+  return { q: "A PM DC motor has V_in = " + V + " V, R = " + R + " Ω and K_T = " + K + " N·m/A. Find the stall torque.", unit: "N·m", ans: r3(T), fig: figMotor("V_in = " + V + " V", "R = " + R + " Ω", "V_bemf = 0 (stall)"), sol: "T_stall = K_T V_in / R = " + K + " × " + V + " / " + R + " = " + nn(r3(T)) + " N·m" }; });
+G("M", "gM-3", "Motor model", function(){ var V = pk([12, 24]), R = pk([1, 2, 4]), Eb = pk([4, 6, 8, 10]), I = rd((V - Eb) / R);
+  return { q: "V_in = " + V + " V, R = " + R + " Ω and the back EMF is " + Eb + " V. Find the motor current.", unit: "A", ans: I, fig: figMotor("V_in = " + V + " V", "R = " + R + " Ω", "V_bemf = " + Eb + " V", "I = ?"), sol: "I = (V_in − V_bemf) / R = (" + V + " − " + Eb + ") / " + R + " = " + nn(I) + " A" }; });
+G("M", "gM-4", "Motor model", function(){ var K = pk([0.02, 0.05, 0.1]), I = pk([0.5, 1, 2, 3]), T = rd(K * I);
+  return { q: "K_T = " + K + " N·m/A and the current is " + I + " A. Find the torque.", unit: "N·m", ans: T, fig: null, sol: "T = K_T I = " + K + " × " + I + " = " + nn(T) + " N·m" }; });
+G("M", "gM-5", "Torque and power", function(){ var Ts = pk([50, 100, 200]), wn = pk([1000, 1500, 3000]), T = pk([10, 20, 25]), w = rd(wn * (1 - T / Ts));
+  return { q: "A PM motor has T_stall = " + Ts + " in·oz and ω_NL = " + wn + " rpm. Find the speed at a load of " + T + " in·oz.", unit: "rpm", ans: r3(w), fig: figTS(Ts + " in·oz", wn + " rpm", T + " in·oz"), sol: "ω = ω_NL (1 − T / T_stall) = " + wn + " × (1 − " + T + " / " + Ts + ") = " + nn(r3(w)) + " rpm" }; });
+G("M", "gM-6", "Torque and power", function(){ var T = pk([0.05, 0.1, 0.2]), w = pk([100, 150, 200]), V = 12, I = pk([2, 3, 4]), e = rd(100 * T * w / (V * I));
+  if (e >= 100) { I = 5; e = rd(100 * T * w / (V * I)); }
+  return { q: "A motor gives T = " + T + " N·m at ω = " + w + " rad/s. It takes " + V + " V and " + I + " A. Find the efficiency in percent.", unit: "%", ans: r3(e), fig: null, sol: "η = T ω / (V I) = " + nn(rd(T * w)) + " W / " + V * I + " W = " + nn(r3(e)) + " %" }; });
+G("M", "gM-7", "Torque and power", function(){ var F = pk([5, 10, 16, 20]), r = pk([1, 2, 3]), T = F * r;
+  return { q: "A " + F + " oz weight hangs from a pulley of radius " + r + " in on the motor shaft. Find the torque needed.", unit: "in·oz", ans: T, fig: null, sol: "T = F × r = " + F + " oz × " + r + " in = " + T + " in·oz" }; });
+
 var S = { page: "dash", ch: "1", tab: "learn" }; var CALC = {};
 var PR = { ch: "all", topic: "all", type: "mixed", q: null, done: false, ses: { n: 0, r: 0 }, last: null };
 var QZ = null;
@@ -2776,7 +3146,7 @@ function badges(){
   var best = {}; STORE.quizzes.forEach(function(q){ var p = Math.round(100 * q.score / q.total); if (!best[q.ch] || p > best[q.ch]) best[q.ch] = p; });
   b.push(["First steps", "Answer 10 questions", s.n >= 10]); b.push(["Century", "Answer 100 questions", s.n >= 100]);
   b.push(["Sharp", "80% accuracy over 30 answers", s.n >= 30 && s.acc >= 80]); b.push(["3-day streak", "Study 3 days in a row", streak() >= 3]);
-  CHAPTER_IDS.forEach(function(c){ b.push(["Chapter " + c + " master", "Score 80% in a Chapter " + c + " quiz", (best[c] || 0) >= 80]); });
+  CHAPTER_IDS.forEach(function(c){ b.push(["" + chL(c) + " master", "Score 80% in a " + chL(c) + " quiz", (best[c] || 0) >= 80]); });
   return b;
 }
 
@@ -2817,9 +3187,9 @@ function pDash(){
   var f = s.total ? s.seen / s.total : 0;
   h += '<section class="card trace"><div class="trace-top"><h1>' + (STORE.name ? "Hello, " + esc2(STORE.name.split(" ")[0]) : "Dashboard") + '</h1><div class="read"><b>' + s.seen + "</b> of " + s.total + " questions seen</div></div>" + trace(f, s.seen + " of " + s.total + " questions seen") + "</section>";
   h += '<div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(streak(), "Day streak") + stat(CHAPTER_IDS.length, "Chapters") + "</div>";
-  h += '<h2 class="sh">Chapters</h2><div class="chgrid">' + CHAPTER_IDS.map(function(c){ var x = chStats(c); return '<section class="card chc">' + ring(x.acc, "Accuracy " + (x.acc == null ? "none" : x.acc + "%")) + "<div><h3>Chapter " + c + "</h3><p>" + CHAPTERS[c].title + '</p><p class="mut">' + x.seen + " of " + x.total + " questions seen</p>" + bar(Math.round(100 * x.seen / x.total)) +
+  h += '<h2 class="sh">Chapters</h2><div class="chgrid">' + CHAPTER_IDS.map(function(c){ var x = chStats(c); return '<section class="card chc">' + ring(x.acc, "Accuracy " + (x.acc == null ? "none" : x.acc + "%")) + "<div><h3>" + chL(c) + "</h3><p>" + CHAPTERS[c].title + '</p><p class="mut">' + x.seen + " of " + x.total + " questions seen</p>" + bar(Math.round(100 * x.seen / x.total)) +
     '<div class="row"><button class="btn sm" data-a="study" data-v="' + c + '">Study</button><button class="btn sm ghost" data-a="prac" data-v="' + c + '">Exercises</button><button class="btn sm ghost" data-a="quizch" data-v="' + c + '">Quiz</button></div></div></section>'; }).join("") + "</div>";
-  h += '<div class="grid2"><section class="card"><h2 class="sh">Needs work</h2>' + (w.length ? w.map(function(x){ return '<div class="wk"><span><b>' + x.topic + "</b> · Chapter " + x.ch + '</span><span>' + x.acc + '%</span><button class="btn sm ghost" data-a="praction" data-v="' + x.ch + "|" + x.topic + '">Practise</button></div>'; }).join("") : '<p class="mut">Topics below 70% appear here after a few answers.</p>') + '</section><section class="card"><h2 class="sh">Badges</h2><div class="badges">' + badges().map(function(b){ return '<div class="bdg ' + (b[2] ? "on" : "") + '" title="' + b[1] + '"><b>' + b[0] + "</b><span>" + b[1] + "</span></div>"; }).join("") + "</div></section></div>";
+  h += '<div class="grid2"><section class="card"><h2 class="sh">Needs work</h2>' + (w.length ? w.map(function(x){ return '<div class="wk"><span><b>' + x.topic + "</b> · " + chL(x.ch) + '</span><span>' + x.acc + '%</span><button class="btn sm ghost" data-a="praction" data-v="' + x.ch + "|" + x.topic + '">Practise</button></div>'; }).join("") : '<p class="mut">Topics below 70% appear here after a few answers.</p>') + '</section><section class="card"><h2 class="sh">Badges</h2><div class="badges">' + badges().map(function(b){ return '<div class="bdg ' + (b[2] ? "on" : "") + '" title="' + b[1] + '"><b>' + b[0] + "</b><span>" + b[1] + "</span></div>"; }).join("") + "</div></section></div>";
   $("page").innerHTML = h;
 }
 function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</span></div>"; }
@@ -2828,7 +3198,7 @@ function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</
 var TABS = [["learn", "Learn"], ["watch", "Watch"], ["calc", "Calculate"]];
 function pStudy0(){
   var x = chStats(S.ch);
-  $("page").innerHTML = '<div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
+  $("page").innerHTML = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
     '<nav class="tabs" role="tablist">' + TABS.map(function(t){ return '<button class="tab" role="tab" data-a="tab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + '</nav><div id="ctab" class="ctab"></div>';
   ({ learn: rLearn, watch: rWatch, calc: rCalc })[S.tab]();
 }
@@ -2861,7 +3231,7 @@ function pStudy0(){
 
 // ---------- formula sheet ----------
 function pSheet0(){
-  var h = '<div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">Formula sheet · ' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="print">Print or save as PDF</button></div></div><section class="card sheet">';
+  var h = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">Formula sheet · ' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="print">Print or save as PDF</button></div></div><section class="card sheet">';
   h += LESSONS[S.ch].map(function(l){ return '<div class="srow"><h2>' + l.t + "</h2>" + (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + "</div>"; }).join("");
   $("page").innerHTML = h + '</section><p class="mut printnote">ME0212 Study Lab · version ' + APP_VERSION + "</p>";
 }
@@ -2869,7 +3239,7 @@ function pSheet0(){
 // ---------- practice ----------
 function pPractice0(){
   var topics = PR.ch === "all" ? [] : topicsOf(PR.ch);
-  $("page").innerHTML = '<h1 class="ph">Exercises</h1><section class="card filters"><div class="field2"><label for="fch">Chapter</label><select id="fch" data-a="pf"><option value="all"' + (PR.ch === "all" ? " selected" : "") + ">All chapters</option>" + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (PR.ch === c ? " selected" : "") + ">Chapter " + c + " · " + CH_NAMES[c] + "</option>"; }).join("") + '</select></div>' +
+  $("page").innerHTML = '<h1 class="ph">Exercises</h1><section class="card filters"><div class="field2"><label for="fch">Chapter</label><select id="fch" data-a="pf"><option value="all"' + (PR.ch === "all" ? " selected" : "") + ">All chapters</option>" + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (PR.ch === c ? " selected" : "") + ">" + chL(c) + " · " + CH_NAMES[c] + "</option>"; }).join("") + '</select></div>' +
     '<div class="field2"><label for="ftp">Topic</label><select id="ftp" data-a="pf"' + (PR.ch === "all" ? " disabled" : "") + '><option value="all">All topics</option>' + topics.map(function(t){ return '<option' + (PR.topic === t ? " selected" : "") + ">" + t + "</option>"; }).join("") + '</select></div>' +
     '<div class="field2"><label for="fty">Type</label><select id="fty" data-a="pf"><option value="mixed"' + (PR.type === "mixed" ? " selected" : "") + '>Mixed</option><option value="mcq"' + (PR.type === "mcq" ? " selected" : "") + '>Multiple choice</option><option value="num"' + (PR.type === "num" ? " selected" : "") + '>Numeric (new numbers every time)</option></select></div>' +
     '<div class="sesbox"><b>' + PR.ses.r + " / " + PR.ses.n + '</b><span>this session</span></div></section><div id="qarea"></div>';
@@ -2886,7 +3256,7 @@ function nextPractice(){
   var l = poolPractice(); if (!l.length){ $("qarea").innerHTML = '<section class="card"><p>No questions match this filter.</p></section>'; return; }
   var d = pickQ(l, PR.last); PR.last = d.id; PR.q = instantiate(d); PR.done = false; PR.res = null; drawQ();
 }
-function qhead(q){ return '<div class="qmeta"><span class="chip">Chapter ' + q.d.ch + '</span><span class="chip alt">' + q.d.topic + "</span>" + (q.kind === "num" ? '<span class="chip">Numeric</span>' : q.kind === "mcq" ? '<span class="chip">Multiple choice</span>' : '<span class="chip">Drawing</span>') + "</div>"; }
+function qhead(q){ return '<div class="qmeta"><span class="chip">' + chL(q.d.ch) + '</span><span class="chip alt">' + q.d.topic + "</span>" + (q.kind === "num" ? '<span class="chip">Numeric</span>' : q.kind === "mcq" ? '<span class="chip">Multiple choice</span>' : '<span class="chip">Drawing</span>') + "</div>"; }
 function qbody(q, st){
   // st: { done, picked, val, review }
   var h = qhead(q) + '<div class="qtext2">' + esc2(q.text) + "</div>" + (q.fig ? fig(q.fig) : "");
@@ -2908,8 +3278,8 @@ function drawQ(){
 }
 function srcLine(q){
   var s = srcOf(q.d.ch, q.d.topic, q.text + " " + (q.sol || "") + " " + (q.why || ""));
-  var body = "Chapter " + q.d.ch + " · " + q.d.topic + "\nQuestion: " + q.text + "\n\nWhat is wrong:\n\n(App version " + APP_VERSION + ")";
-  var mail = "mailto:Mohammad.alghweri@gju.edu.jo?subject=" + encodeURIComponent("ME0212 Study Lab: problem in Chapter " + q.d.ch) + "&body=" + encodeURIComponent(body);
+  var body = "" + chL(q.d.ch) + " · " + q.d.topic + "\nQuestion: " + q.text + "\n\nWhat is wrong:\n\n(App version " + APP_VERSION + ")";
+  var mail = "mailto:Mohammad.alghweri@gju.edu.jo?subject=" + encodeURIComponent("ME0212 Study Lab: problem in " + chL(q.d.ch)) + "&body=" + encodeURIComponent(body);
   return '<p class="srcl">' + (s ? "<span>Source: " + s + "</span>" : "") + '<a href="' + mail + '">Report a problem</a></p>';
 }
 function feedback(q, st){
@@ -2944,11 +3314,11 @@ var QZCH = "1", QZN = 10;
 function pQuiz0(){
   if (QZ && QZ.stage === "run") return drawQuiz();
   if (QZ && QZ.stage === "result") return drawResult();
-  $("page").innerHTML = '<h1 class="ph">Quiz</h1><section class="card"><p>A quiz mixes multiple-choice and numeric questions. A 10-question quiz is planned for 10 minutes, like the course quizzes. You see the results, the solutions and the sources at the end.</p><div class="filters2"><div class="field2"><label for="qch">Chapter</label><select id="qch">' + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (QZCH === c ? " selected" : "") + ">Chapter " + c + " · " + CH_NAMES[c] + "</option>"; }).join("") + '<option value="all"' + (QZCH === "all" ? " selected" : "") + '>All chapters</option></select></div><div class="field2"><label for="qn">Questions</label><select id="qn"><option' + (QZN === 10 ? " selected" : "") + '>10</option><option' + (QZN === 20 ? " selected" : "") + '>20</option></select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
+  $("page").innerHTML = '<h1 class="ph">Quiz</h1><section class="card"><p>A quiz mixes multiple-choice and numeric questions. A 10-question quiz is planned for 10 minutes, like the course quizzes. You see the results, the solutions and the sources at the end.</p><div class="filters2"><div class="field2"><label for="qch">Chapter</label><select id="qch">' + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (QZCH === c ? " selected" : "") + ">" + chL(c) + " · " + CH_NAMES[c] + "</option>"; }).join("") + '<option value="all"' + (QZCH === "all" ? " selected" : "") + '>All chapters</option></select></div><div class="field2"><label for="qn">Questions</label><select id="qn"><option' + (QZN === 10 ? " selected" : "") + '>10</option><option' + (QZN === 20 ? " selected" : "") + '>20</option></select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
 }
 function quizHistory(){
   var q = STORE.quizzes.slice(-5).reverse(); if (!q.length) return "";
-  return '<section class="card"><h2 class="sh">Recent quizzes</h2>' + q.map(function(x){ var p = Math.round(100 * x.score / x.total); return '<div class="wk"><span>' + x.date + " · " + (x.ch === "all" ? "All chapters" : "Chapter " + x.ch) + "</span><span>" + x.score + " / " + x.total + " (" + p + "%)</span>" + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + "</div>"; }).join("") + "</section>";
+  return '<section class="card"><h2 class="sh">Recent quizzes</h2>' + q.map(function(x){ var p = Math.round(100 * x.score / x.total); return '<div class="wk"><span>' + x.date + " · " + (x.ch === "all" ? "All chapters" : "" + chL(x.ch)) + "</span><span>" + x.score + " / " + x.total + " (" + p + "%)</span>" + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + "</div>"; }).join("") + "</section>";
 }
 function startQuiz(){
   QZCH = $("qch").value; QZN = +$("qn").value;
@@ -2991,14 +3361,14 @@ function drawResult(){
 function pProgress0(){
   var s = allStats(), h = '<h1 class="ph">My progress</h1><div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(STORE.quizzes.length, "Quizzes taken") + stat(streak(), "Day streak") + "</div>";
   h += CHAPTER_IDS.map(function(c){ var rows = topicsOf(c).map(function(t){ var x = STORE.t[c + "|" + t], p = x && x.n ? Math.round(100 * x.r / x.n) : null; return '<div class="trow"><span>' + t + '</span><span class="mut">' + (x ? x.r + " / " + x.n : "not tried") + "</span>" + bar(p || 0, p == null ? "" : p >= 80 ? "ok" : p < 60 ? "low" : "") + "<span>" + (p == null ? "–" : p + "%") + "</span></div>"; }).join("");
-    return '<section class="card"><h2 class="sh">Chapter ' + c + " · " + CHAPTERS[c].title + "</h2>" + rows + "</section>"; }).join("");
+    return '<section class="card"><h2 class="sh">' + chL(c) + " · " + CHAPTERS[c].title + "</h2>" + rows + "</section>"; }).join("");
   h += quizHistory() + '<section class="card"><h2 class="sh">Share or reset</h2><p class="mut">Your progress is stored in this browser only' + (memOnly ? " (storage is blocked, so it will be lost when you close the page)" : "") + '. To show your instructor, copy or save the summary.</p><div class="row"><button class="btn" data-a="copysum">Copy summary</button><button class="btn ghost" data-a="dlsum">Save as text file</button><button class="btn ghost danger" data-a="reset">Reset all progress</button></div><div id="sumMsg" class="mut"></div></section>';
   $("page").innerHTML = h;
 }
 function summaryText(){
   var s = allStats(), t = "ME0212 Study Lab progress\nName: " + (STORE.name || "(not set)") + "\nDate: " + today() + "\nAnswers: " + s.n + ", accuracy: " + (s.acc == null ? "-" : s.acc + "%") + ", questions seen: " + s.seen + " of " + s.total + "\n";
-  CHAPTER_IDS.forEach(function(c){ var x = chStats(c); t += "Chapter " + c + ": " + x.seen + "/" + x.total + " seen, accuracy " + (x.acc == null ? "-" : x.acc + "%") + "\n"; });
-  STORE.quizzes.slice(-10).forEach(function(q){ t += "Quiz " + q.date + " Chapter " + q.ch + ": " + q.score + "/" + q.total + "\n"; });
+  CHAPTER_IDS.forEach(function(c){ var x = chStats(c); t += "" + chL(c) + ": " + x.seen + "/" + x.total + " seen, accuracy " + (x.acc == null ? "-" : x.acc + "%") + "\n"; });
+  STORE.quizzes.slice(-10).forEach(function(q){ t += "Quiz " + q.date + " " + chL(q.ch) + ": " + q.score + "/" + q.total + "\n"; });
   return t;
 }
 

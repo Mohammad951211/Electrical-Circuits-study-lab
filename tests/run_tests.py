@@ -56,7 +56,20 @@ def ui_checks(pg, w):
             elif pg.query_selector('[data-a="opt"]'): pg.click('[data-a="opt"]')
             elif pg.query_selector('[data-a="reveal"]'): pg.click('[data-a="reveal"]'); pg.click('[data-a="self"][data-v="1"]'); continue
             if pg.query_selector('[data-a="next"]'): pg.click('[data-a="next"]')
-        pg.click(".back"); pg.click(f'[data-a="quizch"][data-v="{ch}"]'); pg.wait_for_timeout(50); pg.click(".back")
+        pg.click(".back")
+        pg.click(f'[data-a="study"][data-v="{ch}"]'); pg.click(f'[data-a="sheet"][data-v="{ch}"]'); pg.wait_for_timeout(50)
+        if any(b in pg.inner_html("#page") for b in BAD) or not pg.query_selector(".sheet"): errs.append(f"sheet {ch}")
+        pg.click(".back"); pg.click(f'[data-a="quizch"][data-v="{ch}"]'); pg.wait_for_timeout(50)
+        if w == 1366:
+            pg.click('[data-a="startquiz"]'); pg.wait_for_timeout(50)
+            for _ in range(40):
+                if not pg.query_selector('[data-a="qnext"]'): break
+                if pg.query_selector("#numIn"): pg.fill("#numIn", "1")
+                elif pg.query_selector('[data-a="opt"]'): pg.click('[data-a="opt"]')
+                pg.click('[data-a="qnext"]'); pg.wait_for_timeout(20)
+            if not pg.query_selector(".res") or any(b in pg.inner_html("#page") for b in BAD): errs.append(f"quiz {ch}")
+            pg.click('[data-a="go"][data-v="dash"]')
+        else: pg.click(".back")
     sw, iw = pg.evaluate("document.documentElement.scrollWidth"), pg.evaluate("innerWidth")
     if sw > iw: errs.append(f"horizontal overflow {sw}>{iw}")
     fails.extend(f"[{w}px] {e}" for e in errs)
