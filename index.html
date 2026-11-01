@@ -59,12 +59,12 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid2 .card{margin:0}
 .wk{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid #edf1f5}.wk .bar{grid-column:1/-1;margin:0}
-.badges{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.bdg{border:1px dashed var(--edge);border-radius:10px;padding:8px 10px;opacity:.55}.bdg b{display:block;font-size:.92rem}.bdg span{font-size:.8rem;color:var(--mut)}.bdg.on{opacity:1;border:1px solid var(--amber);background:var(--warnsoft)}
+.badges{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.bdg{border:1px dashed var(--edge);border-radius:10px;padding:8px 10px;color:var(--mut)}.bdg:not(.on) b::after{content:" · locked";font-weight:400;font-size:.78rem}.bdg b{display:block;font-size:.92rem}.bdg span{font-size:.8rem;color:var(--mut)}.bdg.on{opacity:1;border:1px solid var(--amber);background:var(--warnsoft)}
 .hello input{padding:10px 12px;border:1px solid var(--edge);border-radius:9px;min-width:220px}
 .chead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:6px}
 .tabs{max-width:100%;display:flex;gap:4px;overflow-x:auto;border-bottom:2px solid var(--edge);margin:8px 0 14px}.tab{padding:10px 16px;border:0;background:none;font-weight:700;color:var(--mut);border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}.tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
 /* study content from the earlier version */
-.lessons{display:grid;grid-template-columns:1fr 1fr;gap:14px}.lesson h3{margin:0 0 6px;font-family:var(--f-disp);font-weight:700;font-size:1.2rem;color:var(--accent)}.lesson ul{margin:6px 0;padding-left:20px}.lesson li{margin:3px 0}.lesson .card,.lesson{margin:0}
+.lessons{display:grid;grid-template-columns:1fr 1fr;gap:14px}.lesson h2,.lesson h3{margin:0 0 6px;font-family:var(--f-disp);font-weight:700;font-size:1.2rem;color:var(--accent)}.lesson ul{margin:6px 0;padding-left:20px}.lesson li{margin:3px 0}.lesson .card,.lesson{margin:0}
 .formula{display:inline-block;background:var(--soft);border:1px solid #cfe2f2;border-radius:6px;padding:1px 8px;font-family:var(--f-mono);font-size:.93rem;margin:2px 0}
 .hint{color:var(--mut);font-size:.92rem;margin:0 0 10px}.picker{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}.pill{padding:7px 14px;background:var(--surf);border:1px solid var(--edge);border-radius:999px;font-weight:700}.pill[aria-pressed="true"]{background:var(--soft);border-color:var(--accent);color:var(--accent)}
 .grid2.wide-left{grid-template-columns:360px 1fr}
@@ -150,7 +150,13 @@ select.theme{padding:5px 10px;margin-top:6px;appearance:auto;text-transform:none
 .simfig svg .st.pp{fill:#6a3fb0;font-weight:700}.simfig svg .st.am{fill:#b45f00;font-weight:700}
 .back{margin:0 0 14px}
 
-.foot{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between;padding:22px 0 30px;font-size:.86rem;color:var(--mut)}.foot a{color:var(--accent);font-weight:700}
+.foot{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between;padding:22px 0 30px;font-size:.86rem;color:var(--mut)}.foot a{color:var(--ink);font-weight:700;text-decoration:underline}
+.srcl{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between;align-items:center;margin:10px 0 0;font-size:.84rem;color:var(--mut)}.srcl a{color:var(--accent);font-weight:700}
+.numhint{margin:6px 0 0;font-size:.84rem;color:var(--mut)}
+.howto ol{margin:6px 0 8px;padding-left:22px}.howto li{margin:3px 0}
+.clock{font-family:var(--f-mono);font-size:.9rem;color:var(--mut)}.clock.over{color:var(--bad);font-weight:700}
+.sheet .srow{padding:10px 0;border-bottom:1px solid var(--edge)}.sheet .srow:last-child{border-bottom:0}.sheet h2{margin:0 0 6px;font-family:var(--f-disp);font-size:1.15rem;color:var(--accent)}.sheet ul{margin:6px 0;padding-left:20px}
+@media print{.top,.letterhead,.foot,.back,.chead .row,#nav{display:none!important}body{background:#fff!important}.card{box-shadow:none!important;border:0!important;background:#fff!important}.sheet .srow{break-inside:avoid}.main{padding:0!important}}
 
 </style></head><body>
 <div class="letterhead" aria-hidden="true"></div>
@@ -930,7 +936,8 @@ CHAPTERS["5"] = { title: "The Network Theorems", questions: [
   { tag: "Calculation", q: "Norton's equivalent of the same network. Find I_N and check with I_L = 1.33 A.", a: "I_N = V_TH / R_TH = 16 V / 4 Ω = 4 A\nI_L = I_N R_N / (R_N + R_L) = 4 × 4 / 12 = 1.33 A", fig: function(){ return figNorton("I_N = ?", "R_N = 4 Ω", "R_L = 8 Ω"); } },
   { tag: "Calculation", q: "Example 5.6. Find I_L from Norton's equivalent circuit.", a: "I_L = I_N R_N / (R_L + R_N) = 1 mA × 250 / (250 + 100) = 0.71 mA", fig: function(){ return figNorton("I_N = 1 mA", "R_N = 250 Ω", "R_L = 100 Ω"); } },
   { tag: "Calculation", q: "Maximum power transfer. V_S = 10 V and R_S = 30 Ω. Find R_L and the maximum load power.", a: "R_L = R_S = 30 Ω\nP_L = V_S² / (4 R_S) = 100 / 120 = 833 mW", fig: function(){ return figThevEq("V_S = 10 V", "R_S = 30 Ω", "R_L = ?"); } },
-  { tag: "Calculation", q: "Maximum power transfer for the network of Example 5.4. Find R_L and P_max.", a: "R_L = R_TH = 4 Ω\nP_max = V_TH² / (4 R_TH) = 16² / 16 = 16 W", fig: function(){ return figThevEq("V_TH = 16 V", "R_TH = 4 Ω", "R_L = ?"); } }
+  { tag: "Calculation", q: "Maximum power transfer for the network of Example 5.4. Find R_L and P_max.", a: "R_L = R_TH = 4 Ω\nP_max = V_TH² / (4 R_TH) = 16² / 16 = 16 W", fig: function(){ return figThevEq("V_TH = 16 V", "R_TH = 4 Ω", "R_L = ?"); } },
+  { tag: "Calculation", q: "Example 5.1. E₁ = 48 V, E₂ = 24 V, R₁ = R₂ = R₃ = R₄ = 8 Ω, R₅ = 16 Ω. Find I_c in R₅ by superposition.", a: "E₁ alone: R′eq = 16 // 16 + 16 = 24 Ω, I_a′ = 48 / 24 = 2 A, I_c′ = 2 × 16 / 32 = 1 A\nE₂ alone: R″eq = 24 Ω, I_b″ = 24 / 24 = 1 A, I_c″ = 1 × 16 / 32 = 0.5 A\nI_c = I_c′ + I_c″ = 1.5 A", fig: function(){ return svg(vrun(XL, YT, YB, [B("E_1 = 48 V")]) + hrun(YT, XL, XR, [{ t: "r", c: 120, len: 30, lab: "R_1 8", side: "t" }, { t: "r", c: 262, len: 30, lab: "R_3 8", side: "t" }]) + vrun(XR, YT, YB, [{ t: "bat", c: YM, plus: "u", lab: "E_2 = 24 V", side: "r" }]) + hrun(YB, XR, XL, [{ t: "r", c: 262, len: 30, lab: "R_4 8", side: "b" }, { t: "r", c: 120, len: 30, lab: "R_2 8", side: "b" }]) + vrun(191, YT, YB, [{ t: "r", c: YM, lab: "R_5 16", side: "r" }]) + dots([[191, YT], [191, YB]]) + P.arr(178, 66, 178, 96, "I_c", 170, 86, "end")); } }
 ] };
 CHAPTERS["6"] = { title: "Capacitors and Inductors", questions: [
   { tag: "Calculation", q: "Example 6.1. A charge of 50 μC is stored. Find the voltage across the capacitor.", a: "V = Q / C = 50 μC / 1000 pF = 50 000 V", fig: function(){ return figCapLoop("E", "C = 1000 pF"); } },
@@ -947,8 +954,8 @@ CHAPTERS["8"] = { title: "Fundamentals of AC Circuits", questions: [
   { tag: "Calculation", q: "The period of a sine wave is T = 20 ms. Find f and ω.", a: "f = 1 / T = 1 / 20 ms = 50 Hz\nω = 2π f = 314.2 rad/s", fig: function(){ return waveFig({ waves: [{ lab: "v(t)" }], T: "one period T = 20 ms" }); } },
   { tag: "Calculation", q: "A sine voltage has V_m = 170 V. Find the RMS value and the half-cycle average value.", a: "V = V_m / √2 = 0.707 × 170 = 120.2 V\nV_avg = 0.637 V_m = 108.3 V", fig: function(){ return waveFig({ waves: [{ lab: "v(t)" }], T: "V_m = 170 V" }); } },
   { tag: "Calculation", q: "v = V_m sin(ωt + 30°) and i = I_m sin(ωt − 20°). Find the phase difference. Which one leads?", a: "φ = ψ_v − ψ_i = 30° − (−20°) = 50°\nφ > 0, so v leads i by 50°.", fig: function(){ return waveFig({ waves: [{ lab: "v", ph: -30 }, { lab: "i", ph: 20, amp: 0.7 }], T: "v is shifted left of i" }); } },
-  { tag: "Calculation", q: "Example 8.11. v_L = 6√2 sin(60t + 35°) V and L = 0.2 H. Find X_L and the current phasor (rms).", a: "X_L = ω L = 60 × 0.2 = 12 Ω\nI = V / (j X_L) = 6∠35° V / (12∠90° Ω) = 0.5∠−55° A", fig: function(){ return figAC("v_L", "ind", "L = 0.2 H"); } },
-  { tag: "Calculation", q: "Example 8.12. v_C = 50√2 sin(ωt − 20°) V, C = 5 μF, f = 500 Hz. Find X_C and the rms current.", a: "ω = 2π × 500 = 3142 rad/s\nX_C = 1 / (ω C) = 63.65 Ω\nI = V / X_C = 50 / 63.65 = 0.786 A, with phase −20° + 90° = +70°", fig: function(){ return figAC("v_C", "cap", "C = 5 μF"); } },
+  { tag: "Calculation", q: "Example 8.11. v_L = 6√2 sin(60t + 35°) V and L = 0.2 H. Find X_L and the current i_L.", a: "X_L = ω L = 60 × 0.2 = 12 Ω\nI_Lm = V_Lm / (j X_L) = 6√2∠35° V / 12∠90° Ω = 0.5√2∠−55° A\ni_L = 0.5√2 sin(60t − 55°) A", fig: function(){ return figAC("v_L", "ind", "L = 0.2 H"); } },
+  { tag: "Calculation", q: "Example 8.12. v_C = 50√2 sin(ωt − 20°) V, C = 5 μF, f = 500 Hz. Find X_C and the current i_C.", a: "ω = 2π × 500 = 3142 rad/s\nX_C = 1 / (ω C) = 63.65 Ω\nI_Cm = 50√2 V / 63.65 Ω = 786√2 mA\ni_C = 786√2 sin(ωt − 20° + 90°) = 786√2 sin(ωt + 70°) mA", fig: function(){ return figAC("v_C", "cap", "C = 5 μF"); } },
   { tag: "Calculation", q: "Convert 3 + j4 to polar form and 10∠30° to rectangular form.", a: "3 + j4 = √(3² + 4²) ∠tan⁻¹(4/3) = 5∠53.13°\n10∠30° = 10 cos 30° + j 10 sin 30° = 8.66 + j5", fig: function(){ return svg(P.w([[60, 118], [330, 118]]) + P.w([[110, 140], [110, 20]]) + '<line class="ar" x1="110" y1="118" x2="236" y2="42"/>' + P.head(240, 40, 0.855, -0.52, 9) + '<line class="dash" x1="240" y1="40" x2="240" y2="118"/><line class="dash" x1="110" y1="40" x2="240" y2="40"/>' + P.t(176, 82, "5", "end", "acc") + P.t(240, 134, "3 (real)") + P.t(100, 44, "4 (j)", "end") + P.t(150, 108, "53.13°", "start")); } }
 ] };
 CHAPTERS["9"] = { title: "Methods of AC Circuit Analysis", questions: [
@@ -1211,61 +1218,7 @@ CHAPTERS["9"] = { title: "Methods of AC Circuit Analysis", questions: [
       } }
   ];
 
-  // ================= find the error =================
-  function wrongSeries(){
-    var s = vrun(XL, YT, YB, [{ t: "isrc", c: YM, dir: "u", lab: "I_S = 4 A", side: "l" }]) + hrun(YT, XL, 255, [{ t: "r", c: 160, lab: "R_S = 3 Ω", side: "t" }]) + hrun(YB, 255, XL, []);
-    return svg(s + P.term(255, YT) + P.term(255, YB) + P.t(265, 42, "a", "start") + P.t(265, 132, "b", "start"));
-  }
-  function wrongArrow(){
-    var xl = 110, xr = 290, s = vrun(xl, YT, YB, [{ t: "isrc", c: YM, dir: "d", lab: "I_S = 4 A", side: "l" }]) + hrun(YT, xl, xr, []) + hrun(YB, xr, xl, []) + vrun(200, YT, YB, [{ t: "r", c: YM, lab: "R_S = 3 Ω", side: "r" }]);
-    return svg(s + dots([[200, YT], [200, YB]]) + P.term(xr, YT) + P.term(xr, YB) + P.t(xr + 10, 42, "a", "start") + P.t(xr + 10, 132, "b", "start") + P.t(60, 148, "original: E = 12 V, + on a", "start", "sign"));
-  }
-  var ERRORS = {
-    "1": [
-      { fig: function(){ return bankFig("1", 1); }, say: "The ammeter is connected across R.", ask: "What is wrong?", opts: ["The ammeter is in parallel. It must be in series with R.", "The battery is reversed.", "R is too small for an ammeter.", "A voltmeter is missing."], ok: 0, why: "An ammeter goes in series, so the current passes through it. In parallel it would act almost like a wire across R." },
-      { fig: function(){ var s = rect(XL, XR, YT, YB, { l: [B("E = 12 V")], r: [{ t: "r", c: YM, lab: "R = 6 Ω", side: "l" }], t: [{ t: "m", c: 190, ch: "V", lab: "V = ?", side: "t" }] }); return svg(s); }, say: "The voltmeter is placed in the wire, in line with R.", ask: "What is wrong?", opts: ["The voltmeter must be placed in series.", "The voltmeter must be in parallel across R.", "A voltmeter cannot measure 12 V.", "The resistor has the wrong value."], ok: 1, why: "A voltmeter goes in parallel with the part it measures. In series it blocks the current." },
-      { fig: function(){ return bankFig("1", 5); }, say: "I = E × R = 2.5 × 125 = 312.5 A", ask: "What is wrong?", opts: ["Nothing, the value is correct.", "Ohm's law is I = E / R, so I = 0.02 A.", "The answer must be in volts.", "R must be in kΩ."], ok: 1, why: "A 125 Ω resistor on 2.5 V cannot carry 312.5 A. Ohm's law gives I = E / R = 2.5 V / 125 Ω = 0.02 A." },
-      { fig: function(){ return bankFig("1", 8); }, say: "Red, red, orange, gold = 22 Ω ± 5%.", ask: "What is wrong?", opts: ["Gold means ± 10%.", "The first digit is wrong.", "Orange is the multiplier × 10³, so it is 22 kΩ.", "Red is the multiplier."], ok: 2, why: "The third band is the multiplier. Orange = 3 zeros, so 22 000 Ω = 22 kΩ ± 5%." }
-    ],
-    "2": [
-      { fig: function(){ return bankFig("2", 1); }, say: "KVL: E + V₁ + V₂ = 0, so 20 + 6 + 14 = 40 V.", ask: "What is wrong?", opts: ["KVL does not apply with a battery.", "V₂ should be 6 V.", "The current must be added too.", "The source is a rise and the drops are opposite: E − V₁ − V₂ = 0."], ok: 3, why: "Add the drops and subtract the rise (or the reverse). 20 − 6 − 14 = 0, so the loop checks." },
-      { fig: function(){ return bankFig("2", 5); }, say: "I₅ = 15 + 10 + 7 + 8 = 40 A", ask: "What is wrong?", opts: ["Currents in and out are added together.", "Only the currents in go on one side: 15 + 10 = 7 + 8 + I₅, so I₅ = 10 A.", "I₅ must be 0 A.", "KCL is not used at nodes."], ok: 1, why: "KCL: current in = current out. 25 A enters, 15 A leaves in the known wires, so I₅ = 10 A." },
-      { fig: function(){ return bankFig("2", 1); }, say: "The source has P = + E I = + 40 W, so it takes in energy.", ask: "What is wrong?", opts: ["The current enters the − end, so P = −40 W and the source gives out energy.", "Sources never have power.", "P must be 20 W.", "The resistors give out energy."], ok: 0, why: "With the reference direction of the slides, the current enters the − end of the source, so its power is negative. The 12 W and 28 W of the resistors are supplied by it." },
-      { fig: function(){ return bankFig("2", 8); }, say: "Vab = VS = 9 V because the source is 9 V.", ask: "What is wrong?", opts: ["RS is ignored. It drops 1 V, so Vab = I RL = 8 V.", "Vab is always 0 V.", "RL is ignored, Vab = 4 V.", "Nothing is wrong."], ok: 0, why: "A real source loses voltage in RS. I = 9 / 4.5 = 2 A. Vab = 2 × 4 = 8 V and the other 1 V drops across RS." }
-    ],
-    "3": [
-      { fig: function(){ return bankFig("3", 2); }, say: "V₂ = 12 × 2 / (2 + 4) = 4 V", ask: "What is wrong?", opts: ["The total resistance is 2 Ω.", "The VDR is not allowed here.", "The resistor wanted (R₂ = 4 Ω) must be on top: V₂ = 12 × 4 / 6 = 8 V.", "The answer must be 12 V."], ok: 2, why: "In the VDR the resistor you want goes on top. Check with KVL: 4 V + 8 V = 12 V." },
-      { fig: function(){ return bankFig("3", 7); }, say: "I(1 kΩ) = 9 mA × 1 / (1 + 2) = 3 mA", ask: "What is wrong?", opts: ["The 1 kΩ branch must take the smaller current.", "In the CDR the OTHER resistor goes on top: 9 × 2 / 3 = 6 mA.", "The units must be amps.", "The CDR needs the voltage first."], ok: 1, why: "The smaller R takes the bigger share. 1 kΩ takes 6 mA and 2 kΩ takes 3 mA. Check: 6 + 3 = 9 mA." },
-      { fig: function(){ return bankFig("3", 6); }, say: "Req = 4 Ω + 12 Ω = 16 Ω", ask: "What is wrong?", opts: ["The sum is only for series. For two in parallel: Req = (4 × 12) / (4 + 12) = 3 Ω.", "Req must be 48 Ω.", "Nothing is wrong.", "Req must be bigger than 12 Ω."], ok: 0, why: "In parallel, Req is smaller than the smallest R. 3 Ω is smaller than 4 Ω, as it must be." },
-      { fig: function(){ return bankFig("3", 4); }, say: "L2 is burned out, so L1 and L3 stay on.", ask: "What is wrong?", opts: ["Only L1 goes off.", "L3 gets brighter.", "All the lamps stay on.", "Series has one path. The open lamp breaks it, so all lamps go off."], ok: 3, why: "That is how old Christmas lights behave. In a parallel circuit each lamp has its own path." }
-    ],
-    "4": [
-      { fig: wrongSeries, say: "12 V with RS = 3 Ω was converted to IS = 4 A with RS = 3 Ω in series.", ask: "What is wrong?", opts: ["IS should be 36 A.", "RS must move to parallel with IS.", "RS must be removed.", "Nothing is wrong."], ok: 1, why: "In a source conversion RS moves from series to parallel (or back). IS = E / RS = 4 A is right." },
-      { fig: wrongArrow, say: "The + of the 12 V source was on terminal a. The converted IS arrow points down.", ask: "What is wrong?", opts: ["Nothing is wrong.", "The value must be 36 A.", "The arrow of IS points to the + of E, so it must point up toward a.", "RS must be 12 Ω."], ok: 2, why: "The polarity rule: the arrow of IS points to the + of E." },
-      { fig: function(){ return bankFig("4", 4); }, say: "E = 1.5 + 1.5 + 1.5 = 4.5 V", ask: "What is wrong?", opts: ["One cell is turned around, so it subtracts: E = 1.5 + 1.5 − 1.5 = 1.5 V.", "Cells in series never add.", "E must be 0 V.", "E must be 3 V."], ok: 0, why: "Series sources add with + if they point the same way as E and − if not." },
-      { fig: function(){ return bankFig("4", 8); }, say: "KCL at node a: I₁ + I₃ = I₂", ask: "What is wrong?", opts: ["KCL is not used in this method.", "I₁ and I₂ enter node a and I₃ leaves: I₁ + I₂ = I₃.", "I₃ enters the node.", "The node must be b."], ok: 1, why: "Read the arrows in the figure. I₁ and I₂ point into a, and I₃ points away from it." }
-    ]
-  };
 
-  // ================= order the steps =================
-  var ORDERS = {
-    "1": [
-      { t: "Read the colour code: red, red, orange, gold", steps: ["First band red: first digit 2.", "Second band red: second digit 2.", "Third band orange: multiplier × 10³.", "R = 22 × 10³ Ω = 22 kΩ.", "Gold: tolerance ± 5%, so 20.9 kΩ to 23.1 kΩ."] },
-      { t: "E = 2.5 V and R = 125 Ω. Find I.", steps: ["Choose the formula: I = E / R.", "Put in the values: I = 2.5 V / 125 Ω.", "Calculate: I = 0.02 A.", "Check with Ohm's law: V = I R = 0.02 × 125 = 2.5 V."] }
-    ],
-    "2": [
-      { t: "Example 2.6: find R₃ (E = 5 V, I = 0.25 A)", steps: ["Find the known drops with V = I R: V₁ = 0.625 V, V₂ = 1.25 V, V₄ = 1 V.", "Write KVL for the loop.", "Solve: V₃ = 5 − 0.625 − 1.25 − 1 = 2.125 V.", "R₃ = V₃ / I = 2.125 / 0.25 = 8.5 Ω.", "Check the power: I² RT = E I = 1.25 W."] },
-      { t: "KCL: 15 A and 10 A enter, 7 A and 8 A leave. Find I₅.", steps: ["Mark the arrows of all the currents at the node.", "Write KCL: in = out.", "Put in the values: 15 + 10 = 7 + 8 + I₅.", "Solve: I₅ = 25 − 15 = 10 A (leaving)."] }
-    ],
-    "3": [
-      { t: "2 Ω in series with (6 Ω // 3 Ω) on 8 V", steps: ["Combine the parallel part: 6 // 3 = 2 Ω.", "Add the series part: Req = 2 + 2 = 4 Ω.", "Find the total current: IT = 8 / 4 = 2 A.", "Go back: V(parallel) = 2 A × 2 Ω = 4 V.", "Check with KVL: 2 × 2 + 4 = 8 V."] },
-      { t: "Example 3.6: R₁ = 10 Ω, IT = 30 mA, I₂ = 10 mA. Find R₂.", steps: ["Write the CDR for I₂: I₂ = IT R₁ / (R₁ + R₂).", "Put in the values: 10 = 30 × 10 / (10 + R₂).", "Solve: 10 + R₂ = 30.", "R₂ = 20 Ω.", "Check: 30 mA × 10 / 30 = 10 mA."] }
-    ],
-    "4": [
-      { t: "Example 4.1: convert E = 6 V, RS = 2 Ω, RL = 10 Ω", steps: ["Find IS = E / RS = 6 / 2 = 3 A.", "Move RS from series to parallel.", "Place the arrow of IS toward the + of E.", "IL (voltage source) = 6 / (2 + 10) = 0.5 A.", "IL (CDR) = 3 × 2 / (2 + 10) = 0.5 A. Same, so equivalent."] },
-      { t: "Branch current analysis in five steps", steps: ["Label the nodes, a current arrow in every branch and a clockwise loop in every mesh.", "Write KCL at (n − 1) nodes.", "Write KVL in every mesh, with V = I R.", "Solve the equations by substitution.", "Find the rest (V, P). A negative current flows the other way."] }
-    ]
-  };
 
   
   // ================= chapters 5, 6, 8, 9: lessons, calculators, errors, orders =================
@@ -1283,10 +1236,10 @@ CHAPTERS["9"] = { title: "Methods of AC Circuit Analysis", questions: [
   ];
   LESSONS["6"] = [
     { t: "The capacitor", pts: ["Two plates separated by a dielectric store charge and an electric field. The unit of C is the farad (F).", "Charge, capacitance and voltage are linked by Q = C V.", "The stored energy is W = ½ C V²."], f: ["Q = C V", "W = ½ C V²"], fig: function(){ return bankFig("6", 2); } },
-    { t: "What sets the capacitance", pts: ["C grows with the plate area A and the dielectric constant k.", "C falls as the gap d grows.", "Above the breakdown voltage the dielectric fails and conducts."], f: ["C = 8.85×10⁻¹² k A / d"], fig: function(){ return bankFig("6", 1); } },
+    { t: "What sets the capacitance", pts: ["C grows with the plate area A and the dielectric constant k.", "C falls as the gap d grows.", "Book Table 6.1: air 1, paper 2.5, oil 4, mica 5, glass 7.5.", "Above the breakdown voltage the dielectric fails and conducts."], f: ["C = 8.85×10⁻¹² k A / d"], fig: function(){ return bankFig("6", 1); } },
     { t: "Capacitors in series and parallel", pts: ["Series: the charge is the same. C_eq is smaller than the smallest capacitor.", "Parallel: the voltage is the same. C_eq is the sum.", "The rules are the reverse of resistors."], f: ["Series: 1/C_eq = 1/C₁ + 1/C₂ + ...", "Parallel: C_eq = C₁ + C₂ + ..."], fig: function(){ return bankFig("6", 5); } },
-    { t: "The inductor", pts: ["A coil stores energy in a magnetic field. The unit of L is the henry (H).", "Faraday's law: a changing current induces a voltage. Lenz's law: the voltage opposes the change.", "More turns and a magnetic core raise L."], f: ["v = L di/dt", "W = ½ L I²"], fig: function(){ return bankFig("6", 6); } },
-    { t: "DC behaviour and combinations", pts: ["In DC steady state the capacitor is an open circuit. It blocks DC and passes AC.", "In DC steady state the inductor is a short circuit. It passes DC and opposes AC.", "Inductors in series add like resistors."], f: ["L_eq = L₁ + L₂ + ... (series)"], fig: function(){ return bankFig("6", 7); } }
+    { t: "The inductor", pts: ["A coil stores energy in a magnetic field. The unit of L is the henry (H).", "Faraday's law: a changing current induces a voltage. Lenz's law: the voltage opposes the change.", "More turns, a larger core area, a core with higher permeability and a shorter core raise L."], f: ["v = L di/dt", "W = ½ L I²", "L = N² A μ / l"], fig: function(){ return bankFig("6", 6); } },
+    { t: "DC behaviour and combinations", pts: ["In DC steady state the capacitor is an open circuit. It blocks DC and passes AC.", "In DC steady state the inductor is a short circuit. It passes DC and opposes AC.", "Inductors combine like resistors: series values add, parallel values combine like parallel resistors (Examples 6.9 and 6.10)."], f: ["Series: L_eq = L₁ + L₂ + ...", "Parallel: 1/L_eq = 1/L₁ + 1/L₂ + ..."], fig: function(){ return bankFig("6", 7); } }
   ];
   LESSONS["8"] = [
     { t: "The sine wave", pts: ["A sine function has three components: the peak V_m, the angular frequency ω and the phase angle ψ.", "The period T is the time of one cycle. The frequency f is the number of cycles per second (Hz).", "The peak-to-peak value is 2 V_m."], f: ["v(t) = V_m sin(ωt + ψ)", "f = 1 / T", "ω = 2π f"], fig: function(){ return bankFig("8", 1); } },
@@ -1422,48 +1375,6 @@ CHAPTERS["9"] = { title: "Methods of AC Circuit Analysis", questions: [
         s += line(ok("Check: √(P² + Q₂²) = " + fmt(Math.sqrt(P * P + Q2 * Q2), "VA") + " = S₂ ✓"));
         return { fig: figPFC(), steps: s };
       } }
-  ];
-
-  ERRORS["5"] = [
-    { fig: function(){ return bankFig("5", 0); }, say: "To turn off a voltage source, replace it with an open circuit.", ask: "What is wrong?", opts: ["Nothing is wrong.", "A voltage source is replaced by a short circuit. A current source is replaced by an open circuit.", "Voltage sources are replaced by a 1 Ω resistor.", "Voltage sources are never turned off."], ok: 1, why: "A zero-volt source is a wire, so it becomes a short circuit. A zero-amp source is a break, so it becomes an open circuit." },
-    { fig: function(){ return bankFig("5", 1); }, say: "R_TH = 12 + 12 + 12 = 36 Ω, because the resistors are added.", ask: "What is wrong?", opts: ["Nothing is wrong.", "R_TH must be 12 Ω.", "With E shorted, the three resistors are in parallel seen from a and b: R_TH = 12 / 3 = 4 Ω.", "R_TH is the open-circuit voltage."], ok: 2, why: "Shorting E puts R₁ across the terminals in parallel with R₂ and R₃. Check: 4 Ω is smaller than 12 Ω, as a parallel value must be." },
-    { fig: function(){ return bankFig("5", 3); }, say: "I_L = V_TH / R_L = 16 / 8 = 2 A.", ask: "What is wrong?", opts: ["R_TH is missing in the loop: I_L = 16 / (4 + 8) = 1.33 A.", "V_TH must be 48 V.", "The load must be in parallel with V_TH.", "Nothing is wrong."], ok: 0, why: "The load is in series with both V_TH and R_TH. The loop resistance is 4 + 8 = 12 Ω." },
-    { fig: function(){ return bankFig("5", 6); }, say: "Maximum power is delivered when R_L is as small as possible, R_L = 0.", ask: "What is wrong?", opts: ["Maximum power needs R_L as large as possible.", "Nothing is wrong.", "Maximum power is delivered when R_L = R_TH. At R_L = 0 the load power is zero.", "Maximum power needs R_L = 2 R_TH."], ok: 2, why: "At R_L = 0 the load voltage is zero, so P = 0. The peak is at R_L = R_TH." }
-  ];
-  ERRORS["6"] = [
-    { fig: function(){ return bankFig("6", 3); }, say: "Four 100 μF capacitors in series give C_eq = 400 μF.", ask: "What is wrong?", opts: ["Nothing is wrong.", "In series C_eq = 1 / (4 / 100 μF) = 25 μF. The sum belongs to parallel.", "C_eq must be 100 μF.", "C_eq must be 4 μF."], ok: 1, why: "Series capacitors give a value smaller than the smallest one. Check: 25 μF < 100 μF." },
-    { fig: function(){ return bankFig("6", 2); }, say: "W = C V² = 2.2 μF × (15 V)² = 495 μJ.", ask: "What is wrong?", opts: ["The energy has no factor ½.", "The energy is W = ½ C V² = 247.5 μJ.", "V must not be squared.", "The unit must be farads."], ok: 1, why: "The stored energy is ½ C V². The missing ½ doubles the answer." },
-    { fig: function(){ return bankFig("6", 7); }, say: "In DC steady state the capacitor is a short circuit and the inductor is an open circuit.", ask: "What is wrong?", opts: ["Nothing is wrong.", "Both are open circuits.", "Both are short circuits.", "It is the reverse: the capacitor is open (it blocks DC) and the inductor is a short (it passes DC)."], ok: 3, why: "A charged capacitor has i = C dv/dt = 0. A steady current gives v = L di/dt = 0." },
-    { fig: function(){ return bankFig("6", 1); }, say: "The gap d is halved, so C is halved.", ask: "What is wrong?", opts: ["C does not depend on d.", "C is inversely proportional to d, so halving d doubles C.", "C becomes four times larger.", "Nothing is wrong."], ok: 1, why: "C = 8.85×10⁻¹² k A / d. A smaller gap puts the plates closer and stores more charge per volt." }
-  ];
-  ERRORS["8"] = [
-    { fig: function(){ return bankFig("8", 2); }, say: "A supply of V_m = 170 V has an rms value of 170 × 2 = 340 V.", ask: "What is wrong?", opts: ["Nothing is wrong.", "The RMS value is V_m / √2 = 120.2 V.", "The RMS value is V_m / 2 = 85 V.", "The RMS value is V_m."], ok: 1, why: "RMS = 0.707 V_m. The rms value is always smaller than the peak." },
-    { fig: function(){ return bankFig("8", 3); }, say: "v = V_m sin(ωt + 30°) and i = I_m sin(ωt − 20°), so i leads v by 10°.", ask: "What is wrong?", opts: ["Nothing is wrong.", "The angles are subtracted as 30° − 20°, which gives 10°.", "The phase difference is 30° − (−20°) = 50°, and v leads i.", "i leads by 50°."], ok: 2, why: "Subtract with the signs: φ = ψ_v − ψ_i = 30° − (−20°) = 50°. A positive φ means v leads." },
-    { fig: function(){ return bankFig("8", 4); }, say: "L = 0.2 H at ω = 60 rad/s gives X_L = 1 / (ω L) = 0.083 Ω.", ask: "What is wrong?", opts: ["X_L = ω L = 12 Ω. The reciprocal belongs to the capacitor.", "X_L = L / ω.", "Nothing is wrong.", "X_L = ω / L."], ok: 0, why: "Inductive reactance grows with frequency: X_L = ω L = 60 × 0.2 = 12 Ω." },
-    { fig: function(){ return bankFig("8", 5); }, say: "In a capacitor, the voltage leads the current by 90°.", ask: "What is wrong?", opts: ["Nothing is wrong.", "The current leads the voltage by 90° in a capacitor (ICE).", "They are in phase.", "The voltage leads by 180°."], ok: 1, why: "ELI the ICE man: in L the voltage E leads I, in C the current I leads E." }
-  ];
-  ERRORS["9"] = [
-    { fig: function(){ return bankFig("9", 0); }, say: "Z = R + j(X_L + X_C) = 1.5 + j5.5 Ω.", ask: "What is wrong?", opts: ["Nothing is wrong.", "R must be removed.", "The reactances oppose each other: X = X_L − X_C = 2.5 − 3 = −0.5 Ω.", "Both reactances are negative."], ok: 2, why: "Z_L = +jX_L and Z_C = −jX_C. Their sum is X_L − X_C. Z = 1.5 − j0.5 Ω is capacitive." },
-    { fig: function(){ return bankFig("9", 3); }, say: "S_T = P_T + Q_T = 60 + 55 = 115 VA.", ask: "What is wrong?", opts: ["P and Q are at 90° to each other: S = √(60² + 55²) = 81.39 VA.", "S must be 60 VA.", "Nothing is wrong.", "S must be 55 VA."], ok: 0, why: "P and Q are the sides of the power triangle. Add them as a right triangle, not as plain numbers." },
-    { fig: function(){ return bankFig("9", 4); }, say: "To correct a lagging power factor, an inductor is placed in parallel with the load.", ask: "What is wrong?", opts: ["Nothing is wrong.", "A resistor must be used.", "A capacitor is placed in parallel. It supplies reactive power and lowers the total Q.", "A battery must be used."], ok: 2, why: "The load is inductive, so Q is positive. The capacitor gives Q_C of the opposite sign. P does not change." },
-    { fig: function(){ return bankFig("9", 5); }, say: "Z = 3 + j4 Ω has |Z| = 3 + 4 = 7 Ω.", ask: "What is wrong?", opts: ["Nothing is wrong.", "|Z| must be 4 Ω.", "|Z| must be 12 Ω.", "|Z| = √(3² + 4²) = 5 Ω. R and X are the sides of a right triangle."], ok: 3, why: "The magnitude is the hypotenuse of the impedance triangle. Check: 5 Ω < 7 Ω." }
-  ];
-
-  ORDERS["5"] = [
-    { t: "Example 5.4: find I_L with Thevenin (E = 48 V, three 12 Ω, R_L = 8 Ω)", steps: ["Remove R_L and mark the terminals a and b.", "Short E and find R_TH = 12 // 12 // 12 = 4 Ω.", "Restore E and find V_TH = 48 × 6 / 18 = 16 V.", "Draw the Thevenin circuit and reconnect R_L = 8 Ω.", "I_L = 16 / (4 + 8) = 1.33 A."] },
-    { t: "Superposition with two sources", steps: ["Keep source 1. Replace source 2 with a short circuit (voltage source).", "Find the partial current I' in the wanted branch.", "Keep source 2. Replace source 1 with a short circuit.", "Find the partial current I'' in the same branch.", "Add with signs: I = I' + I''."] }
-  ];
-  ORDERS["6"] = [
-    { t: "Example 6.6: find C_eq of the capacitor network", steps: ["Combine C₄ and C₅ in series: 0.5 × 2 / 2.5 = 0.4 μF.", "Add the parallel group: 2 + 0.6 + 0.4 = 3 μF.", "Combine with C₁ in series: 6 × 3 / 9.", "C_eq = 2 μF."] },
-    { t: "Example 6.3: find the energy in a 2.2 μF capacitor at 15 V", steps: ["Choose the formula: W = ½ C V².", "Put in the values: ½ × 2.2 μF × (15 V)².", "Square the voltage: 225 V².", "W = 247.5 μJ."] }
-  ];
-  ORDERS["8"] = [
-    { t: "Find the rms value and the instantaneous value of v = 170 sin ωt at 30°", steps: ["Read the peak: V_m = 170 V.", "RMS value: V = 170 / √2 = 120.2 V.", "Put ωt = 30° in the equation.", "v = 170 sin 30° = 85 V."] },
-    { t: "Example 8.11: find X_L and I for L = 0.2 H, ω = 60 rad/s, V = 6∠35° V", steps: ["X_L = ω L = 60 × 0.2 = 12 Ω.", "Write the impedance: Z_L = j12 Ω = 12∠90° Ω.", "I = V / Z_L = 6∠35° / 12∠90°.", "I = 0.5∠−55° A. The current lags v by 90°."] }
-  ];
-  ORDERS["9"] = [
-    { t: "Example 9.1: find Z of the series RLC circuit", steps: ["Read R = 1.5 Ω, X_L = 2.5 Ω and X_C = 3 Ω.", "Find the net reactance: X = 2.5 − 3 = −0.5 Ω.", "Write Z = 1.5 − j0.5 Ω.", "Convert: |Z| = 1.58 Ω, φ = −18.44°.", "X is negative, so the circuit is capacitive."] },
-    { t: "Slide 33: correct the power factor of 4 kW, 120 V, 60 Hz from 0.8 to 0.95", steps: ["Find Q₁ = 4000 × tan(cos⁻¹ 0.8) = 3000 var.", "Find Q₂ = 4000 × tan(cos⁻¹ 0.95) = 1315 var.", "Q_C = Q₁ − Q₂ = 1685 var.", "ω = 2π × 60 = 377 rad/s.", "C = Q_C / (ω V²) = 1685 / (377 × 120²) = 310 μF."] }
   ];
 
 // ---------- Watch tab: animated, interactive simulations ----------
@@ -1818,14 +1729,14 @@ SIMS["5"] = [
     out: function(v){ var P = this.PL(v, v.rl), Pm = v.V * v.V / (4 * v.rt); return ["P_L = V_TH² R_L / (R_TH + R_L)² = " + nf(P, 3) + " W", "P_max = V_TH² / (4 R_TH) = " + nf(Pm, 3) + " W at R_L = " + v.rt + " Ω", "This load gets " + nf(100 * P / Pm, 3) + "% of P_max", "Efficiency = R_L / (R_TH + R_L) = " + nf(100 * v.rl / (v.rt + v.rl), 3) + "%"]; },
     look: ["The curve rises, peaks at R_L = R_TH and then falls.", "At the peak the efficiency is 50%.", "A larger R_TH lowers P_max."],
     tryit: [["V_TH = 16 V and R_TH = 4 Ω. Set R_L = 4 Ω. What is P_L?", "P_max = 16 W."], ["Set R_L = 1 Ω. Is P_L larger or smaller than P_max?", "Smaller: 10.2 W."]] },
-  { t: "Superposition", d: "Two sources feed the shared resistor R₃. Each source alone gives a partial current. The two are added.",
-    ctl: [{ id: "e1", label: "E₁", min: 0, max: 20, step: 2, val: 12, unit: "V" }, { id: "e2", label: "E₂", min: 0, max: 20, step: 2, val: 6, unit: "V" }],
-    sol: function(v){ var r1 = 2, r2 = 3, r3 = 6, i1p = v.e1 / (r1 + r2 * r3 / (r2 + r3)), a = i1p * r2 / (r2 + r3), i2p = v.e2 / (r2 + r1 * r3 / (r1 + r3)), b = i2p * r1 / (r1 + r3); return [a, b, a + b]; },
+  { t: "Superposition", d: "Example 5.1: E₁ and E₂ feed the middle resistor R₅. Each source alone gives a partial current I_c′ and I_c″. The two are added.",
+    ctl: [{ id: "e1", label: "E₁", min: 0, max: 60, step: 6, val: 48, unit: "V" }, { id: "e2", label: "E₂", min: 0, max: 48, step: 6, val: 24, unit: "V" }],
+    sol: function(v){ var rl = 16, rr = 16, r5 = 16, a = v.e1 / (rl + r5 * rr / (r5 + rr)) * rr / (rr + r5), b = v.e2 / (rr + r5 * rl / (r5 + rl)) * rl / (rl + r5); return [a, b, a + b]; },
     spd: function(v){ return [spd1(this.sol(v)[2] * 1.4)]; },
     draw: function(v, ph){
-      var s = this.sol(v), o = "", sc = 52, x0 = 300, rows = [["I₃′ (E₁ alone)", s[0], "l3"], ["I₃″ (E₂ alone)", s[1], "l2"], ["I₃ = I₃′ + I₃″", s[2], ""]], i;
+      var s = this.sol(v), o = "", sc = 70, x0 = 300, rows = [["I_c′ (E₁ alone)", s[0], "l3"], ["I_c″ (E₂ alone)", s[1], "l2"], ["I_c = I_c′ + I_c″", s[2], ""]], i;
       o += wr("40,40 240,40") + wr("40,220 240,220") + wr("40,40 40,52") + zig(40, 52, 40, 102) + bat(40, 112, 172) + wr("40,172 40,220") + wr("240,40 240,52") + zig(240, 52, 240, 102) + bat(240, 112, 172) + wr("240,172 240,220") + wr("140,40 140,100") + zig(140, 100, 140, 160) + wr("140,160 140,220");
-      o += '<circle class="nd" cx="140" cy="40" r="3.5"/><circle class="nd" cx="140" cy="220" r="3.5"/>' + flow([[140, 40], [140, 220]], ph[0], "g", 32) + tx(52, 82, "R₁ 2", "start") + tx(228, 82, "R₂ 3", "end") + tx(150, 130, "R₃ 6", "start") + tx(70, 150, "E₁ " + v.e1, "start") + tx(212, 150, "E₂ " + v.e2, "end") + tx(140, 250, "current in R₃ = I₃");
+      o += '<circle class="nd" cx="140" cy="40" r="3.5"/><circle class="nd" cx="140" cy="220" r="3.5"/>' + flow([[140, 40], [140, 220]], ph[0], "g", 32) + tx(52, 82, "R₁+R₂ 16", "start") + tx(228, 82, "R₃+R₄ 16", "end") + tx(150, 130, "R₅ 16", "start") + tx(70, 150, "E₁ " + v.e1, "start") + tx(212, 150, "E₂ " + v.e2, "end") + tx(140, 250, "current in R₅ = I_c");
       for (i = 0; i < 3; i++){
         var y = 62 + i * 62, w = s[i] * sc;
         o += tx(x0 + 6, y - 14, rows[i][0], "start", i === 2 ? "a" : "") + '<rect x="' + x0 + '" y="' + (y - 8) + '" width="' + Math.max(0, w).toFixed(1) + '" height="16" rx="3" fill="' + (i === 0 ? "#14803c" : i === 1 ? "#c0392b" : "#0b6bab") + '"/>' + tx(x0 + Math.max(0, w) + 6, y + 5, nf(s[i], 3) + " A", "start");
@@ -1833,9 +1744,9 @@ SIMS["5"] = [
       o += '<line class="axis2" x1="' + x0 + '" y1="40" x2="' + x0 + '" y2="205"/>';
       return o;
     },
-    out: function(v){ var s = this.sol(v); return ["E₁ alone (E₂ shorted): I₃′ = " + nf(s[0], 3) + " A", "E₂ alone (E₁ shorted): I₃″ = " + nf(s[1], 3) + " A", "I₃ = I₃′ + I₃″ = " + nf(s[2], 3) + " A", "R₁ = 2 Ω, R₂ = 3 Ω, R₃ = 6 Ω"]; },
-    look: ["The bars add up: the third bar is the sum of the first two.", "Set E₂ = 0. Only the first bar is left.", "Both partial currents flow the same way in R₃, so they add."],
-    tryit: [["Set E₁ = 0 and E₂ = 10 V. What is I₃?", "I₃ = I₃″ = 1.85 A."], ["Why is superposition not used for power?", "Power depends on the square of the current, so it is not linear."]] }
+    out: function(v){ var s = this.sol(v); return ["E₁ alone (E₂ shorted): I_c′ = " + nf(s[0], 3) + " A", "E₂ alone (E₁ shorted): I_c″ = " + nf(s[1], 3) + " A", "I_c = I_c′ + I_c″ = " + nf(s[2], 3) + " A", "R₁ = R₂ = R₃ = R₄ = 8 Ω, R₅ = 16 Ω (Example 5.1)"]; },
+    look: ["The bars add up: the third bar is the sum of the first two.", "Set E₂ = 0. Only the first bar is left.", "Both partial currents flow the same way in R₅, so they add."],
+    tryit: [["Example 5.1 uses E₁ = 48 V and E₂ = 24 V. What is I_c?", "I_c′ = 1 A, I_c″ = 0.5 A, so I_c = 1.5 A."], ["Why is superposition not used for power?", "Power depends on the square of the current, so it is not linear."]] }
 ];
 
 // ---------- Chapter 6 ----------
@@ -2027,7 +1938,52 @@ IDEAS["The impedance triangle"] = { i: "R and X are two sides of a right triangl
 IDEAS["Active, reactive and apparent power"] = { i: "P does the work. Q only moves back and forth. S is what the supply must carry.", s: "Adding P and Q as plain numbers. They form a right triangle.", w: 2 };
 IDEAS["Power factor and its correction"] = { i: "A capacitor in parallel supplies the reactive power the motor needs, so the line carries less current.", s: "Changing P when correcting the power factor. Only Q changes.", w: 2 };
 
+// ===== sources: book page and slide numbers for lessons, examples and topics =====
+// Book: Wang, Understandable Electric Circuits (IET 2010). Slides: the ME0212 chapter decks.
+var LREF = {
+  "The basic circuit": "Book §1.2, p. 4 · Slides 4–8", "Current": "Book §1.3, p. 8 · Slides 9–13", "Voltage": "Book §1.4, p. 10 · Slides 14–17",
+  "Resistance and conductance": "Book §1.5.1–1.5.4, p. 14 · Slides 18–24", "Ohm's law": "Book §1.5.5–1.6, p. 17 · Slides 25–30", "Resistor colour code": "Slide 31",
+  "Power and energy": "Book §2.1, p. 31 · Slides 2–11", "Kirchhoff's voltage law (KVL)": "Book §2.2, p. 36 · Slides 12–17", "Kirchhoff's current law (KCL)": "Book §2.3, p. 41 · Slides 18–23",
+  "Node, branch, mesh, loop": "Book §2.3.6, p. 47 · Slides 24–25", "Real voltage source": "Book §2.4.1, p. 48 · Slides 26–29", "Current source": "Book §2.4.2, p. 50 · Slides 30–32", "Metric prefixes": "Book §2.5.2, p. 54 · Slides 33–34",
+  "Series circuit": "Book §3.1.1, p. 63 · Slides 2–9", "Voltage-divider rule (VDR)": "Book §3.1.2, p. 67 · Slides 10–11", "Circuit ground": "Book §3.1.3, p. 70 · Slides 12–14",
+  "Parallel circuit": "Book §3.2.1, p. 71 · Slides 15–20", "Current-divider rule (CDR)": "Book §3.2.2, p. 76 · Slides 21–24", "Series–parallel circuits": "Book §3.3, p. 79 · Slides 25–30",
+  "Source conversion": "Book §4.1.1, p. 101 · Slides 2–7", "The polarity rule": "Book §4.1.1, p. 101 · Slides 2–3", "Sources in series and parallel": "Book §4.1.2, p. 104 · Slides 8–13",
+  "Branch current analysis": "Book §4.2, p. 108 · Slides 14–19", "A circuit with a current source": "Book §4.2, Example 4.5, p. 112 · Slide 20",
+  "Superposition theorem": "Book §5.1, p. 128 · Slides 2–10", "Thevenin's theorem": "Book §5.2, p. 133 · Slides 11–22", "Norton's theorem": "Book §5.2, p. 133 · Slides 11–22", "Maximum power transfer": "Book §5.3, p. 147 · Slide 23",
+  "The capacitor": "Book §6.1, p. 164 · Slides 3–12, 18–19", "What sets the capacitance": "Book §6.1.6–6.1.8, p. 169 · Slides 13–15", "Capacitors in series and parallel": "Book §6.2, p. 174 · Slides 20–26",
+  "The inductor": "Book §6.3, p. 179 · Slides 27–41", "DC behaviour and combinations": "Book §6.1.9, §6.3.4 and §6.4, p. 188 · Slides 16–17, 35, 42–45",
+  "The sine wave": "Book §8.1, p. 227 · Slides 2–6, 11–12", "Average and RMS value": "Book §8.2.3–8.2.4, p. 236 · Slides 15–17", "Phase difference": "Book §8.1.5, p. 232 · Slides 7–10",
+  "Complex numbers and phasors": "Book §8.3, p. 239 · Slides 18–28", "Resistor, inductor and capacitor in AC": "Book §8.4, p. 248 · Slides 29–37",
+  "Impedance": "Book §9.1, p. 265 · Slides 2, 10–12", "Series and parallel impedances": "Book §9.2, p. 272 · Slides 3–9", "The impedance triangle": "Book §9.1.3, p. 267 · Slides 10–12",
+  "Active, reactive and apparent power": "Book §9.3.1–9.3.5, p. 276 · Slides 13–21", "Power factor and its correction": "Book §9.3.6–9.3.7, p. 285 · Slides 22–33"
+};
+var EXP = { "1.1": 9, "1.3": 16, "1.4": 17, "2.1": 34, "2.2": 34, "2.3": 35, "2.4": 35, "2.5": 37, "2.6": 39, "2.7": 40, "2.8": 42, "2.9": 42, "2.10": 43, "2.11": 45, "2.12": 46, "2.13": 47, "2.14": 49,
+  "3.1": 67, "3.2": 69, "3.3": 70, "3.4": 75, "3.5": 78, "3.6": 79, "4.1": 103, "4.2": 104, "4.3": 108, "4.4": 110, "4.5": 112,
+  "5.1": 129, "5.2": 130, "5.4": 136, "5.5": 139, "5.6": 143, "5.7": 145, "6.1": 168, "6.2": 170, "6.3": 174, "6.4": 175, "6.5": 177, "6.6": 178, "6.8": 187, "6.9": 189, "6.10": 189,
+  "8.1": 232, "8.2": 234, "8.3": 236, "8.11": 253, "8.12": 257, "9.1": 268, "9.3": 274, "9.5": 288, "9.6": 288, "11.1": 340, "11.2": 341, "11.3": 345 };
+var TREF = {
+  "1": { "Circuit basics": "The basic circuit", "Current": "Current", "Voltage": "Voltage", "Resistance": "Resistance and conductance", "Conductance": "Resistance and conductance", "Ohm's law": "Ohm's law", "Colour code": "Resistor colour code" },
+  "2": { "Power and energy": "Power and energy", "KVL": "Kirchhoff's voltage law (KVL)", "KCL": "Kirchhoff's current law (KCL)", "Circuit terms": "Node, branch, mesh, loop", "Sources": "Real voltage source", "Real sources": "Real voltage source", "Prefixes": "Metric prefixes" },
+  "3": { "Series circuit": "Series circuit", "Series": "Series circuit", "Voltage divider": "Voltage-divider rule (VDR)", "Ground": "Circuit ground", "Parallel circuit": "Parallel circuit", "Parallel": "Parallel circuit", "Current divider": "Current-divider rule (CDR)", "Series-parallel": "Series–parallel circuits" },
+  "4": { "Source conversion": "Source conversion", "Polarity": "The polarity rule", "Sources in series": "Sources in series and parallel", "Series sources": "Sources in series and parallel", "Parallel sources": "Sources in series and parallel", "Branch current": "Branch current analysis", "Current source in a circuit": "A circuit with a current source" },
+  "5": { "Superposition": "Superposition theorem", "Thevenin": "Thevenin's theorem", "Norton": "Norton's theorem", "Maximum power": "Maximum power transfer" },
+  "6": { "Capacitor": "The capacitor", "Charge and energy": "The capacitor", "Capacitance": "What sets the capacitance", "Series and parallel": "Capacitors in series and parallel", "Inductor": "The inductor", "DC behaviour": "DC behaviour and combinations" },
+  "8": { "Sine wave": "The sine wave", "Frequency": "The sine wave", "Instantaneous value": "The sine wave", "RMS value": "Average and RMS value", "Phase": "Phase difference", "Phasor": "Complex numbers and phasors", "R, L, C": "Resistor, inductor and capacitor in AC", "Reactance": "Resistor, inductor and capacitor in AC" },
+  "9": { "Impedance": "Impedance", "Power": "Active, reactive and apparent power", "Power factor": "Power factor and its correction" }
+};
+var CHREF = { "1": "Book Chapter 1, p. 1 · Chapter 1 slides", "2": "Book Chapter 2, p. 31 · Chapter 2 slides", "3": "Book Chapter 3, p. 63 · Chapter 3 slides", "4": "Book Chapter 4, p. 101 · Chapter 4 slides", "5": "Book Chapter 5, p. 127 · Chapter 5 slides", "6": "Book Chapter 6, p. 163 · Chapter 6 slides", "8": "Book Chapter 8, p. 227 · Chapter 8 slides", "9": "Book Chapter 9, p. 265 · Chapter 9 slides" };
+function srcOf(ch, topic, text){
+  var m = /Example (\d+\.\d+)/.exec(text || "");
+  if (m && EXP[m[1]]) return "Book Example " + m[1] + ", p. " + EXP[m[1]];
+  if (/Slide 33/.test(text || "") && ch === "9") return "Slide 33 (Chapter 9)";
+  var t = TREF[ch] && TREF[ch][topic];
+  if (t && LREF[t]) return LREF[t];
+  if (LREF[topic]) return LREF[topic];
+  return CHREF[ch] || "";
+}
+
 // ================= platform =================
+var APP_VERSION = "@@VERSION@@";
 var CH_NAMES = { "1": "Basic Concepts", "2": "Basic Laws", "3": "Series–Parallel", "4": "DC Analysis Methods", "5": "Network Theorems", "6": "Capacitors & Inductors", "8": "AC Fundamentals", "9": "AC Analysis" };
 var MCQ = {}; function M(topic, q, ok, wrong, why){ return { topic: topic, q: q, ok: ok, wrong: wrong, why: why }; }
 MCQ["1"] = [
@@ -2397,6 +2353,111 @@ M("Power","Why is the power factor corrected?","To lower the current for the sam
 M("Power","What is placed in parallel with an inductive load to correct the PF?","A capacitor",["An inductor","A resistor","A battery"],"The capacitor supplies reactive power Q_C and lowers the total Q.")
 ];
 
+// ===== more questions for chapters 5, 6, 8, 9 (book and slide based) =====
+MCQ["5"] = MCQ["5"].concat([
+M("Superposition","Example 5.1. E₁ = 48 V acts alone and R′eq = 24 Ω. What is I_a′?","2 A",["0.5 A","1 A","4 A"],"I_a′ = E₁ / R′eq = 48 / 24 = 2 A."),
+M("Superposition","Example 5.1. I_c′ = 1 A and I_c″ = 0.5 A in the same direction. What is I_c?","1.5 A",["0.5 A","1 A","2 A"],"I_c = I_c′ + I_c″ = 1.5 A."),
+M("Superposition","Example 5.1. When E₂ acts alone, what replaces E₁?","A jump wire (short circuit)",["An open circuit","A 16 Ω resistor","A current source"],"A voltage source that is turned off becomes a short circuit."),
+M("Superposition","Example 5.2 has a voltage source and a current source. When E acts alone, the current source I₁ is replaced by","an open circuit",["a short circuit","a 50 Ω resistor","a voltage source"],"A current source that is turned off becomes an open circuit."),
+M("Superposition","What is the last step of the superposition procedure?","Add the single-source contributions algebraically",["Multiply the contributions","Keep only the largest contribution","Average the contributions"],"Slide 3, step 4: the algebraic sum of all contributions."),
+M("Superposition","A partial current points opposite to the reference direction. How is it added?","With a minus sign",["With a plus sign","It is ignored","It is doubled"],"The sum is algebraic, so direction gives the sign."),
+M("Thevenin","Example 5.4. Why does I_N equal E / R₁ = 4 A?","The short across a and b carries all the current, so R₂ and R₃ get none",["R₂ and R₃ are in series with R₁","E is turned off","R_L is in parallel with R₁"],"The short circuit bypasses R₂ and R₃."),
+M("Thevenin","When R_TH is found, a current source in the network is replaced by","an open circuit",["a short circuit","a resistor equal to R_L","a voltage source"],"Slide 12: voltage sources shorted, current sources opened."),
+M("Thevenin","Which equation links the three Thevenin and Norton quantities?","V_TH = I_N R_TH",["V_TH = I_N / R_TH","V_TH = I_N + R_TH","R_TH = V_TH I_N"],"For Example 5.4: 4 A × 4 Ω = 16 V."),
+M("Thevenin","Thevenin's theorem is applied to the load branch. Which branch is removed first?","The load branch (or the unknown branch)",["The source branch","Every resistor in series","The branch with the largest resistor"],"Slide 12, step 1."),
+M("Thevenin","V_TH = 16 V and R_TH = 4 Ω. R_L = 4 Ω. What is the load voltage?","8 V",["16 V","4 V","2 V"],"V_L = 16 × 4 / (4 + 4) = 8 V."),
+M("Thevenin","Two networks have the same V_TH and R_TH. What is true for any load?","They give the same load current and voltage",["They contain the same resistors","They have the same internal power loss","They are both ideal sources"],"An equivalent circuit is equal only at its terminals."),
+M("Norton","Example 5.6. R_N = (R₁ // R₂ + R₃) // R₄ with 200, 200, 400 and 500 Ω. What is R_N?","250 Ω",["500 Ω","1300 Ω","100 Ω"],"(100 + 400) // 500 = 250 Ω."),
+M("Norton","Example 5.6. Why is I_N = I = 1 mA?","The short across a and b takes the whole source current",["The resistors are all equal","R_L is removed from the source","The source is turned off"],"The short has no resistance, so all of I flows through it."),
+M("Norton","A Norton equivalent has I_N = 4 A and R_N = 4 Ω. What is the open-circuit voltage?","16 V",["1 V","8 V","0 V"],"V_ab = I_N R_N = 16 V."),
+M("Norton","In the Norton circuit, how is the load current found?","With the current divider rule",["With the voltage divider rule only","I_L = I_N always","I_L = I_N R_L"],"I_L = I_N R_N / (R_N + R_L)."),
+M("Maximum power","Book Table 5.1. V_S = 10 V and R_S = 30 Ω. What is P_L at R_L = 10 Ω?","0.625 W",["0.833 W","0.8 W","1 W"],"I = 10 / 40 = 0.25 A, P = 0.25² × 10 = 0.625 W."),
+M("Maximum power","Book Table 5.1. At which load does P_L reach 0.833 W?","R_L = 30 Ω",["R_L = 10 Ω","R_L = 50 Ω","R_L = 20 Ω"],"The peak is at R_L = R_S = 30 Ω."),
+M("Maximum power","At maximum power transfer, what is the load voltage?","V_TH / 2",["V_TH","Zero","2 V_TH"],"Equal resistors split V_TH in half."),
+M("Maximum power","R_TH = 8 Ω. Which load gives the maximum power?","8 Ω",["4 Ω","16 Ω","0 Ω"],"R_L = R_TH."),
+M("Maximum power","V_TH = 20 V and R_TH = 5 Ω. What is P_max?","20 W",["80 W","40 W","10 W"],"P_max = 20² / (4 × 5) = 20 W."),
+M("Maximum power","Book Table 5.1. V_S = 10 V, R_S = 30 Ω. What is P_L at R_L = 50 Ω?","0.781 W",["0.833 W","0.625 W","1 W"],"I = 10 / 80 = 0.125 A, P = 0.125² × 50 = 0.781 W.")
+]);
+MCQ["6"] = MCQ["6"].concat([
+M("Capacitor","What is the dielectric of a capacitor?","The insulating material between the plates",["The metal of the plates","The lead wires","The case"],"Slide 3: paper, air, glass, mica, ceramics and others."),
+M("Capacitor","Which capacitors are usually polarized?","Electrolytic capacitors",["Air capacitors","Mica capacitors","Ceramic capacitors"],"Slide 4: electrolytic capacitors are usually polarized."),
+M("Capacitor","When charging ends in a DC circuit, what is V_C?","V_C = E and I = 0",["V_C = 0 and I = 0","V_C = E and I is maximum","V_C = E / 2"],"Slide 7: the charging current falls to zero."),
+M("Capacitor","A charged capacitor is shorted by a wire. What happens?","It discharges and its stored energy is released",["It charges more","Nothing happens","Its capacitance doubles"],"Slide 8: discharging a capacitor."),
+M("Capacitor","Example 6.1. Q = 50 μC and C = 1000 pF. What is V?","50 kV",["50 V","0.05 V","5 kV"],"V = Q / C = 50×10⁻⁶ / 1000×10⁻¹² = 50 000 V."),
+M("Capacitor","Example 6.2. What is k for mica in Table 6.1?","5",["1","2.5","7.5"],"Table 6.1: mica 5, paper 2.5, glass 7.5."),
+M("Capacitor","Which material in Table 6.1 has the largest dielectric constant?","Glass (7.5)",["Mica (5)","Oil (4)","Teflon (2.1)"],"A larger k gives a larger C."),
+M("Capacitor","A capacitor with air (k ≈ 1) is filled with oil (k = 4). The geometry is the same. What happens to C?","It becomes about 4 times larger",["It stays the same","It becomes 4 times smaller","It doubles"],"C is proportional to k."),
+M("Capacitor","What is the leakage current of a capacitor?","A small current through the imperfect dielectric",["The charging current","The current at breakdown","The discharge current"],"Book §6.1.7: no insulator is perfect."),
+M("Capacitor","Example 6.3. W = ½ × 2.2 μF × (15 V)². What is W?","247.5 μJ",["495 μJ","16.5 μJ","33 μJ"],"½ × 2.2×10⁻⁶ × 225 = 247.5×10⁻⁶ J."),
+M("Capacitor","Example 6.5. C_eq = 450 μF on 60 V. What is the total charge?","27 mC",["7.5 μC","2.7 mC","450 mC"],"Q = 450×10⁻⁶ × 60 = 0.027 C."),
+M("Capacitor","Series capacitors behave like one capacitor with","a larger total gap between the plates",["a larger plate area","a smaller gap","a higher k"],"Book Figure 6.10: the gaps add, so C_eq falls."),
+M("Capacitor","Parallel capacitors behave like one capacitor with","a larger total plate area",["a larger gap","a smaller plate area","a lower k"],"Book Figure 6.13: the areas add, so C_eq grows."),
+M("Inductor","Which law gives the induced voltage of a coil?","Faraday's law",["Ohm's law","Kirchhoff's current law","Coulomb's law"],"A changing magnetic flux induces a voltage."),
+M("Inductor","Which factor lowers the inductance of a coil?","A longer core",["More turns","A larger core area","A core with higher permeability"],"L = N² A μ / l. A longer l gives a smaller L."),
+M("Inductor","The number of turns of a coil is doubled. What happens to L?","It becomes 4 times larger",["It doubles","It stays the same","It halves"],"L is proportional to N²."),
+M("Inductor","Why does an iron-core inductor have a larger L than an air-core one?","Iron has a higher permeability",["Iron has more turns","Iron has a lower resistance","Iron stores charge"],"Slide 31: iron gives a better path for the magnetic flux."),
+M("Inductor","What is the winding resistance R_w of an inductor?","The resistance of the wire of the coil",["The resistance of the core","The reactance at 50 Hz","The resistance of the source"],"Every real coil has some wire resistance."),
+M("Inductor","Example 6.8. E = 20 V, R = 45 Ω and R_w = 5 Ω. What is the steady current?","0.4 A",["0.44 A","4 A","0.5 A"],"I = 20 / (45 + 5) = 0.4 A."),
+M("Inductor","Example 6.8. W_L = 4 J and I = 0.4 A. What is L?","50 H",["25 H","20 H","10 H"],"L = 2W / I² = 8 / 0.16 = 50 H."),
+M("Inductor","Two inductors L₁ and L₂ are in parallel. What is L_eq?","L₁ L₂ / (L₁ + L₂)",["L₁ + L₂","L₁ − L₂","(L₁ + L₂) / 2"],"Inductors combine like resistors."),
+M("Inductor","Example 6.10. Three inductors of 40, 40 and 50 H give L_eq = 70 H. How are they connected?","The two 40 H in parallel, then in series with 50 H",["All three in series","All three in parallel","40 H and 50 H in parallel, then in series with 40 H"],"50 + 40 // 40 = 50 + 20 = 70 H."),
+M("Inductor","Example 6.9. Which value is L_eq of that network?","1.5 H",["3 H","9 H","0.5 H"],"(L₄ + L₅) // L₃ = 1 H. Add L₂ and L₆: 3 H. Then 3 H // L₁ (3 H) = 1.5 H."),
+M("DC behaviour","A capacitor and an inductor are in a DC circuit for a long time. Which one has zero current?","The capacitor",["The inductor","Both","Neither"],"A charged capacitor blocks DC.")
+]);
+MCQ["8"] = MCQ["8"].concat([
+M("Sine wave","What is the main difference between DC and AC?","AC changes its polarity periodically, DC does not",["DC changes polarity, AC does not","AC has no frequency","DC is always larger"],"Book §8.1.1."),
+M("Sine wave","Pulsing DC changes","its amplitude but not its polarity",["its polarity but not its amplitude","both polarity and frequency","nothing"],"Book summary of Chapter 8."),
+M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is the peak value?","6 V",["25 V","30 V","3 V"],"The number before sin is V_m."),
+M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is ω?","25 rad/s",["6 rad/s","30 rad/s","157 rad/s"],"The number before t is ω."),
+M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is the phase ψ?","−30°",["30°","25°","6°"],"The angle added to ωt is ψ."),
+M("Sine wave","Example 8.1. ω = 25 rad/s. What is f?","3.98 Hz",["25 Hz","157 Hz","0.25 Hz"],"f = ω / 2π = 25 / 6.283 = 3.98 Hz."),
+M("Sine wave","Example 8.3. V_m = 5 V. What is v at 135°?","3.54 V",["5 V","2.5 V","−3.54 V"],"v = 5 sin 135° = 3.54 V."),
+M("Sine wave","The instantaneous value is written with","a lowercase letter, for example v or i",["an uppercase letter only","a phasor with a dot","the letter V_m"],"Lowercase letters mark values that change with time."),
+M("RMS value","A meter shows 220 V AC. Which value does it read?","The rms value",["The peak value","The peak-to-peak value","The half-cycle average"],"Meters and ratings use rms values."),
+M("RMS value","The rms current of a sine wave is 10 A. What is I_m?","14.14 A",["7.07 A","10 A","6.37 A"],"I_m = √2 × 10 A."),
+M("RMS value","Why is the half-cycle average used for a sine wave?","The full-cycle average is zero",["It is always larger than the peak","It equals the rms value","Meters need it"],"Book §8.2.3: the wave is symmetric."),
+M("RMS value","V_m = 100 V. What is the half-cycle average?","63.7 V",["70.7 V","100 V","50 V"],"V_avg = 0.637 V_m."),
+M("Phase","i₁ = sin(ωt + 60°), i₂ = sin(ωt − 30°). What is φ?","90°, i₁ leads",["30°, i₁ leads","90°, i₂ leads","30°, i₂ leads"],"φ = 60° − (−30°) = 90°."),
+M("Phase","φ = 180°. What does it mean?","The two waves are opposite",["The waves are in phase","One wave leads by 90°","The frequencies differ"],"One is at its positive peak when the other is at its negative peak."),
+M("Phase","Can the phase difference be found for waves of different frequency?","No, the waves must have the same frequency",["Yes, always","Only if the peaks are equal","Only for DC"],"Phase difference compares waves of the same ω."),
+M("Phasor","A phasor is written with","the magnitude and the angle, for example 10∠30°",["the frequency only","the period and the peak","the time t"],"ω is the same for all quantities, so it is left out."),
+M("Phasor","(3 + j4) + (1 − j2) = ?","4 + j2",["2 + j6","4 + j6","3 − j8"],"Add the real parts and the imaginary parts."),
+M("Phasor","10∠30° × 2∠20° = ?","20∠50°",["12∠50°","20∠10°","5∠10°"],"Multiply the magnitudes and add the angles."),
+M("Phasor","10∠30° ÷ 2∠20° = ?","5∠10°",["20∠50°","5∠50°","8∠10°"],"Divide the magnitudes and subtract the angles."),
+M("Phasor","Multiplying a phasor by j does what?","Rotates it 90° counterclockwise",["Rotates it 90° clockwise","Doubles it","Changes nothing"],"j = 1∠90°, the rotating factor."),
+M("R, L, C","Example 8.11 gives I_Lm = 0.5√2∠−55° A. What is i_L?","0.5√2 sin(60t − 55°) A",["0.5√2 sin(60t + 35°) A","0.5 sin(60t + 125°) A","6√2 sin(60t − 55°) A"],"The phasor is turned back into the time domain with the same ω."),
+M("R, L, C","Example 8.12. X_C = 63.65 Ω and V_Cm = 50√2 V. What is I_Cm?","786√2 mA",["50√2 mA","63.65 mA","3.18√2 A"],"I_Cm = 50√2 / 63.65."),
+M("R, L, C","In an inductor, what happens to the current when f is doubled at the same voltage?","It is halved",["It doubles","It stays the same","It becomes zero"],"X_L doubles with f."),
+M("R, L, C","In a resistor with R = 10 Ω, V = 60 V rms. What is I?","6 A rms, in phase with v",["6 A rms, 90° behind v","600 A","0.6 A rms"],"Ohm's law with rms values.")
+]);
+MCQ["9"] = MCQ["9"].concat([
+M("Impedance","Z = R + jX. What is X when X_L = 8 Ω and X_C = 8 Ω?","0 Ω",["16 Ω","8 Ω","64 Ω"],"X = X_L − X_C = 0, the circuit is resistive."),
+M("Impedance","Z = 10∠90° Ω. Which element is it?","A pure inductor",["A pure resistor","A pure capacitor","A resistor and capacitor"],"Z_L = jX_L = X_L∠90°."),
+M("Impedance","Z = 10∠−90° Ω. Which element is it?","A pure capacitor",["A pure inductor","A pure resistor","A resistor and inductor"],"Z_C = −jX_C = X_C∠−90°."),
+M("Impedance","φ > 0 in Z. What does it mean?","X_L > X_C, the circuit is inductive",["X_C > X_L, the circuit is capacitive","The circuit is resistive","R is negative"],"Book Figure 9.2(a)."),
+M("Impedance","Example 9.1. Z = 1.5 − j0.5 Ω. What is φ?","−18.44°",["18.44°","−71.57°","0°"],"φ = tan⁻¹(−0.5 / 1.5)."),
+M("Impedance","Example 9.3. Z₃ = R_L + jX_L = 4 + j8 kΩ. What is its polar form?","8.94∠63.44° kΩ",["12∠45° kΩ","8.94∠26.57° kΩ","4∠63.44° kΩ"],"√(4² + 8²) = 8.94, tan⁻¹(8/4) = 63.44°."),
+M("Impedance","Example 9.3. Z₂ // Z₃ = 16 − j8 kΩ. What is Z_eq = Z₁ + Z₂ // Z₃ with Z₁ = 4 kΩ?","20 − j8 kΩ",["12 − j8 kΩ","20 + j8 kΩ","4 − j8 kΩ"],"Add the real parts: 4 + 16 = 20."),
+M("Impedance","Example 9.3. E = 100∠0° V and Z_eq = 21.54∠−21.8° kΩ. What is I₁?","4.64∠21.8° mA",["4.64∠−21.8° mA","2154∠21.8° mA","0.46∠21.8° mA"],"Divide magnitudes, subtract angles: 0° − (−21.8°)."),
+M("Impedance","Which phasor form of KVL is correct?","The phasor sum of the voltages around a loop is zero",["The sum of the magnitudes is zero","Only the real parts add to zero","KVL does not hold in AC"],"Book §9.2.3."),
+M("Impedance","Two impedances 4 Ω and j4 Ω are in series. What is |Z|?","5.66 Ω",["8 Ω","4 Ω","2 Ω"],"|4 + j4| = 4√2."),
+M("Power","What is the instantaneous power p?","p = v i at each moment",["p = V I cos φ always","p = I² X","p = V / I"],"Book §9.3.1."),
+M("Power","What is the average power of a pure inductor?","Zero",["V I","I² X_L","V I / 2"],"The inductor stores and returns energy each cycle."),
+M("Power","What is the average power of a pure resistor with rms values V and I?","P = V I",["P = 0","P = V I sin φ","P = V / I"],"For a resistor φ = 0, so cos φ = 1."),
+M("Power","Which formula gives P for a general load?","P = V I cos φ",["P = V I sin φ","P = V I tan φ","P = V / I"],"Only the in-phase part of the current does work."),
+M("Power","Which formula gives Q for a general load?","Q = V I sin φ",["Q = V I cos φ","Q = P + S","Q = V I"],"Q uses the 90° part of the current."),
+M("Power","S = 100 VA and PF = 0.6. What is Q?","80 var",["60 var","40 var","100 var"],"P = 60 W and Q = √(100² − 60²) = 80 var."),
+M("Power","Example 9.5. S_T = 81.39 VA and P_T = 60 W. What is the PF?","0.74",["0.68","0.81","1.36"],"PF = 60 / 81.39."),
+M("Power","Example 9.5. PF = 0.74. What is φ?","42.3°",["47.7°","36.9°","74°"],"φ = cos⁻¹ 0.74."),
+M("Power","Example 9.6 adds lamps of 5 × 100 W. What is their reactive power?","0 var",["500 var","100 var","50 var"],"Lamps are resistive."),
+M("Power","Example 9.6. P_T = 7000 W and Q_T = 5790 var. What is S_T?","9084 VA",["12 790 VA","1210 VA","7000 VA"],"S = √(7000² + 5790²)."),
+M("Power","Example 9.6. S_T = 9084.3 VA on 110 V. What is the source current?","82.6 A",["63.6 A","110 A","9.08 A"],"I = S / V."),
+M("Power","Example 9.6 raises the PF to 0.87. What is the new angle φ′?","29.5°",["39.7°","60.5°","0.87°"],"φ′ = cos⁻¹ 0.87."),
+M("Power","Example 9.6. P_T = 7000 W and φ′ = 29.5°. What is the new Q′_T?","about 3960 var",["about 5790 var","about 7000 var","about 1830 var"],"Q′ = P tan φ′ = 7000 × tan 29.5°."),
+M("Power","After PF correction, what happens to the source current?","It falls",["It rises","It stays the same","It becomes zero"],"S falls while P stays the same."),
+M("Power","Slide 33. Q₁ = 3000 var and Q₂ = 1315 var. What Q_C must the capacitor supply?","1685 var",["4315 var","3000 var","1315 var"],"Q_C = Q₁ − Q₂.")
+]);
+
 // ===== number generators: every call makes a new question with new values =====
 var GENS = { "1": [], "2": [], "3": [], "4": [] };
 function ri(a, b){ return a + Math.floor(Math.random() * (b - a + 1)); }
@@ -2650,12 +2711,12 @@ G("9", "g9-7", "Power", function(){ var S = pk([100, 500, 1000, 2000]), pf = pk(
 G("9", "g9-8", "Power", function(){ var Pw = pk([1, 2, 4, 5]) * 1000, pf1 = pk([0.6, 0.7, 0.8]), pf2 = 0.95, Q1 = Pw * Math.tan(Math.acos(pf1)), Q2 = Pw * Math.tan(Math.acos(pf2)), Qc = Q1 - Q2;
   return { q: "A " + (Pw / 1000) + " kW load has a lagging power factor of " + pf1 + ". Find the reactive power Q_C of the capacitor that raises the power factor to 0.95.", unit: "var", ans: r3(Qc), fig: null, sol: "Q₁ = P tan(cos⁻¹ " + pf1 + ") = " + nn(r3(Q1)) + " var\nQ₂ = P tan(cos⁻¹ 0.95) = " + nn(r3(Q2)) + " var\nQ_C = Q₁ − Q₂ = " + nn(r3(Qc)) + " var" }; });
 
-var S = { page: "dash", ch: "1", tab: "learn" }; var CALC = {}, ERR = {}, ORD = {};
+var S = { page: "dash", ch: "1", tab: "learn" }; var CALC = {};
 var PR = { ch: "all", topic: "all", type: "mixed", q: null, done: false, ses: { n: 0, r: 0 }, last: null };
 var QZ = null;
 
 // ---------- store (this device only) ----------
-var STORE = { name: "", a: {}, t: {}, quizzes: [], days: [], seen: 0 };
+var STORE = { name: "", a: {}, t: {}, quizzes: [], days: [], seen: 0, help: 1 };
 var memOnly = false;
 function loadStore(){ try { var o = JSON.parse(localStorage.getItem("me0212-lab-v2") || "null"); if (o) for (var k in STORE) if (o[k] != null) STORE[k] = o[k]; } catch (e) { memOnly = true; } }
 function saveStore(){ try { localStorage.setItem("me0212-lab-v2", JSON.stringify(STORE)); } catch (e) { memOnly = true; } }
@@ -2735,11 +2796,11 @@ function addBack(){
   var b = document.createElement("button"); b.className = "btn ghost sm back"; b.dataset.a = "go"; b.dataset.v = "dash"; b.textContent = "← Back to chapters";
   pg.insertBefore(b, pg.firstChild);
 }
-function pStudy(){ pStudy0(); addBack(); } function pPractice(){ pPractice0(); addBack(); } function pQuiz(){ pQuiz0(); addBack(); } function pProgress(){ pProgress0(); addBack(); }
+function pStudy(){ pStudy0(); addBack(); } function pSheet(){ pSheet0(); addBack(); } function pPractice(){ pPractice0(); addBack(); } function pQuiz(){ pQuiz0(); addBack(); } function pProgress(){ pProgress0(); addBack(); }
 function render(){
   $("nav").innerHTML = NAV.map(function(n){ return '<button class="nv" data-a="go" data-v="' + n[0] + '" aria-current="' + (S.page === n[0]) + '">' + n[1] + "</button>"; }).join("");
   $("who").textContent = STORE.name ? STORE.name : "Guest";
-  ({ dash: pDash, study: pStudy, practice: pPractice, quiz: pQuiz, progress: pProgress })[S.page]();
+  ({ dash: pDash, study: pStudy, practice: pPractice, quiz: pQuiz, progress: pProgress, sheet: pSheet })[S.page]();
 }
 function trace(f, label){
   var W = 1000, H = 80, N = 160, pts = [], k, x, y;
@@ -2752,6 +2813,7 @@ function trace(f, label){
 function pDash(){
   var s = allStats(), w = weak(), h = "";
   if (!STORE.name) h += '<section class="card hello"><h2>Welcome to the ME0212 Study Lab</h2><p>Enter your name. It stays on this device only.</p><div class="row"><input id="nameIn" type="text" placeholder="Your name" aria-label="Your name" maxlength="40"><button class="btn" data-a="setname">Save</button></div></section>';
+  if (STORE.help) h += '<section class="card howto"><h2 class="sh">How to use the Study Lab</h2><ol><li><b>Pick a chapter</b> from the cards below.</li><li><b>Study:</b> read the lesson, watch the animation, try the calculator.</li><li><b>Exercises:</b> answer questions one by one and see the solution at once.</li><li><b>Quiz:</b> 10 questions in about 10 minutes, with the results at the end.</li></ol><p class="mut">Your progress is saved on this device only. Each answer shows its source in the book or the slides.</p><button class="btn sm ghost" data-a="hidehelp">Hide this</button></section>';
   var f = s.total ? s.seen / s.total : 0;
   h += '<section class="card trace"><div class="trace-top"><h1>' + (STORE.name ? "Hello, " + esc2(STORE.name.split(" ")[0]) : "Dashboard") + '</h1><div class="read"><b>' + s.seen + "</b> of " + s.total + " questions seen</div></div>" + trace(f, s.seen + " of " + s.total + " questions seen") + "</section>";
   h += '<div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(streak(), "Day streak") + stat(CHAPTER_IDS.length, "Chapters") + "</div>";
@@ -2766,15 +2828,15 @@ function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</
 var TABS = [["learn", "Learn"], ["watch", "Watch"], ["calc", "Calculate"]];
 function pStudy0(){
   var x = chStats(S.ch);
-  $("page").innerHTML = '<div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button></div></div>' +
+  $("page").innerHTML = '<div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
     '<nav class="tabs" role="tablist">' + TABS.map(function(t){ return '<button class="tab" role="tab" data-a="tab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + '</nav><div id="ctab" class="ctab"></div>';
   ({ learn: rLearn, watch: rWatch, calc: rCalc })[S.tab]();
 }
   function rLearn(){
     $("ctab").innerHTML = '<div class="lessons">' + LESSONS[S.ch].map(function(l){
       var id = IDEAS[l.t];
-      return '<section class="card lesson"><h3>' + l.t + "</h3>" + (id ? '<p class="idea"><b>In plain words.</b> ' + id.i + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" +
-        (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + (l.fig ? fig(l.fig()) : "") + (id ? '<p class="slip"><b>Common slip.</b> ' + id.s + "</p>" + (id.w != null ? '<button class="btn sm ghost" data-watch="' + id.w + '">Watch it move</button>' : "") : "") + "</section>";
+      return '<section class="card lesson"><h2>' + l.t + "</h2>" + (id ? '<p class="idea"><b>In plain words.</b> ' + id.i + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" +
+        (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + (l.fig ? fig(l.fig()) : "") + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + (id ? '<p class="slip"><b>Common slip.</b> ' + id.s + "</p>" + (id.w != null ? '<button class="btn sm ghost" data-watch="' + id.w + '">Watch it move</button>' : "") : "") + "</section>";
     }).join("") + "</div>";
     $("ctab").querySelectorAll("[data-watch]").forEach(function(b){ b.onclick = function(){ (WSIM[S.ch] = WSIM[S.ch] || {}).k = +b.dataset.watch; S.tab = "watch"; render(); window.scrollTo(0, 0); }; });
   }
@@ -2794,33 +2856,15 @@ function pStudy0(){
     run();
   }
 
-  function rError(){
-    var list = ERRORS[S.ch], st = ERR[S.ch] || (ERR[S.ch] = { i: 0, a: -1 }), e = list[st.i];
-    $("ctab").innerHTML = '<div class="nav"><span class="count">Case ' + (st.i + 1) + " of " + list.length + '</span><span><button class="btn ghost" id="prevE"' + (st.i === 0 ? " disabled" : "") + '>Back</button> <button class="btn" id="nextE"' + (st.i === list.length - 1 ? " disabled" : "") + ">Next case</button></span></div>" +
-      '<div class="grid2"><section class="card">' + fig(e.fig()) + '</section><section class="card"><div class="tag">Find the error</div><div class="err-q">' + e.say + '</div><div><b>' + e.ask + '</b></div><div class="opts">' +
-      e.opts.map(function(o, i){ var c = st.a < 0 ? "" : i === e.ok ? " right" : i === st.a ? " wrong" : ""; return '<button class="opt' + c + '" data-o="' + i + '"' + (st.a >= 0 ? " disabled" : "") + ">" + o + "</button>"; }).join("") + "</div>" +
-      (st.a >= 0 ? '<div class="why"><b>' + (st.a === e.ok ? "Correct. " : "Not quite. ") + "</b>" + e.why + "</div>" : "") + "</section></div>";
-    $("ctab").querySelectorAll(".opt").forEach(function(b){ b.onclick = function(){ st.a = +b.dataset.o; rError(); }; });
-    $("prevE").onclick = function(){ st.i--; st.a = -1; rError(); };
-    $("nextE").onclick = function(){ st.i++; st.a = -1; rError(); };
-  }
 
-  function rOrder(){
-    var list = ORDERS[S.ch], k = ORD[S.ch] ? ORD[S.ch].k : 0, task = list[k];
-    var st = ORD[S.ch] && ORD[S.ch].tk === k ? ORD[S.ch] : (ORD[S.ch] = { k: k, tk: k, pool: shuffle(task.steps.map(function(s, i){ return i; })), n: 0, bad: -1 });
-    $("ctab").innerHTML = '<div class="picker">' + list.map(function(x, i){ return '<button class="pill" data-task="' + i + '" aria-pressed="' + (i === k) + '">Task ' + (i + 1) + "</button>"; }).join("") + "</div>" +
-      '<section class="card"><div class="tag">Put the steps in the right order</div><div class="qtext">' + task.t + '</div><div class="ordergrid"><div class="col"><h4>Steps (tap the next one)</h4>' +
-      st.pool.filter(function(i){ return i >= st.n; }).map(function(i){ return '<button class="stepbtn' + (i === st.bad ? " shake" : "") + '" data-s="' + i + '">' + task.steps[i] + "</button>"; }).join("") + '</div><div class="col"><h4>Your order</h4>' +
-      task.steps.slice(0, st.n).map(function(s, i){ return '<div class="done"><b>' + (i + 1) + ".</b>" + s + "</div>"; }).join("") + (st.n === task.steps.length ? '<div class="why"><b>All steps are in order.</b></div>' : "") + '</div></div><div class="btnrow"><button class="btn ghost" id="resetO">Shuffle again</button></div></section>';
-    $("ctab").querySelectorAll(".stepbtn").forEach(function(b){ b.onclick = function(){
-      var i = +b.dataset.s;
-      if (i === st.n){ st.n++; st.bad = -1; } else st.bad = i;
-      rOrder();
-    }; });
-    $("resetO").onclick = function(){ ORD[S.ch] = { k: k, tk: k, pool: shuffle(task.steps.map(function(s, i){ return i; })), n: 0, bad: -1 }; rOrder(); };
-    $("ctab").querySelectorAll("[data-task]").forEach(function(b){ b.onclick = function(){ ORD[S.ch] = { k: +b.dataset.task, tk: -1 }; rOrder(); }; });
-  }
 
+
+// ---------- formula sheet ----------
+function pSheet0(){
+  var h = '<div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">Formula sheet · ' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="print">Print or save as PDF</button></div></div><section class="card sheet">';
+  h += LESSONS[S.ch].map(function(l){ return '<div class="srow"><h2>' + l.t + "</h2>" + (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + "</div>"; }).join("");
+  $("page").innerHTML = h + '</section><p class="mut printnote">ME0212 Study Lab · version ' + APP_VERSION + "</p>";
+}
 
 // ---------- practice ----------
 function pPractice0(){
@@ -2849,7 +2893,7 @@ function qbody(q, st){
   if (q.kind === "mcq"){
     h += '<div class="opts">' + q.opts.map(function(o, i){ var c = ""; if (st.done){ if (i === q.correct) c = " right"; else if (i === st.picked) c = " wrong"; } else if (st.picked === i) c = " pick"; return '<button class="opt" data-a="opt" data-v="' + i + '"' + (st.done ? " disabled" : "") + ">" + esc2(o) + "</button>"; }).join("") + "</div>";
   } else if (q.kind === "num"){
-    h += '<div class="numrow"><input id="numIn" type="text" inputmode="decimal" autocomplete="off" placeholder="Your answer" aria-label="Your answer" value="' + esc2(st.val || "") + '"' + (st.done ? " disabled" : "") + '><span class="un">' + (q.unit || "") + "</span>" + (st.done ? "" : '<button class="btn" data-a="check">Check</button>') + "</div>";
+    h += '<div class="numrow"><input id="numIn" type="text" inputmode="decimal" autocomplete="off" placeholder="Your answer" aria-label="Your answer" value="' + esc2(st.val || "") + '"' + (st.done ? " disabled" : "") + '><span class="un">' + (q.unit || "") + "</span>" + (st.done ? "" : '<button class="btn" data-a="check">Check</button>') + "</div>" + (st.done ? "" : '<p class="numhint">Answers within 1.5% are accepted. A prefix may be typed, for example 0.71 mA or 710 µA.</p>');
   }
   return h;
 }
@@ -2862,17 +2906,35 @@ function drawQ(){
   var nx = $("nextBtn"); if (nx) nx.focus({ preventScroll: true });
   var sb = document.querySelector(".sesbox"); if (sb) sb.innerHTML = "<b>" + PR.ses.r + " / " + PR.ses.n + "</b><span>this session</span>";
 }
+function srcLine(q){
+  var s = srcOf(q.d.ch, q.d.topic, q.text + " " + (q.sol || "") + " " + (q.why || ""));
+  var body = "Chapter " + q.d.ch + " · " + q.d.topic + "\nQuestion: " + q.text + "\n\nWhat is wrong:\n\n(App version " + APP_VERSION + ")";
+  var mail = "mailto:Mohammad.alghweri@gju.edu.jo?subject=" + encodeURIComponent("ME0212 Study Lab: problem in Chapter " + q.d.ch) + "&body=" + encodeURIComponent(body);
+  return '<p class="srcl">' + (s ? "<span>Source: " + s + "</span>" : "") + '<a href="' + mail + '">Report a problem</a></p>';
+}
 function feedback(q, st){
-  if (q.kind === "bank") return '<div class="fb" role="status"><b>Answer:</b><div class="sol">' + esc2(q.ans) + '</div></div><div class="row"><span class="mut">Did you get it?</span><button class="btn" data-a="self" data-v="1">I got it</button><button class="btn ghost" data-a="self" data-v="0">Not yet</button></div>';
+  if (q.kind === "bank") return '<div class="fb" role="status"><b>Answer:</b><div class="sol">' + esc2(q.ans) + '</div></div><div class="row"><span class="mut">Did you get it?</span><button class="btn" data-a="self" data-v="1">I got it</button><button class="btn ghost" data-a="self" data-v="0">Not yet</button></div>' + srcLine(q);
   var good = st.ok, h = '<div class="fb ' + (good ? "good" : "bad") + '" role="status"><b>' + (good ? "Correct." : "Not quite.") + "</b> ";
   if (q.kind === "mcq") h += (good ? "" : "The answer is: " + esc2(q.opts[q.correct]) + ". ") + esc2(q.why);
   if (q.kind === "num") h += (good ? "" : "The answer is " + nn(q.ans) + " " + q.unit + ". ") + '<div class="sol">' + esc2(q.sol) + "</div>";
-  return h + '</div><div class="row"><button class="btn" id="nextBtn" data-a="next">Next question</button></div>';
+  return h + "</div>" + srcLine(q) + '<div class="row"><button class="btn" id="nextBtn" data-a="next">Next question</button></div>';
 }
-function parseNum(s){ s = String(s).trim().replace(",", ".").replace(/\s+/g, ""); if (!/^[-+]?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+var SIPF = { p: 1e-12, n: 1e-9, u: 1e-6, "µ": 1e-6, "μ": 1e-6, m: 1e-3, k: 1e3, K: 1e3, M: 1e6 };
+var BASEU = ["rad/s", "var", "VA", "Hz", "A", "V", "Ω", "W", "J", "C", "F", "H", "S", "°"];
+function splitUnit(u){ u = String(u || "").replace(/ohms?/i, "Ω"); if (BASEU.indexOf(u) >= 0 || !u) return [1, u]; var p = u.charAt(0); if (SIPF[p] && BASEU.indexOf(u.slice(1)) >= 0) return [SIPF[p], u.slice(1)]; return [1, u]; }
+function parseNum(s, unit){
+  s = String(s).trim().replace(",", ".").replace(/\s+/g, "").replace(/ohms?/i, "Ω");
+  var m = /^([-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?)(.*)$/.exec(s); if (!m) return NaN;
+  var x = parseFloat(m[1]), rest = m[2]; if (!rest) return x;
+  var qu = splitUnit(unit), ru = splitUnit(rest);
+  if (ru[1] === qu[1] && rest !== ru[1] || rest === qu[1]) return x * ru[0] / qu[0];
+  if (rest.length === 1 && SIPF[rest]) return x * SIPF[rest] / qu[0];
+  if (rest === String(unit)) return x;
+  return NaN;
+}
 function isRight(g, a){ if (!isFinite(g)) return false; if (a === 0) return Math.abs(g) < 1e-9; return Math.abs(g - a) <= Math.abs(a) * 0.015 + 1e-12; }
 function check(){
-  var q = PR.q, v = $("numIn").value, g = parseNum(v);
+  var q = PR.q, v = $("numIn").value, g = parseNum(v, q.unit);
   if (!isFinite(g)){ $("numIn").setAttribute("aria-invalid", "true"); $("numIn").placeholder = "Enter a number"; return; }
   var ok = isRight(g, q.ans); PR.done = true; PR.res = { ok: ok, val: v }; PR.ses.n++; if (ok) PR.ses.r++; record(q.d, ok); drawQ();
 }
@@ -2882,7 +2944,7 @@ var QZCH = "1", QZN = 10;
 function pQuiz0(){
   if (QZ && QZ.stage === "run") return drawQuiz();
   if (QZ && QZ.stage === "result") return drawResult();
-  $("page").innerHTML = '<h1 class="ph">Quiz</h1><section class="card"><p>A quiz mixes multiple-choice and numeric questions. You see the results and the solutions at the end.</p><div class="filters2"><div class="field2"><label for="qch">Chapter</label><select id="qch">' + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (QZCH === c ? " selected" : "") + ">Chapter " + c + " · " + CH_NAMES[c] + "</option>"; }).join("") + '<option value="all"' + (QZCH === "all" ? " selected" : "") + '>All chapters</option></select></div><div class="field2"><label for="qn">Questions</label><select id="qn"><option' + (QZN === 10 ? " selected" : "") + '>10</option><option' + (QZN === 20 ? " selected" : "") + '>20</option></select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
+  $("page").innerHTML = '<h1 class="ph">Quiz</h1><section class="card"><p>A quiz mixes multiple-choice and numeric questions. A 10-question quiz is planned for 10 minutes, like the course quizzes. You see the results, the solutions and the sources at the end.</p><div class="filters2"><div class="field2"><label for="qch">Chapter</label><select id="qch">' + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (QZCH === c ? " selected" : "") + ">Chapter " + c + " · " + CH_NAMES[c] + "</option>"; }).join("") + '<option value="all"' + (QZCH === "all" ? " selected" : "") + '>All chapters</option></select></div><div class="field2"><label for="qn">Questions</label><select id="qn"><option' + (QZN === 10 ? " selected" : "") + '>10</option><option' + (QZN === 20 ? " selected" : "") + '>20</option></select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
 }
 function quizHistory(){
   var q = STORE.quizzes.slice(-5).reverse(); if (!q.length) return "";
@@ -2896,14 +2958,21 @@ function startQuiz(){
 }
 function drawQuiz(){
   var q = QZ.qs[QZ.i], st = QZ.cur || {};
-  $("page").innerHTML = '<div class="qzbar"><b>Question ' + (QZ.i + 1) + " of " + QZ.qs.length + "</b>" + bar(Math.round(100 * QZ.i / QZ.qs.length)) + '<button class="btn sm ghost" data-a="quitquiz">Quit</button></div><section class="card qcard">' + qbody(q, { done: false, picked: st.picked, val: st.val }) +
+  $("page").innerHTML = '<div class="qzbar"><b>Question ' + (QZ.i + 1) + " of " + QZ.qs.length + "</b>" + bar(Math.round(100 * QZ.i / QZ.qs.length)) + '<span class="clock" id="qzclock"></span><button class="btn sm ghost" data-a="quitquiz">Quit</button></div><section class="card qcard">' + qbody(q, { done: false, picked: st.picked, val: st.val }) +
     '<div class="row"><button class="btn" data-a="qnext">' + (QZ.i === QZ.qs.length - 1 ? "Finish" : "Next") + "</button></div></section>";
-  var inp = $("numIn"); if (inp){ inp.focus(); inp.addEventListener("keydown", function(e){ if (e.key === "Enter") qnext(); }); }
+  qclock(); var inp = $("numIn"); if (inp){ inp.focus(); inp.addEventListener("keydown", function(e){ if (e.key === "Enter") qnext(); }); }
   if (q.kind === "mcq" && st.picked != null) document.querySelectorAll(".opt")[st.picked].classList.add("pick");
 }
+function qclock(){
+  var el = $("qzclock"); if (!el || !QZ || QZ.stage !== "run") return;
+  var lim = QZ.qs.length <= 10 ? 600 : 1200, t = Math.floor((Date.now() - QZ.t0) / 1000), f = function(x){ return Math.floor(x / 60) + ":" + ("0" + x % 60).slice(-2); };
+  el.textContent = t < lim ? "Time " + f(t) + " / " + f(lim) : "Time is up (" + f(t) + "). Finish when ready.";
+  el.classList.toggle("over", t >= lim);
+}
+setInterval(qclock, 1000);
 function qnext(){
   var q = QZ.qs[QZ.i], st = QZ.cur || {}, v = q.kind === "num" ? $("numIn").value : null, ok = false;
-  if (q.kind === "mcq") ok = st.picked === q.correct; else ok = isRight(parseNum(v), q.ans);
+  if (q.kind === "mcq") ok = st.picked === q.correct; else ok = isRight(parseNum(v, q.unit), q.ans);
   QZ.ans.push({ picked: st.picked, val: v, ok: ok }); record(q.d, ok); QZ.cur = null; QZ.i++;
   if (QZ.i >= QZ.qs.length){
     var sc = QZ.ans.filter(function(a){ return a.ok; }).length; QZ.stage = "result"; QZ.score = sc; QZ.secs = Math.round((Date.now() - QZ.t0) / 1000);
@@ -2914,7 +2983,7 @@ function qnext(){
 function drawResult(){
   var p = Math.round(100 * QZ.score / QZ.qs.length), h = '<h1 class="ph">Quiz result</h1><section class="card res"><div class="big">' + QZ.score + " / " + QZ.qs.length + "</div><div>" + p + "% · " + Math.floor(QZ.secs / 60) + " min " + (QZ.secs % 60) + ' s</div>' + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + '<div class="row"><button class="btn" data-a="againquiz">New quiz</button><button class="btn ghost" data-a="go" data-v="dash">Dashboard</button></div></section><h2 class="sh">Review</h2>';
   h += QZ.qs.map(function(q, i){ var a = QZ.ans[i], right = q.kind === "mcq" ? q.opts[q.correct] : nn(q.ans) + " " + q.unit, mine = q.kind === "mcq" ? (a.picked == null ? "no answer" : q.opts[a.picked]) : (a.val || "no answer");
-    return '<section class="card rv ' + (a.ok ? "good" : "bad") + '"><div class="qmeta"><span class="chip">' + (a.ok ? "Correct" : "Wrong") + '</span><span class="chip alt">' + q.d.topic + '</span></div><div class="qtext2">' + (i + 1) + ". " + esc2(q.text) + "</div>" + (q.fig && !a.ok ? fig(q.fig) : "") + '<p><b>Your answer:</b> ' + esc2(mine) + "</p>" + (a.ok ? "" : "<p><b>Correct answer:</b> " + esc2(right) + "</p>") + '<div class="sol">' + esc2(q.kind === "mcq" ? q.why : q.sol) + "</div></section>"; }).join("");
+    return '<section class="card rv ' + (a.ok ? "good" : "bad") + '"><div class="qmeta"><span class="chip">' + (a.ok ? "Correct" : "Wrong") + '</span><span class="chip alt">' + q.d.topic + '</span></div><div class="qtext2">' + (i + 1) + ". " + esc2(q.text) + "</div>" + (q.fig && !a.ok ? fig(q.fig) : "") + '<p><b>Your answer:</b> ' + esc2(mine) + "</p>" + (a.ok ? "" : "<p><b>Correct answer:</b> " + esc2(right) + "</p>") + '<div class="sol">' + esc2(q.kind === "mcq" ? q.why : q.sol) + "</div>" + srcLine(q) + "</section>"; }).join("");
   $("page").innerHTML = h;
 }
 
@@ -2954,6 +3023,9 @@ document.addEventListener("click", function(e){
   else if (a === "startquiz") startQuiz();
   else if (a === "qnext") qnext();
   else if (a === "quitquiz"){ QZ = null; render(); }
+  else if (a === "hidehelp"){ STORE.help = 0; saveStore(); render(); }
+  else if (a === "sheet"){ go("sheet", v); }
+  else if (a === "print"){ window.print(); }
   else if (a === "againquiz"){ QZ = null; render(); }
   else if (a === "copysum"){ var t = summaryText(); function done(){ $("sumMsg").textContent = "Copied."; } if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function(){ $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }); else $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }
   else if (a === "dlsum"){ var bl = new Blob([summaryText()], { type: "text/plain" }), u = URL.createObjectURL(bl), l = document.createElement("a"); l.href = u; l.download = "ME0212_progress.txt"; document.body.appendChild(l); l.click(); l.remove(); setTimeout(function(){ URL.revokeObjectURL(u); }, 500); }

@@ -1,14 +1,15 @@
 // ================= platform =================
+var APP_VERSION = "@@VERSION@@";
 var CH_NAMES = { "1": "Basic Concepts", "2": "Basic Laws", "3": "Series–Parallel", "4": "DC Analysis Methods", "5": "Network Theorems", "6": "Capacitors & Inductors", "8": "AC Fundamentals", "9": "AC Analysis" };
 var MCQ = {}; function M(topic, q, ok, wrong, why){ return { topic: topic, q: q, ok: ok, wrong: wrong, why: why }; }
 //@@MCQ@@
 //@@GENS@@
-var S = { page: "dash", ch: "1", tab: "learn" }; var CALC = {}, ERR = {}, ORD = {};
+var S = { page: "dash", ch: "1", tab: "learn" }; var CALC = {};
 var PR = { ch: "all", topic: "all", type: "mixed", q: null, done: false, ses: { n: 0, r: 0 }, last: null };
 var QZ = null;
 
 // ---------- store (this device only) ----------
-var STORE = { name: "", a: {}, t: {}, quizzes: [], days: [], seen: 0 };
+var STORE = { name: "", a: {}, t: {}, quizzes: [], days: [], seen: 0, help: 1 };
 var memOnly = false;
 function loadStore(){ try { var o = JSON.parse(localStorage.getItem("me0212-lab-v2") || "null"); if (o) for (var k in STORE) if (o[k] != null) STORE[k] = o[k]; } catch (e) { memOnly = true; } }
 function saveStore(){ try { localStorage.setItem("me0212-lab-v2", JSON.stringify(STORE)); } catch (e) { memOnly = true; } }
@@ -88,11 +89,11 @@ function addBack(){
   var b = document.createElement("button"); b.className = "btn ghost sm back"; b.dataset.a = "go"; b.dataset.v = "dash"; b.textContent = "← Back to chapters";
   pg.insertBefore(b, pg.firstChild);
 }
-function pStudy(){ pStudy0(); addBack(); } function pPractice(){ pPractice0(); addBack(); } function pQuiz(){ pQuiz0(); addBack(); } function pProgress(){ pProgress0(); addBack(); }
+function pStudy(){ pStudy0(); addBack(); } function pSheet(){ pSheet0(); addBack(); } function pPractice(){ pPractice0(); addBack(); } function pQuiz(){ pQuiz0(); addBack(); } function pProgress(){ pProgress0(); addBack(); }
 function render(){
   $("nav").innerHTML = NAV.map(function(n){ return '<button class="nv" data-a="go" data-v="' + n[0] + '" aria-current="' + (S.page === n[0]) + '">' + n[1] + "</button>"; }).join("");
   $("who").textContent = STORE.name ? STORE.name : "Guest";
-  ({ dash: pDash, study: pStudy, practice: pPractice, quiz: pQuiz, progress: pProgress })[S.page]();
+  ({ dash: pDash, study: pStudy, practice: pPractice, quiz: pQuiz, progress: pProgress, sheet: pSheet })[S.page]();
 }
 function trace(f, label){
   var W = 1000, H = 80, N = 160, pts = [], k, x, y;
@@ -105,6 +106,7 @@ function trace(f, label){
 function pDash(){
   var s = allStats(), w = weak(), h = "";
   if (!STORE.name) h += '<section class="card hello"><h2>Welcome to the ME0212 Study Lab</h2><p>Enter your name. It stays on this device only.</p><div class="row"><input id="nameIn" type="text" placeholder="Your name" aria-label="Your name" maxlength="40"><button class="btn" data-a="setname">Save</button></div></section>';
+  if (STORE.help) h += '<section class="card howto"><h2 class="sh">How to use the Study Lab</h2><ol><li><b>Pick a chapter</b> from the cards below.</li><li><b>Study:</b> read the lesson, watch the animation, try the calculator.</li><li><b>Exercises:</b> answer questions one by one and see the solution at once.</li><li><b>Quiz:</b> 10 questions in about 10 minutes, with the results at the end.</li></ol><p class="mut">Your progress is saved on this device only. Each answer shows its source in the book or the slides.</p><button class="btn sm ghost" data-a="hidehelp">Hide this</button></section>';
   var f = s.total ? s.seen / s.total : 0;
   h += '<section class="card trace"><div class="trace-top"><h1>' + (STORE.name ? "Hello, " + esc2(STORE.name.split(" ")[0]) : "Dashboard") + '</h1><div class="read"><b>' + s.seen + "</b> of " + s.total + " questions seen</div></div>" + trace(f, s.seen + " of " + s.total + " questions seen") + "</section>";
   h += '<div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(streak(), "Day streak") + stat(CHAPTER_IDS.length, "Chapters") + "</div>";
@@ -119,15 +121,15 @@ function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</
 var TABS = [["learn", "Learn"], ["watch", "Watch"], ["calc", "Calculate"]];
 function pStudy0(){
   var x = chStats(S.ch);
-  $("page").innerHTML = '<div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button></div></div>' +
+  $("page").innerHTML = '<div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
     '<nav class="tabs" role="tablist">' + TABS.map(function(t){ return '<button class="tab" role="tab" data-a="tab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + '</nav><div id="ctab" class="ctab"></div>';
   ({ learn: rLearn, watch: rWatch, calc: rCalc })[S.tab]();
 }
   function rLearn(){
     $("ctab").innerHTML = '<div class="lessons">' + LESSONS[S.ch].map(function(l){
       var id = IDEAS[l.t];
-      return '<section class="card lesson"><h3>' + l.t + "</h3>" + (id ? '<p class="idea"><b>In plain words.</b> ' + id.i + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" +
-        (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + (l.fig ? fig(l.fig()) : "") + (id ? '<p class="slip"><b>Common slip.</b> ' + id.s + "</p>" + (id.w != null ? '<button class="btn sm ghost" data-watch="' + id.w + '">Watch it move</button>' : "") : "") + "</section>";
+      return '<section class="card lesson"><h2>' + l.t + "</h2>" + (id ? '<p class="idea"><b>In plain words.</b> ' + id.i + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" +
+        (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + (l.fig ? fig(l.fig()) : "") + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + (id ? '<p class="slip"><b>Common slip.</b> ' + id.s + "</p>" + (id.w != null ? '<button class="btn sm ghost" data-watch="' + id.w + '">Watch it move</button>' : "") : "") + "</section>";
     }).join("") + "</div>";
     $("ctab").querySelectorAll("[data-watch]").forEach(function(b){ b.onclick = function(){ (WSIM[S.ch] = WSIM[S.ch] || {}).k = +b.dataset.watch; S.tab = "watch"; render(); window.scrollTo(0, 0); }; });
   }
@@ -147,33 +149,15 @@ function pStudy0(){
     run();
   }
 
-  function rError(){
-    var list = ERRORS[S.ch], st = ERR[S.ch] || (ERR[S.ch] = { i: 0, a: -1 }), e = list[st.i];
-    $("ctab").innerHTML = '<div class="nav"><span class="count">Case ' + (st.i + 1) + " of " + list.length + '</span><span><button class="btn ghost" id="prevE"' + (st.i === 0 ? " disabled" : "") + '>Back</button> <button class="btn" id="nextE"' + (st.i === list.length - 1 ? " disabled" : "") + ">Next case</button></span></div>" +
-      '<div class="grid2"><section class="card">' + fig(e.fig()) + '</section><section class="card"><div class="tag">Find the error</div><div class="err-q">' + e.say + '</div><div><b>' + e.ask + '</b></div><div class="opts">' +
-      e.opts.map(function(o, i){ var c = st.a < 0 ? "" : i === e.ok ? " right" : i === st.a ? " wrong" : ""; return '<button class="opt' + c + '" data-o="' + i + '"' + (st.a >= 0 ? " disabled" : "") + ">" + o + "</button>"; }).join("") + "</div>" +
-      (st.a >= 0 ? '<div class="why"><b>' + (st.a === e.ok ? "Correct. " : "Not quite. ") + "</b>" + e.why + "</div>" : "") + "</section></div>";
-    $("ctab").querySelectorAll(".opt").forEach(function(b){ b.onclick = function(){ st.a = +b.dataset.o; rError(); }; });
-    $("prevE").onclick = function(){ st.i--; st.a = -1; rError(); };
-    $("nextE").onclick = function(){ st.i++; st.a = -1; rError(); };
-  }
 
-  function rOrder(){
-    var list = ORDERS[S.ch], k = ORD[S.ch] ? ORD[S.ch].k : 0, task = list[k];
-    var st = ORD[S.ch] && ORD[S.ch].tk === k ? ORD[S.ch] : (ORD[S.ch] = { k: k, tk: k, pool: shuffle(task.steps.map(function(s, i){ return i; })), n: 0, bad: -1 });
-    $("ctab").innerHTML = '<div class="picker">' + list.map(function(x, i){ return '<button class="pill" data-task="' + i + '" aria-pressed="' + (i === k) + '">Task ' + (i + 1) + "</button>"; }).join("") + "</div>" +
-      '<section class="card"><div class="tag">Put the steps in the right order</div><div class="qtext">' + task.t + '</div><div class="ordergrid"><div class="col"><h4>Steps (tap the next one)</h4>' +
-      st.pool.filter(function(i){ return i >= st.n; }).map(function(i){ return '<button class="stepbtn' + (i === st.bad ? " shake" : "") + '" data-s="' + i + '">' + task.steps[i] + "</button>"; }).join("") + '</div><div class="col"><h4>Your order</h4>' +
-      task.steps.slice(0, st.n).map(function(s, i){ return '<div class="done"><b>' + (i + 1) + ".</b>" + s + "</div>"; }).join("") + (st.n === task.steps.length ? '<div class="why"><b>All steps are in order.</b></div>' : "") + '</div></div><div class="btnrow"><button class="btn ghost" id="resetO">Shuffle again</button></div></section>';
-    $("ctab").querySelectorAll(".stepbtn").forEach(function(b){ b.onclick = function(){
-      var i = +b.dataset.s;
-      if (i === st.n){ st.n++; st.bad = -1; } else st.bad = i;
-      rOrder();
-    }; });
-    $("resetO").onclick = function(){ ORD[S.ch] = { k: k, tk: k, pool: shuffle(task.steps.map(function(s, i){ return i; })), n: 0, bad: -1 }; rOrder(); };
-    $("ctab").querySelectorAll("[data-task]").forEach(function(b){ b.onclick = function(){ ORD[S.ch] = { k: +b.dataset.task, tk: -1 }; rOrder(); }; });
-  }
 
+
+// ---------- formula sheet ----------
+function pSheet0(){
+  var h = '<div class="chead"><div><div class="lbl">Chapter ' + S.ch + '</div><h1 class="ph">Formula sheet · ' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="print">Print or save as PDF</button></div></div><section class="card sheet">';
+  h += LESSONS[S.ch].map(function(l){ return '<div class="srow"><h2>' + l.t + "</h2>" + (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + "</div>"; }).join("");
+  $("page").innerHTML = h + '</section><p class="mut printnote">ME0212 Study Lab · version ' + APP_VERSION + "</p>";
+}
 
 // ---------- practice ----------
 function pPractice0(){
@@ -202,7 +186,7 @@ function qbody(q, st){
   if (q.kind === "mcq"){
     h += '<div class="opts">' + q.opts.map(function(o, i){ var c = ""; if (st.done){ if (i === q.correct) c = " right"; else if (i === st.picked) c = " wrong"; } else if (st.picked === i) c = " pick"; return '<button class="opt" data-a="opt" data-v="' + i + '"' + (st.done ? " disabled" : "") + ">" + esc2(o) + "</button>"; }).join("") + "</div>";
   } else if (q.kind === "num"){
-    h += '<div class="numrow"><input id="numIn" type="text" inputmode="decimal" autocomplete="off" placeholder="Your answer" aria-label="Your answer" value="' + esc2(st.val || "") + '"' + (st.done ? " disabled" : "") + '><span class="un">' + (q.unit || "") + "</span>" + (st.done ? "" : '<button class="btn" data-a="check">Check</button>') + "</div>";
+    h += '<div class="numrow"><input id="numIn" type="text" inputmode="decimal" autocomplete="off" placeholder="Your answer" aria-label="Your answer" value="' + esc2(st.val || "") + '"' + (st.done ? " disabled" : "") + '><span class="un">' + (q.unit || "") + "</span>" + (st.done ? "" : '<button class="btn" data-a="check">Check</button>') + "</div>" + (st.done ? "" : '<p class="numhint">Answers within 1.5% are accepted. A prefix may be typed, for example 0.71 mA or 710 µA.</p>');
   }
   return h;
 }
@@ -215,17 +199,35 @@ function drawQ(){
   var nx = $("nextBtn"); if (nx) nx.focus({ preventScroll: true });
   var sb = document.querySelector(".sesbox"); if (sb) sb.innerHTML = "<b>" + PR.ses.r + " / " + PR.ses.n + "</b><span>this session</span>";
 }
+function srcLine(q){
+  var s = srcOf(q.d.ch, q.d.topic, q.text + " " + (q.sol || "") + " " + (q.why || ""));
+  var body = "Chapter " + q.d.ch + " · " + q.d.topic + "\nQuestion: " + q.text + "\n\nWhat is wrong:\n\n(App version " + APP_VERSION + ")";
+  var mail = "mailto:Mohammad.alghweri@gju.edu.jo?subject=" + encodeURIComponent("ME0212 Study Lab: problem in Chapter " + q.d.ch) + "&body=" + encodeURIComponent(body);
+  return '<p class="srcl">' + (s ? "<span>Source: " + s + "</span>" : "") + '<a href="' + mail + '">Report a problem</a></p>';
+}
 function feedback(q, st){
-  if (q.kind === "bank") return '<div class="fb" role="status"><b>Answer:</b><div class="sol">' + esc2(q.ans) + '</div></div><div class="row"><span class="mut">Did you get it?</span><button class="btn" data-a="self" data-v="1">I got it</button><button class="btn ghost" data-a="self" data-v="0">Not yet</button></div>';
+  if (q.kind === "bank") return '<div class="fb" role="status"><b>Answer:</b><div class="sol">' + esc2(q.ans) + '</div></div><div class="row"><span class="mut">Did you get it?</span><button class="btn" data-a="self" data-v="1">I got it</button><button class="btn ghost" data-a="self" data-v="0">Not yet</button></div>' + srcLine(q);
   var good = st.ok, h = '<div class="fb ' + (good ? "good" : "bad") + '" role="status"><b>' + (good ? "Correct." : "Not quite.") + "</b> ";
   if (q.kind === "mcq") h += (good ? "" : "The answer is: " + esc2(q.opts[q.correct]) + ". ") + esc2(q.why);
   if (q.kind === "num") h += (good ? "" : "The answer is " + nn(q.ans) + " " + q.unit + ". ") + '<div class="sol">' + esc2(q.sol) + "</div>";
-  return h + '</div><div class="row"><button class="btn" id="nextBtn" data-a="next">Next question</button></div>';
+  return h + "</div>" + srcLine(q) + '<div class="row"><button class="btn" id="nextBtn" data-a="next">Next question</button></div>';
 }
-function parseNum(s){ s = String(s).trim().replace(",", ".").replace(/\s+/g, ""); if (!/^[-+]?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?$/.test(s)) return NaN; return parseFloat(s); }
+var SIPF = { p: 1e-12, n: 1e-9, u: 1e-6, "µ": 1e-6, "μ": 1e-6, m: 1e-3, k: 1e3, K: 1e3, M: 1e6 };
+var BASEU = ["rad/s", "var", "VA", "Hz", "A", "V", "Ω", "W", "J", "C", "F", "H", "S", "°"];
+function splitUnit(u){ u = String(u || "").replace(/ohms?/i, "Ω"); if (BASEU.indexOf(u) >= 0 || !u) return [1, u]; var p = u.charAt(0); if (SIPF[p] && BASEU.indexOf(u.slice(1)) >= 0) return [SIPF[p], u.slice(1)]; return [1, u]; }
+function parseNum(s, unit){
+  s = String(s).trim().replace(",", ".").replace(/\s+/g, "").replace(/ohms?/i, "Ω");
+  var m = /^([-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?)(.*)$/.exec(s); if (!m) return NaN;
+  var x = parseFloat(m[1]), rest = m[2]; if (!rest) return x;
+  var qu = splitUnit(unit), ru = splitUnit(rest);
+  if (ru[1] === qu[1] && rest !== ru[1] || rest === qu[1]) return x * ru[0] / qu[0];
+  if (rest.length === 1 && SIPF[rest]) return x * SIPF[rest] / qu[0];
+  if (rest === String(unit)) return x;
+  return NaN;
+}
 function isRight(g, a){ if (!isFinite(g)) return false; if (a === 0) return Math.abs(g) < 1e-9; return Math.abs(g - a) <= Math.abs(a) * 0.015 + 1e-12; }
 function check(){
-  var q = PR.q, v = $("numIn").value, g = parseNum(v);
+  var q = PR.q, v = $("numIn").value, g = parseNum(v, q.unit);
   if (!isFinite(g)){ $("numIn").setAttribute("aria-invalid", "true"); $("numIn").placeholder = "Enter a number"; return; }
   var ok = isRight(g, q.ans); PR.done = true; PR.res = { ok: ok, val: v }; PR.ses.n++; if (ok) PR.ses.r++; record(q.d, ok); drawQ();
 }
@@ -235,7 +237,7 @@ var QZCH = "1", QZN = 10;
 function pQuiz0(){
   if (QZ && QZ.stage === "run") return drawQuiz();
   if (QZ && QZ.stage === "result") return drawResult();
-  $("page").innerHTML = '<h1 class="ph">Quiz</h1><section class="card"><p>A quiz mixes multiple-choice and numeric questions. You see the results and the solutions at the end.</p><div class="filters2"><div class="field2"><label for="qch">Chapter</label><select id="qch">' + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (QZCH === c ? " selected" : "") + ">Chapter " + c + " · " + CH_NAMES[c] + "</option>"; }).join("") + '<option value="all"' + (QZCH === "all" ? " selected" : "") + '>All chapters</option></select></div><div class="field2"><label for="qn">Questions</label><select id="qn"><option' + (QZN === 10 ? " selected" : "") + '>10</option><option' + (QZN === 20 ? " selected" : "") + '>20</option></select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
+  $("page").innerHTML = '<h1 class="ph">Quiz</h1><section class="card"><p>A quiz mixes multiple-choice and numeric questions. A 10-question quiz is planned for 10 minutes, like the course quizzes. You see the results, the solutions and the sources at the end.</p><div class="filters2"><div class="field2"><label for="qch">Chapter</label><select id="qch">' + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (QZCH === c ? " selected" : "") + ">Chapter " + c + " · " + CH_NAMES[c] + "</option>"; }).join("") + '<option value="all"' + (QZCH === "all" ? " selected" : "") + '>All chapters</option></select></div><div class="field2"><label for="qn">Questions</label><select id="qn"><option' + (QZN === 10 ? " selected" : "") + '>10</option><option' + (QZN === 20 ? " selected" : "") + '>20</option></select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
 }
 function quizHistory(){
   var q = STORE.quizzes.slice(-5).reverse(); if (!q.length) return "";
@@ -249,14 +251,21 @@ function startQuiz(){
 }
 function drawQuiz(){
   var q = QZ.qs[QZ.i], st = QZ.cur || {};
-  $("page").innerHTML = '<div class="qzbar"><b>Question ' + (QZ.i + 1) + " of " + QZ.qs.length + "</b>" + bar(Math.round(100 * QZ.i / QZ.qs.length)) + '<button class="btn sm ghost" data-a="quitquiz">Quit</button></div><section class="card qcard">' + qbody(q, { done: false, picked: st.picked, val: st.val }) +
+  $("page").innerHTML = '<div class="qzbar"><b>Question ' + (QZ.i + 1) + " of " + QZ.qs.length + "</b>" + bar(Math.round(100 * QZ.i / QZ.qs.length)) + '<span class="clock" id="qzclock"></span><button class="btn sm ghost" data-a="quitquiz">Quit</button></div><section class="card qcard">' + qbody(q, { done: false, picked: st.picked, val: st.val }) +
     '<div class="row"><button class="btn" data-a="qnext">' + (QZ.i === QZ.qs.length - 1 ? "Finish" : "Next") + "</button></div></section>";
-  var inp = $("numIn"); if (inp){ inp.focus(); inp.addEventListener("keydown", function(e){ if (e.key === "Enter") qnext(); }); }
+  qclock(); var inp = $("numIn"); if (inp){ inp.focus(); inp.addEventListener("keydown", function(e){ if (e.key === "Enter") qnext(); }); }
   if (q.kind === "mcq" && st.picked != null) document.querySelectorAll(".opt")[st.picked].classList.add("pick");
 }
+function qclock(){
+  var el = $("qzclock"); if (!el || !QZ || QZ.stage !== "run") return;
+  var lim = QZ.qs.length <= 10 ? 600 : 1200, t = Math.floor((Date.now() - QZ.t0) / 1000), f = function(x){ return Math.floor(x / 60) + ":" + ("0" + x % 60).slice(-2); };
+  el.textContent = t < lim ? "Time " + f(t) + " / " + f(lim) : "Time is up (" + f(t) + "). Finish when ready.";
+  el.classList.toggle("over", t >= lim);
+}
+setInterval(qclock, 1000);
 function qnext(){
   var q = QZ.qs[QZ.i], st = QZ.cur || {}, v = q.kind === "num" ? $("numIn").value : null, ok = false;
-  if (q.kind === "mcq") ok = st.picked === q.correct; else ok = isRight(parseNum(v), q.ans);
+  if (q.kind === "mcq") ok = st.picked === q.correct; else ok = isRight(parseNum(v, q.unit), q.ans);
   QZ.ans.push({ picked: st.picked, val: v, ok: ok }); record(q.d, ok); QZ.cur = null; QZ.i++;
   if (QZ.i >= QZ.qs.length){
     var sc = QZ.ans.filter(function(a){ return a.ok; }).length; QZ.stage = "result"; QZ.score = sc; QZ.secs = Math.round((Date.now() - QZ.t0) / 1000);
@@ -267,7 +276,7 @@ function qnext(){
 function drawResult(){
   var p = Math.round(100 * QZ.score / QZ.qs.length), h = '<h1 class="ph">Quiz result</h1><section class="card res"><div class="big">' + QZ.score + " / " + QZ.qs.length + "</div><div>" + p + "% · " + Math.floor(QZ.secs / 60) + " min " + (QZ.secs % 60) + ' s</div>' + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + '<div class="row"><button class="btn" data-a="againquiz">New quiz</button><button class="btn ghost" data-a="go" data-v="dash">Dashboard</button></div></section><h2 class="sh">Review</h2>';
   h += QZ.qs.map(function(q, i){ var a = QZ.ans[i], right = q.kind === "mcq" ? q.opts[q.correct] : nn(q.ans) + " " + q.unit, mine = q.kind === "mcq" ? (a.picked == null ? "no answer" : q.opts[a.picked]) : (a.val || "no answer");
-    return '<section class="card rv ' + (a.ok ? "good" : "bad") + '"><div class="qmeta"><span class="chip">' + (a.ok ? "Correct" : "Wrong") + '</span><span class="chip alt">' + q.d.topic + '</span></div><div class="qtext2">' + (i + 1) + ". " + esc2(q.text) + "</div>" + (q.fig && !a.ok ? fig(q.fig) : "") + '<p><b>Your answer:</b> ' + esc2(mine) + "</p>" + (a.ok ? "" : "<p><b>Correct answer:</b> " + esc2(right) + "</p>") + '<div class="sol">' + esc2(q.kind === "mcq" ? q.why : q.sol) + "</div></section>"; }).join("");
+    return '<section class="card rv ' + (a.ok ? "good" : "bad") + '"><div class="qmeta"><span class="chip">' + (a.ok ? "Correct" : "Wrong") + '</span><span class="chip alt">' + q.d.topic + '</span></div><div class="qtext2">' + (i + 1) + ". " + esc2(q.text) + "</div>" + (q.fig && !a.ok ? fig(q.fig) : "") + '<p><b>Your answer:</b> ' + esc2(mine) + "</p>" + (a.ok ? "" : "<p><b>Correct answer:</b> " + esc2(right) + "</p>") + '<div class="sol">' + esc2(q.kind === "mcq" ? q.why : q.sol) + "</div>" + srcLine(q) + "</section>"; }).join("");
   $("page").innerHTML = h;
 }
 
@@ -307,6 +316,9 @@ document.addEventListener("click", function(e){
   else if (a === "startquiz") startQuiz();
   else if (a === "qnext") qnext();
   else if (a === "quitquiz"){ QZ = null; render(); }
+  else if (a === "hidehelp"){ STORE.help = 0; saveStore(); render(); }
+  else if (a === "sheet"){ go("sheet", v); }
+  else if (a === "print"){ window.print(); }
   else if (a === "againquiz"){ QZ = null; render(); }
   else if (a === "copysum"){ var t = summaryText(); function done(){ $("sumMsg").textContent = "Copied."; } if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function(){ $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }); else $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }
   else if (a === "dlsum"){ var bl = new Blob([summaryText()], { type: "text/plain" }), u = URL.createObjectURL(bl), l = document.createElement("a"); l.href = u; l.download = "ME0212_progress.txt"; document.body.appendChild(l); l.click(); l.remove(); setTimeout(function(){ URL.revokeObjectURL(u); }, 500); }

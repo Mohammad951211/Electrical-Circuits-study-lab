@@ -11,7 +11,7 @@ def b64(p): return base64.b64encode(open(os.path.join(ROOT, p), "rb").read()).de
 FIGS    = ["src/fig-lib.js", "src/fig-data.js", "src/figs5689.js", "src/figs11.js"]
 CONTENT = ["src/content.js", "src/content5689.js", "src/content11.js"]
 WATCH   = ["src/watch.js", "src/watch5689.js", "src/watch11.js"]
-IDEAS   = ["src/ideas.js", "src/ideas5689.js", "src/ideas11.js"]
+IDEAS   = ["src/ideas.js", "src/ideas5689.js", "src/ideas11.js", "src/refs.js", "src/refs11.js"]
 MCQ     = ["src/mcq1.js", "src/mcq2.js", "src/mcq3.js", "src/mcq4.js", "src/mcq5689.js", "src/mcq5689b.js", "src/mcq11.js"]
 GENS    = ["src/gens.js", "src/gens5689.js", "src/gens11.js"]
 FONTS = [("Plex Cond", 600, "ibm-plex-sans-condensed-latin-600-normal.woff2"), ("Plex Cond", 700, "ibm-plex-sans-condensed-latin-700-normal.woff2"),
