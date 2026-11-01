@@ -1,7 +1,7 @@
 # Changelog
 
 ## 1.6.0 (2026-11-01)
-- New "Examples" tab in every chapter: 55 book examples solved step by step (one step at a time), plus a "New random example" with fresh numbers.
+- New "Examples" tab in every chapter: 51 book examples solved step by step (one step at a time), plus a "New random example" with fresh numbers.
 - All solutions in exercises and quizzes are shown as numbered steps (formula, values, result).
 - The back button returns to the previous page.
 - Students enter their full name and university ID in white fields. Both appear in the header and on the progress report.
