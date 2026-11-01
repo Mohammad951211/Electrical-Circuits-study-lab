@@ -150,6 +150,8 @@ select.theme{padding:5px 10px;margin-top:6px;appearance:auto;text-transform:none
 .simfig svg .st.pp{fill:#6a3fb0;font-weight:700}.simfig svg .st.am{fill:#b45f00;font-weight:700}
 .back{margin:0 0 14px}
 
+.foot{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between;padding:22px 0 30px;font-size:.86rem;color:var(--mut)}.foot a{color:var(--accent);font-weight:700}
+
 </style></head><body>
 <div class="letterhead" aria-hidden="true"></div>
 <header class="top"><div class="wrap">
@@ -159,6 +161,7 @@ select.theme{padding:5px 10px;margin-top:6px;appearance:auto;text-transform:none
   <nav id="nav" aria-label="Main"></nav>
 </div></header>
 <main class="main wrap" id="page" aria-live="polite"></main>
+<footer class="foot wrap"><span>ME0212 Study Lab · version 1.4.0 (2026-11-01)</span><a href="mailto:Mohammad.alghweri@gju.edu.jo?subject=ME0212%20Study%20Lab%20feedback">Send feedback</a></footer>
 <script>
 (function(){
   // ---------- tiny schematic library: draws every circuit as inline SVG ----------
@@ -2089,6 +2092,7 @@ M("Colour code","Yellow, violet, orange, gold. The value is","47 kΩ ± 5%",["4.
 M("Colour code","Orange, orange, brown, gold. The value is","330 Ω ± 5%",["3.3 kΩ ± 5%","33 Ω ± 5%","33 kΩ ± 5%"],"33 followed by 1 zero."),
 M("Colour code","A 22 kΩ resistor has a tolerance of ± 5%. Its real value lies between","20.9 kΩ and 23.1 kΩ",["21.9 kΩ and 22.1 kΩ","17.6 kΩ and 26.4 kΩ","11 kΩ and 33 kΩ"],"5% of 22 kΩ is 1.1 kΩ.")
 ];
+
 MCQ["2"] = [
 M("Power and energy","What is the unit of power?","Watt (W)",["Joule (J)","Volt (V)","Ampere (A)"],"Power is measured in watts."),
 M("Power and energy","What is the unit of energy?","Joule (J)",["Watt (W)","Siemens (S)","Ohm (Ω)"],"Energy and work are measured in joules."),
@@ -2155,6 +2159,7 @@ M("Prefixes","0.000 047 A written with a prefix is","47 µA",["47 mA","4.7 µA",
 M("Prefixes","3.3 kΩ in ohms is","3300 Ω",["330 Ω","33 000 Ω","3.3 Ω"],"3.3 × 10³."),
 M("Prefixes","250 mA in amperes is","0.25 A",["250 A","2.5 A","0.025 A"],"250 × 10⁻³ A.")
 ];
+
 MCQ["3"] = [
 M("Series circuit","In a series circuit, the same ___ flows in every part.","current",["voltage","power","resistance"],"There is only one path."),
 M("Series circuit","Parts are in series when they are","joined one after the other on one path",["across the same two points","connected to ground only","joined by three wires"],"One path, no branching."),
@@ -2220,6 +2225,7 @@ M("Series-parallel","In the challenge circuit, VAB is","6 V",["18 V","3 V","24 V
 M("Series-parallel","In the challenge circuit, VBC is","18 V",["6 V","24 V","8 V"],"3 A × 6 Ω."),
 M("Series-parallel","After finding IT, the currents in branches are found with","Ohm's law, CDR and KCL",["only KVL","only the ohmmeter","only Req"],"Go back step by step.")
 ];
+
 MCQ["4"] = [
 M("Source conversion","A voltage source with RS in series is equivalent to","a current source with RS in parallel",["a current source with RS in series","a voltage source with RS in parallel","a resistor only"],"Series becomes parallel."),
 M("Source conversion","Equivalent sources give the same","V and I at the load terminals a and b",["power inside the source","internal resistance only","number of parts"],"Equivalent means the same behaviour at the load."),
@@ -2284,6 +2290,7 @@ M("Current source in a circuit","Why is no KVL written for a mesh with a current
 M("Current source in a circuit","Example 4.5 has I₄ = 6 A known. The unknowns are","I₁, I₂ and I₃",["I₁ to I₄","I₄ only","none"],"So 3 equations."),
 M("Current source in a circuit","Example 4.5 uses","1 KCL and 2 KVL equations",["3 KCL equations","3 KVL equations","2 KCL and 1 KVL equation"],"Mesh 3 is skipped.")
 ];
+
 MCQ["5"] = [
 M("Superposition","What does the superposition theorem say?","The response of a linear circuit with several sources is the sum of the responses to each source acting alone",["The response is the product of the responses of each source","Only the largest source matters","All sources are replaced by their average value"],"Each source is solved alone and the partial results are added."),
 M("Superposition","The theorem holds for which kind of circuit?","A linear circuit",["Any circuit with diodes","Only a circuit with one source","Only a circuit with capacitors"],"Linearity is needed so that the partial responses can be added."),
@@ -2568,6 +2575,7 @@ G("4", "g4-10", "Branch current", function(){ var b = ri(3, 8), n = ri(2, Math.m
   return { q: "A circuit has b = " + b + " branches and n = " + n + " nodes. How many " + which + " equations does branch current analysis need?", unit: "", ans: which === "KCL" ? n - 1 : b - (n - 1), fig: null, sol: "KCL equations = n − 1 = " + (n - 1) + "\nKVL equations = b − (n − 1) = " + (b - n + 1) + "\nTotal = b = " + b }; });
 G("4", "g4-11", "Branch current", function(){ var d = brData(), p = rd(d.E1 * d.I1);
   return { q: "Find the power of source E₁ (positive when it gives out energy).", unit: "W", ans: p, fig: branchFig({ e1: "E_1 = " + d.E1 + " V", e2: "E_2 = " + d.E2 + " V", r1: "R_1 = " + d.R1 + " Ω", r2: "R_2 = " + d.R2 + " Ω", r3: "R_3 = " + d.R3 + " Ω" }), sol: "Solve the currents: I₁ = " + d.I1 + " A\nP = E₁ I₁ = " + d.E1 + " × " + d.I1 + " = " + p + " W" }; });
+
 // ===== number generators for chapters 5, 6, 8, 9 =====
 GENS["5"] = []; GENS["6"] = []; GENS["8"] = []; GENS["9"] = [];
 function r3(x){ return parseFloat(Number(x).toPrecision(3)); }
