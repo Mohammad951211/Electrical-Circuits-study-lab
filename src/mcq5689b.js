@@ -29,10 +29,7 @@ M("Capacitor","Which capacitors are usually polarized?","Electrolytic capacitors
 M("Capacitor","When charging ends in a DC circuit, what is V_C?","V_C = E and I = 0",["V_C = 0 and I = 0","V_C = E and I is maximum","V_C = E / 2"],"Slide 7: the charging current falls to zero."),
 M("Capacitor","A charged capacitor is shorted by a wire. What happens?","It discharges and its stored energy is released",["It charges more","Nothing happens","Its capacitance doubles"],"Slide 8: discharging a capacitor."),
 M("Capacitor","Example 6.1. Q = 50 μC and C = 1000 pF. What is V?","50 kV",["50 V","0.05 V","5 kV"],"V = Q / C = 50×10⁻⁶ / 1000×10⁻¹² = 50 000 V."),
-M("Capacitor","Example 6.2. What is k for mica in Table 6.1?","5",["1","2.5","7.5"],"Table 6.1: mica 5, paper 2.5, glass 7.5."),
-M("Capacitor","Which material in Table 6.1 has the largest dielectric constant?","Glass (7.5)",["Mica (5)","Oil (4)","Teflon (2.1)"],"A larger k gives a larger C."),
-M("Capacitor","A capacitor with air (k ≈ 1) is filled with oil (k = 4). The geometry is the same. What happens to C?","It becomes about 4 times larger",["It stays the same","It becomes 4 times smaller","It doubles"],"C is proportional to k."),
-M("Capacitor","What is the leakage current of a capacitor?","A small current through the imperfect dielectric",["The charging current","The current at breakdown","The discharge current"],"Book §6.1.7: no insulator is perfect."),
+M("Capacitor","Example 6.2 uses mica as the dielectric. Which k is used?","5",["1","2.5","7.5"],"Example 6.2 takes k = 5 for mica."),
 M("Capacitor","Example 6.3. W = ½ × 2.2 μF × (15 V)². What is W?","247.5 μJ",["495 μJ","16.5 μJ","33 μJ"],"½ × 2.2×10⁻⁶ × 225 = 247.5×10⁻⁶ J."),
 M("Capacitor","Example 6.5. C_eq = 450 μF on 60 V. What is the total charge?","27 mC",["7.5 μC","2.7 mC","450 mC"],"Q = 450×10⁻⁶ × 60 = 0.027 C."),
 M("Capacitor","Series capacitors behave like one capacitor with","a larger total gap between the plates",["a larger plate area","a smaller gap","a higher k"],"Book Figure 6.10: the gaps add, so C_eq falls."),
@@ -51,7 +48,6 @@ M("DC behaviour","A capacitor and an inductor are in a DC circuit for a long tim
 ]);
 MCQ["8"] = MCQ["8"].concat([
 M("Sine wave","What is the main difference between DC and AC?","AC changes its polarity periodically, DC does not",["DC changes polarity, AC does not","AC has no frequency","DC is always larger"],"Book §8.1.1."),
-M("Sine wave","Pulsing DC changes","its amplitude but not its polarity",["its polarity but not its amplitude","both polarity and frequency","nothing"],"Book summary of Chapter 8."),
 M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is the peak value?","6 V",["25 V","30 V","3 V"],"The number before sin is V_m."),
 M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is ω?","25 rad/s",["6 rad/s","30 rad/s","157 rad/s"],"The number before t is ω."),
 M("Sine wave","Example 8.1. v(t) = 6 sin(25t − 30°) V. What is the phase ψ?","−30°",["30°","25°","6°"],"The angle added to ωt is ψ."),
@@ -69,7 +65,6 @@ M("Phasor","A phasor is written with","the magnitude and the angle, for example 
 M("Phasor","(3 + j4) + (1 − j2) = ?","4 + j2",["2 + j6","4 + j6","3 − j8"],"Add the real parts and the imaginary parts."),
 M("Phasor","10∠30° × 2∠20° = ?","20∠50°",["12∠50°","20∠10°","5∠10°"],"Multiply the magnitudes and add the angles."),
 M("Phasor","10∠30° ÷ 2∠20° = ?","5∠10°",["20∠50°","5∠50°","8∠10°"],"Divide the magnitudes and subtract the angles."),
-M("Phasor","Multiplying a phasor by j does what?","Rotates it 90° counterclockwise",["Rotates it 90° clockwise","Doubles it","Changes nothing"],"j = 1∠90°, the rotating factor."),
 M("R, L, C","Example 8.11 gives I_Lm = 0.5√2∠−55° A. What is i_L?","0.5√2 sin(60t − 55°) A",["0.5√2 sin(60t + 35°) A","0.5 sin(60t + 125°) A","6√2 sin(60t − 55°) A"],"The phasor is turned back into the time domain with the same ω."),
 M("R, L, C","Example 8.12. X_C = 63.65 Ω and V_Cm = 50√2 V. What is I_Cm?","786√2 mA",["50√2 mA","63.65 mA","3.18√2 A"],"I_Cm = 50√2 / 63.65."),
 M("R, L, C","In an inductor, what happens to the current when f is doubled at the same voltage?","It is halved",["It doubles","It stays the same","It becomes zero"],"X_L doubles with f."),

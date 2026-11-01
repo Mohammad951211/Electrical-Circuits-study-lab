@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.0 (2026-11-01)
+- Worked examples moved from the Study page into Exercises: each chapter opens with 8 examples solved step by step, then the practice questions.
+- Examples now stay inside the slide material: book examples only where the slides name them, plus practice examples written for the slide topics (80 in total).
+- Content beyond the slides removed: leakage current, the full dielectric table, mutual inductance, the rotating factor j and pulsing DC.
+
 ## 1.6.0 (2026-11-01)
 - New "Examples" tab in every chapter: 51 book examples solved step by step (one step at a time), plus a "New random example" with fresh numbers.
 - All solutions in exercises and quizzes are shown as numbered steps (formula, values, result).

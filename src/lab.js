@@ -125,12 +125,12 @@ function pDash(){
 function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</span></div>"; }
 
 // ---------- study ----------
-var TABS = [["learn", "Learn"], ["examples", "Examples"], ["watch", "Watch"], ["calc", "Calculate"]];
+var TABS = [["learn", "Learn"], ["watch", "Watch"], ["calc", "Calculate"]];
 function pStudy0(){
   var x = chStats(S.ch);
   $("page").innerHTML = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
     '<nav class="tabs" role="tablist">' + TABS.map(function(t){ return '<button class="tab" role="tab" data-a="tab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + '</nav><div id="ctab" class="ctab"></div>';
-  ({ learn: rLearn, examples: rExamples, watch: rWatch, calc: rCalc })[S.tab]();
+  ({ learn: rLearn, watch: rWatch, calc: rCalc })[S.tab]();
 }
   function rLearn(){
     $("ctab").innerHTML = '<div class="lessons">' + LESSONS[S.ch].map(function(l){
@@ -141,9 +141,10 @@ function pStudy0(){
     $("ctab").querySelectorAll("[data-watch]").forEach(function(b){ b.onclick = function(){ (WSIM[S.ch] = WSIM[S.ch] || {}).k = +b.dataset.watch; S.tab = "watch"; render(); window.scrollTo(0, 0); }; });
   }
 
-  var EXS = {};
-  function exLabel(id){ return /^\d+\.\d+N$/.test(id) ? "Example " + id.replace("N", "") + " (Norton)" : /^\d+\.\d+$/.test(id) ? "Example " + id : id; }
-  function exSrc(ch, id){
+  var EXS = {}, EXCH = "1";
+  function exLabel(id){ if (/^P\d+$/.test(id)) return "Practice " + id.slice(1); return /^\d+\.\d+N$/.test(id) ? "Example " + id.replace("N", "") + " (Norton)" : /^\d+\.\d+$/.test(id) ? "Example " + id : id; }
+  function exSrc(ch, id, topic){
+    if (/^P\d+$/.test(id)) return "Practice example on a slide topic" + (topic && LREF[topic] ? ": " + LREF[topic] : "");
     var m = /^(\d+\.\d+)/.exec(id);
     if (m && EXP[m[1]]) return "Book Example " + m[1] + ", p. " + EXP[m[1]];
     if (/^Table 5\.1/.test(id)) return "Book Table 5.1, p. 149 · Slide 23";
@@ -152,22 +153,23 @@ function pStudy0(){
     return CHREF[ch] || "";
   }
   function rExamples(){
-    var list = EXAMPLES[S.ch] || [], st = EXS[S.ch] || (EXS[S.ch] = { k: 0, n: 0, gen: null }), ex;
+    if (!$("exbox")) return;
+    var list = EXAMPLES[EXCH] || [], st = EXS[EXCH] || (EXS[EXCH] = { k: 0, n: 0, gen: null }), ex;
     if (st.k === "gen"){
-      if (!st.gen){ var gl = GENS[S.ch] || [], g = gl[Math.floor(Math.random() * gl.length)], r = g.make(); st.gen = { id: "New example", t: g.topic, q: r.q, steps: String(r.sol).split(/\n+/), ans: nn(r.ans) + " " + r.unit, figH: r.fig, gen: true }; }
+      if (!st.gen){ var gl = GENS[EXCH] || [], g = gl[Math.floor(Math.random() * gl.length)], r = g.make(); st.gen = { id: "New example", t: g.topic, q: r.q, steps: String(r.sol).split(/\n+/), ans: nn(r.ans) + " " + r.unit, figH: r.fig, gen: true }; }
       ex = st.gen;
     } else ex = list[st.k] || list[0];
-    var pills = list.map(function(e, i){ return '<button class="pill" data-exk="' + i + '" aria-pressed="' + (st.k === i) + '">' + exLabel(e.id) + "</button>"; }).join("") + ((GENS[S.ch] || []).length ? '<button class="pill gen" data-exk="gen" aria-pressed="' + (st.k === "gen") + '">New random example</button>' : "");
+    var pills = list.map(function(e, i){ return '<button class="pill" data-exk="' + i + '" aria-pressed="' + (st.k === i) + '">' + exLabel(e.id) + "</button>"; }).join("") + ((GENS[EXCH] || []).length ? '<button class="pill gen" data-exk="gen" aria-pressed="' + (st.k === "gen") + '">New random example</button>' : "");
     var fh = ex.figH || (ex.fig ? ex.fig() : ""), steps = ex.steps, n = Math.min(st.n, steps.length), done = n >= steps.length;
     var h = '<div class="picker">' + pills + '</div><div class="grid2 wide-left exgrid"><section class="card excard"><div class="lbl">' + (ex.gen ? "Generated example · " + ex.t : exLabel(ex.id)) + "</div><h2>" + (ex.gen ? "Worked example with new numbers" : ex.t) + '</h2><p class="exq">' + ex.q + "</p>" + (fh ? fig(fh) : "");
     if (ex.given) h += '<div class="gf"><div><b>Given</b><span>' + ex.given + "</span></div><div><b>Find</b><span>" + ex.find + "</span></div></div>";
     h += '</section><section class="card"><h2 class="sh">Solution, step by step</h2><ol class="exsteps">' + steps.slice(0, n).map(function(s, i){ return '<li><span>Step ' + (i + 1) + "</span><div>" + s + "</div></li>"; }).join("") + "</ol>";
     if (!n) h += '<p class="mut">Try it on paper first. Then open the steps one at a time.</p>';
     h += '<div class="btnrow">' + (done ? "" : '<button class="btn" id="exNext">' + (n ? "Show next step" : "Show the first step") + '</button><button class="btn ghost" id="exAll">Show all steps</button>') + (n ? '<button class="btn ghost" id="exHide">Hide the steps</button>' : "") + "</div>";
-    if (done) h += '<div class="st2a exans">Answer: ' + ex.ans + "</div>" + (ex.gen ? '<button class="btn sm ghost" id="exNew">Another one</button>' : '<p class="srcl"><span>Source: ' + exSrc(S.ch, ex.id) + "</span></p>");
+    if (done) h += '<div class="st2a exans">Answer: ' + ex.ans + "</div>" + (ex.gen ? '<button class="btn sm ghost" id="exNew">Another one</button>' : '<p class="srcl"><span>Source: ' + exSrc(EXCH, ex.id, ex.topic) + "</span></p>");
     h += '<p class="mut exprog">Step ' + n + " of " + steps.length + "</p></section></div>";
-    $("ctab").innerHTML = h;
-    $("ctab").querySelectorAll("[data-exk]").forEach(function(b){ b.onclick = function(){ var v = b.dataset.exk; st.k = v === "gen" ? "gen" : +v; st.n = 0; if (v === "gen") st.gen = null; rExamples(); }; });
+    $("exbox").innerHTML = h;
+    $("exbox").querySelectorAll("[data-exk]").forEach(function(b){ b.onclick = function(){ var v = b.dataset.exk; st.k = v === "gen" ? "gen" : +v; st.n = 0; if (v === "gen") st.gen = null; rExamples(); }; });
     var f = function(id, fn){ var e = $(id); if (e) e.onclick = fn; };
     f("exNext", function(){ st.n++; rExamples(); }); f("exAll", function(){ st.n = steps.length; rExamples(); }); f("exHide", function(){ st.n = 0; rExamples(); }); f("exNew", function(){ st.gen = null; st.n = 0; rExamples(); });
   }
@@ -203,7 +205,10 @@ function pPractice0(){
   $("page").innerHTML = '<h1 class="ph">Exercises</h1><section class="card filters"><div class="field2"><label for="fch">Chapter</label><select id="fch" data-a="pf"><option value="all"' + (PR.ch === "all" ? " selected" : "") + ">All chapters</option>" + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (PR.ch === c ? " selected" : "") + ">" + chL(c) + " · " + CH_NAMES[c] + "</option>"; }).join("") + '</select></div>' +
     '<div class="field2"><label for="ftp">Topic</label><select id="ftp" data-a="pf"' + (PR.ch === "all" ? " disabled" : "") + '><option value="all">All topics</option>' + topics.map(function(t){ return '<option' + (PR.topic === t ? " selected" : "") + ">" + t + "</option>"; }).join("") + '</select></div>' +
     '<div class="field2"><label for="fty">Type</label><select id="fty" data-a="pf"><option value="mixed"' + (PR.type === "mixed" ? " selected" : "") + '>Mixed</option><option value="mcq"' + (PR.type === "mcq" ? " selected" : "") + '>Multiple choice</option><option value="num"' + (PR.type === "num" ? " selected" : "") + '>Numeric (new numbers every time)</option></select></div>' +
-    '<div class="sesbox"><b>' + PR.ses.r + " / " + PR.ses.n + '</b><span>this session</span></div></section><div id="qarea"></div>';
+    '<div class="sesbox"><b>' + PR.ses.r + " / " + PR.ses.n + '</b><span>this session</span></div></section>' +
+    (PR.ch === "all" ? '<p class="mut exnote">Choose a chapter above to see its worked examples.</p>' : '<details class="card exwrap"' + (PR.exOpen === false ? "" : " open") + '><summary><span>Worked examples · ' + chL(PR.ch) + "</span><b>" + (EXAMPLES[PR.ch] || []).length + ' examples, solved step by step</b></summary><div id="exbox"></div></details>') +
+    '<h2 class="sh">Practice questions</h2><div id="qarea"></div>';
+  if (PR.ch !== "all"){ EXCH = PR.ch; rExamples(); var dw = document.querySelector(".exwrap"); if (dw) dw.addEventListener("toggle", function(){ PR.exOpen = dw.open; }); }
   if (!PR.q) nextPractice(); else drawQ();
 }
 function poolPractice(){

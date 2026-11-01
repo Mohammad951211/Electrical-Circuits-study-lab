@@ -34,7 +34,7 @@ def ui_checks(pg, w):
     ids = pg.evaluate('__X("CHAPTER_IDS")')
     for ch in ids:
         pg.click('[data-a="go"][data-v="dash"]'); pg.click(f'[data-a="study"][data-v="{ch}"]'); pg.wait_for_timeout(50)
-        for t in ("learn", "examples", "watch", "calc"):
+        for t in ("learn", "watch", "calc"):
             pg.click(f'[data-a="tab"][data-v="{t}"]'); pg.wait_for_timeout(60)
             if t == "watch":
                 n = pg.evaluate(f'__X("SIMS[\\"{ch}\\"].length")')
@@ -44,12 +44,6 @@ def ui_checks(pg, w):
                         for val in (sl.get_attribute("min"), sl.get_attribute("max")):
                             sl.evaluate(f'e=>{{e.value={val};e.dispatchEvent(new Event("input"))}}'); pg.wait_for_timeout(30)
                             if any(b in pg.inner_html("#simsvg") + pg.inner_text("#simout") for b in BAD): errs.append(f"sim {ch}.{k} at {val}")
-            if t == "examples":
-                n = len(pg.query_selector_all("[data-exk]"))
-                for k in range(n):
-                    pg.query_selector_all("[data-exk]")[k].click(); pg.wait_for_timeout(30)
-                    if pg.query_selector("#exAll"): pg.click("#exAll"); pg.wait_for_timeout(30)
-                    if not pg.query_selector(".exans") or any(b in pg.inner_html("#ctab") for b in BAD): errs.append(f"example {ch}.{k}")
             if t == "calc":
                 n = pg.evaluate(f'__X("TOOLS[\\"{ch}\\"].length")')
                 for k in range(n):
@@ -59,6 +53,12 @@ def ui_checks(pg, w):
         pg.click(f'#page .chead [data-a="prac"]'); pg.wait_for_timeout(40); pg.click(".back"); pg.wait_for_timeout(40)
         if not pg.query_selector("nav.tabs"): errs.append(f"back from exercises did not return to study {ch}")
         pg.click(".back"); pg.click(f'[data-a="prac"][data-v="{ch}"]'); pg.wait_for_timeout(60)
+        n = len(pg.query_selector_all("[data-exk]"))
+        if n < 2: errs.append(f"no worked examples in exercises {ch}")
+        for k in range(n):
+            pg.query_selector_all("[data-exk]")[k].click(); pg.wait_for_timeout(30)
+            if pg.query_selector("#exAll"): pg.click("#exAll"); pg.wait_for_timeout(30)
+            if not pg.query_selector(".exans") or any(b in pg.inner_html("#exbox") for b in BAD): errs.append(f"example {ch}.{k}")
         for _ in range(6):
             if pg.query_selector("#numIn"): pg.fill("#numIn", "1"); pg.click('[data-a="check"]')
             elif pg.query_selector('[data-a="opt"]'): pg.click('[data-a="opt"]')
