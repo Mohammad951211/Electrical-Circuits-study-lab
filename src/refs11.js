@@ -1,0 +1,14 @@
+LREF["The transformer"] = "Book §11.2.1–11.2.3, p. 336 · Slides 2–5";
+LREF["The ideal transformer"] = "Book §11.2.4, p. 338 · Slides 6–9";
+LREF["Step-up and step-down transformers"] = "Book §11.3, p. 340 · Slides 10–12";
+LREF["Other types of transformers"] = "Book §11.3.4, p. 343 · Slides 13–16";
+LREF["Impedance matching"] = "Book §11.4, p. 344 · Slides 17–19";
+LREF["How a DC motor works"] = "Introduction to Motors.pdf: Basic principle, Motor construction, Brushed DC motor";
+LREF["Types of brushed DC motors"] = "Introduction to Motors.pdf: Common configurations, Series, Shunt and Compound-wound motors";
+LREF["The PM DC motor model"] = "Introduction to Motors.pdf: Electromechanical and Mathematical model";
+LREF["Torque-speed curve, power and efficiency"] = "Introduction to Motors.pdf: PM DC motor, Useful relationships, Example, Motor efficiency";
+LREF["AC motors"] = "Introduction to Motors.pdf: AC motors, Three-phase AC motor, Induction motor, Torque-speed curve";
+TREF["11"] = { "Transformer": "The transformer", "Ideal transformer": "The ideal transformer", "Step-up and step-down": "Step-up and step-down transformers", "Transformer types": "Other types of transformers", "Impedance matching": "Impedance matching" };
+TREF["M"] = { "DC motor basics": "How a DC motor works", "Motor types": "Types of brushed DC motors", "Motor model": "The PM DC motor model", "Torque and power": "Torque-speed curve, power and efficiency", "AC motors": "AC motors" };
+CHREF["11"] = "Book Chapter 11, p. 333 · Chapter 11 slides";
+CHREF["M"] = "Introduction to Motors.pdf";
