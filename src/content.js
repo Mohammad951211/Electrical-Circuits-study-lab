@@ -248,60 +248,6 @@
       } }
   ];
 
-  // ================= find the error =================
-  function wrongSeries(){
-    var s = vrun(XL, YT, YB, [{ t: "isrc", c: YM, dir: "u", lab: "I_S = 4 A", side: "l" }]) + hrun(YT, XL, 255, [{ t: "r", c: 160, lab: "R_S = 3 Ω", side: "t" }]) + hrun(YB, 255, XL, []);
-    return svg(s + P.term(255, YT) + P.term(255, YB) + P.t(265, 42, "a", "start") + P.t(265, 132, "b", "start"));
-  }
-  function wrongArrow(){
-    var xl = 110, xr = 290, s = vrun(xl, YT, YB, [{ t: "isrc", c: YM, dir: "d", lab: "I_S = 4 A", side: "l" }]) + hrun(YT, xl, xr, []) + hrun(YB, xr, xl, []) + vrun(200, YT, YB, [{ t: "r", c: YM, lab: "R_S = 3 Ω", side: "r" }]);
-    return svg(s + dots([[200, YT], [200, YB]]) + P.term(xr, YT) + P.term(xr, YB) + P.t(xr + 10, 42, "a", "start") + P.t(xr + 10, 132, "b", "start") + P.t(60, 148, "original: E = 12 V, + on a", "start", "sign"));
-  }
-  var ERRORS = {
-    "1": [
-      { fig: function(){ return bankFig("1", 1); }, say: "The ammeter is connected across R.", ask: "What is wrong?", opts: ["The ammeter is in parallel. It must be in series with R.", "The battery is reversed.", "R is too small for an ammeter.", "A voltmeter is missing."], ok: 0, why: "An ammeter goes in series, so the current passes through it. In parallel it would act almost like a wire across R." },
-      { fig: function(){ var s = rect(XL, XR, YT, YB, { l: [B("E = 12 V")], r: [{ t: "r", c: YM, lab: "R = 6 Ω", side: "l" }], t: [{ t: "m", c: 190, ch: "V", lab: "V = ?", side: "t" }] }); return svg(s); }, say: "The voltmeter is placed in the wire, in line with R.", ask: "What is wrong?", opts: ["The voltmeter must be placed in series.", "The voltmeter must be in parallel across R.", "A voltmeter cannot measure 12 V.", "The resistor has the wrong value."], ok: 1, why: "A voltmeter goes in parallel with the part it measures. In series it blocks the current." },
-      { fig: function(){ return bankFig("1", 5); }, say: "I = E × R = 2.5 × 125 = 312.5 A", ask: "What is wrong?", opts: ["Nothing, the value is correct.", "Ohm's law is I = E / R, so I = 0.02 A.", "The answer must be in volts.", "R must be in kΩ."], ok: 1, why: "A 125 Ω resistor on 2.5 V cannot carry 312.5 A. Ohm's law gives I = E / R = 2.5 V / 125 Ω = 0.02 A." },
-      { fig: function(){ return bankFig("1", 8); }, say: "Red, red, orange, gold = 22 Ω ± 5%.", ask: "What is wrong?", opts: ["Gold means ± 10%.", "The first digit is wrong.", "Orange is the multiplier × 10³, so it is 22 kΩ.", "Red is the multiplier."], ok: 2, why: "The third band is the multiplier. Orange = 3 zeros, so 22 000 Ω = 22 kΩ ± 5%." }
-    ],
-    "2": [
-      { fig: function(){ return bankFig("2", 1); }, say: "KVL: E + V₁ + V₂ = 0, so 20 + 6 + 14 = 40 V.", ask: "What is wrong?", opts: ["KVL does not apply with a battery.", "V₂ should be 6 V.", "The current must be added too.", "The source is a rise and the drops are opposite: E − V₁ − V₂ = 0."], ok: 3, why: "Add the drops and subtract the rise (or the reverse). 20 − 6 − 14 = 0, so the loop checks." },
-      { fig: function(){ return bankFig("2", 5); }, say: "I₅ = 15 + 10 + 7 + 8 = 40 A", ask: "What is wrong?", opts: ["Currents in and out are added together.", "Only the currents in go on one side: 15 + 10 = 7 + 8 + I₅, so I₅ = 10 A.", "I₅ must be 0 A.", "KCL is not used at nodes."], ok: 1, why: "KCL: current in = current out. 25 A enters, 15 A leaves in the known wires, so I₅ = 10 A." },
-      { fig: function(){ return bankFig("2", 1); }, say: "The source has P = + E I = + 40 W, so it takes in energy.", ask: "What is wrong?", opts: ["The current enters the − end, so P = −40 W and the source gives out energy.", "Sources never have power.", "P must be 20 W.", "The resistors give out energy."], ok: 0, why: "With the reference direction of the slides, the current enters the − end of the source, so its power is negative. The 12 W and 28 W of the resistors are supplied by it." },
-      { fig: function(){ return bankFig("2", 8); }, say: "Vab = VS = 9 V because the source is 9 V.", ask: "What is wrong?", opts: ["RS is ignored. It drops 1 V, so Vab = I RL = 8 V.", "Vab is always 0 V.", "RL is ignored, Vab = 4 V.", "Nothing is wrong."], ok: 0, why: "A real source loses voltage in RS. I = 9 / 4.5 = 2 A. Vab = 2 × 4 = 8 V and the other 1 V drops across RS." }
-    ],
-    "3": [
-      { fig: function(){ return bankFig("3", 2); }, say: "V₂ = 12 × 2 / (2 + 4) = 4 V", ask: "What is wrong?", opts: ["The total resistance is 2 Ω.", "The VDR is not allowed here.", "The resistor wanted (R₂ = 4 Ω) must be on top: V₂ = 12 × 4 / 6 = 8 V.", "The answer must be 12 V."], ok: 2, why: "In the VDR the resistor you want goes on top. Check with KVL: 4 V + 8 V = 12 V." },
-      { fig: function(){ return bankFig("3", 7); }, say: "I(1 kΩ) = 9 mA × 1 / (1 + 2) = 3 mA", ask: "What is wrong?", opts: ["The 1 kΩ branch must take the smaller current.", "In the CDR the OTHER resistor goes on top: 9 × 2 / 3 = 6 mA.", "The units must be amps.", "The CDR needs the voltage first."], ok: 1, why: "The smaller R takes the bigger share. 1 kΩ takes 6 mA and 2 kΩ takes 3 mA. Check: 6 + 3 = 9 mA." },
-      { fig: function(){ return bankFig("3", 6); }, say: "Req = 4 Ω + 12 Ω = 16 Ω", ask: "What is wrong?", opts: ["The sum is only for series. For two in parallel: Req = (4 × 12) / (4 + 12) = 3 Ω.", "Req must be 48 Ω.", "Nothing is wrong.", "Req must be bigger than 12 Ω."], ok: 0, why: "In parallel, Req is smaller than the smallest R. 3 Ω is smaller than 4 Ω, as it must be." },
-      { fig: function(){ return bankFig("3", 4); }, say: "L2 is burned out, so L1 and L3 stay on.", ask: "What is wrong?", opts: ["Only L1 goes off.", "L3 gets brighter.", "All the lamps stay on.", "Series has one path. The open lamp breaks it, so all lamps go off."], ok: 3, why: "That is how old Christmas lights behave. In a parallel circuit each lamp has its own path." }
-    ],
-    "4": [
-      { fig: wrongSeries, say: "12 V with RS = 3 Ω was converted to IS = 4 A with RS = 3 Ω in series.", ask: "What is wrong?", opts: ["IS should be 36 A.", "RS must move to parallel with IS.", "RS must be removed.", "Nothing is wrong."], ok: 1, why: "In a source conversion RS moves from series to parallel (or back). IS = E / RS = 4 A is right." },
-      { fig: wrongArrow, say: "The + of the 12 V source was on terminal a. The converted IS arrow points down.", ask: "What is wrong?", opts: ["Nothing is wrong.", "The value must be 36 A.", "The arrow of IS points to the + of E, so it must point up toward a.", "RS must be 12 Ω."], ok: 2, why: "The polarity rule: the arrow of IS points to the + of E." },
-      { fig: function(){ return bankFig("4", 4); }, say: "E = 1.5 + 1.5 + 1.5 = 4.5 V", ask: "What is wrong?", opts: ["One cell is turned around, so it subtracts: E = 1.5 + 1.5 − 1.5 = 1.5 V.", "Cells in series never add.", "E must be 0 V.", "E must be 3 V."], ok: 0, why: "Series sources add with + if they point the same way as E and − if not." },
-      { fig: function(){ return bankFig("4", 8); }, say: "KCL at node a: I₁ + I₃ = I₂", ask: "What is wrong?", opts: ["KCL is not used in this method.", "I₁ and I₂ enter node a and I₃ leaves: I₁ + I₂ = I₃.", "I₃ enters the node.", "The node must be b."], ok: 1, why: "Read the arrows in the figure. I₁ and I₂ point into a, and I₃ points away from it." }
-    ]
-  };
 
-  // ================= order the steps =================
-  var ORDERS = {
-    "1": [
-      { t: "Read the colour code: red, red, orange, gold", steps: ["First band red: first digit 2.", "Second band red: second digit 2.", "Third band orange: multiplier × 10³.", "R = 22 × 10³ Ω = 22 kΩ.", "Gold: tolerance ± 5%, so 20.9 kΩ to 23.1 kΩ."] },
-      { t: "E = 2.5 V and R = 125 Ω. Find I.", steps: ["Choose the formula: I = E / R.", "Put in the values: I = 2.5 V / 125 Ω.", "Calculate: I = 0.02 A.", "Check with Ohm's law: V = I R = 0.02 × 125 = 2.5 V."] }
-    ],
-    "2": [
-      { t: "Example 2.6: find R₃ (E = 5 V, I = 0.25 A)", steps: ["Find the known drops with V = I R: V₁ = 0.625 V, V₂ = 1.25 V, V₄ = 1 V.", "Write KVL for the loop.", "Solve: V₃ = 5 − 0.625 − 1.25 − 1 = 2.125 V.", "R₃ = V₃ / I = 2.125 / 0.25 = 8.5 Ω.", "Check the power: I² RT = E I = 1.25 W."] },
-      { t: "KCL: 15 A and 10 A enter, 7 A and 8 A leave. Find I₅.", steps: ["Mark the arrows of all the currents at the node.", "Write KCL: in = out.", "Put in the values: 15 + 10 = 7 + 8 + I₅.", "Solve: I₅ = 25 − 15 = 10 A (leaving)."] }
-    ],
-    "3": [
-      { t: "2 Ω in series with (6 Ω // 3 Ω) on 8 V", steps: ["Combine the parallel part: 6 // 3 = 2 Ω.", "Add the series part: Req = 2 + 2 = 4 Ω.", "Find the total current: IT = 8 / 4 = 2 A.", "Go back: V(parallel) = 2 A × 2 Ω = 4 V.", "Check with KVL: 2 × 2 + 4 = 8 V."] },
-      { t: "Example 3.6: R₁ = 10 Ω, IT = 30 mA, I₂ = 10 mA. Find R₂.", steps: ["Write the CDR for I₂: I₂ = IT R₁ / (R₁ + R₂).", "Put in the values: 10 = 30 × 10 / (10 + R₂).", "Solve: 10 + R₂ = 30.", "R₂ = 20 Ω.", "Check: 30 mA × 10 / 30 = 10 mA."] }
-    ],
-    "4": [
-      { t: "Example 4.1: convert E = 6 V, RS = 2 Ω, RL = 10 Ω", steps: ["Find IS = E / RS = 6 / 2 = 3 A.", "Move RS from series to parallel.", "Place the arrow of IS toward the + of E.", "IL (voltage source) = 6 / (2 + 10) = 0.5 A.", "IL (CDR) = 3 × 2 / (2 + 10) = 0.5 A. Same, so equivalent."] },
-      { t: "Branch current analysis in five steps", steps: ["Label the nodes, a current arrow in every branch and a clockwise loop in every mesh.", "Write KCL at (n − 1) nodes.", "Write KVL in every mesh, with V = I R.", "Solve the equations by substitution.", "Find the rest (V, P). A negative current flows the other way."] }
-    ]
-  };
 
   

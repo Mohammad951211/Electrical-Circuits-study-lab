@@ -53,14 +53,14 @@ SIMS["5"] = [
     out: function(v){ var P = this.PL(v, v.rl), Pm = v.V * v.V / (4 * v.rt); return ["P_L = V_TH² R_L / (R_TH + R_L)² = " + nf(P, 3) + " W", "P_max = V_TH² / (4 R_TH) = " + nf(Pm, 3) + " W at R_L = " + v.rt + " Ω", "This load gets " + nf(100 * P / Pm, 3) + "% of P_max", "Efficiency = R_L / (R_TH + R_L) = " + nf(100 * v.rl / (v.rt + v.rl), 3) + "%"]; },
     look: ["The curve rises, peaks at R_L = R_TH and then falls.", "At the peak the efficiency is 50%.", "A larger R_TH lowers P_max."],
     tryit: [["V_TH = 16 V and R_TH = 4 Ω. Set R_L = 4 Ω. What is P_L?", "P_max = 16 W."], ["Set R_L = 1 Ω. Is P_L larger or smaller than P_max?", "Smaller: 10.2 W."]] },
-  { t: "Superposition", d: "Two sources feed the shared resistor R₃. Each source alone gives a partial current. The two are added.",
-    ctl: [{ id: "e1", label: "E₁", min: 0, max: 20, step: 2, val: 12, unit: "V" }, { id: "e2", label: "E₂", min: 0, max: 20, step: 2, val: 6, unit: "V" }],
-    sol: function(v){ var r1 = 2, r2 = 3, r3 = 6, i1p = v.e1 / (r1 + r2 * r3 / (r2 + r3)), a = i1p * r2 / (r2 + r3), i2p = v.e2 / (r2 + r1 * r3 / (r1 + r3)), b = i2p * r1 / (r1 + r3); return [a, b, a + b]; },
+  { t: "Superposition", d: "Example 5.1: E₁ and E₂ feed the middle resistor R₅. Each source alone gives a partial current I_c′ and I_c″. The two are added.",
+    ctl: [{ id: "e1", label: "E₁", min: 0, max: 60, step: 6, val: 48, unit: "V" }, { id: "e2", label: "E₂", min: 0, max: 48, step: 6, val: 24, unit: "V" }],
+    sol: function(v){ var rl = 16, rr = 16, r5 = 16, a = v.e1 / (rl + r5 * rr / (r5 + rr)) * rr / (rr + r5), b = v.e2 / (rr + r5 * rl / (r5 + rl)) * rl / (rl + r5); return [a, b, a + b]; },
     spd: function(v){ return [spd1(this.sol(v)[2] * 1.4)]; },
     draw: function(v, ph){
-      var s = this.sol(v), o = "", sc = 52, x0 = 300, rows = [["I₃′ (E₁ alone)", s[0], "l3"], ["I₃″ (E₂ alone)", s[1], "l2"], ["I₃ = I₃′ + I₃″", s[2], ""]], i;
+      var s = this.sol(v), o = "", sc = 70, x0 = 300, rows = [["I_c′ (E₁ alone)", s[0], "l3"], ["I_c″ (E₂ alone)", s[1], "l2"], ["I_c = I_c′ + I_c″", s[2], ""]], i;
       o += wr("40,40 240,40") + wr("40,220 240,220") + wr("40,40 40,52") + zig(40, 52, 40, 102) + bat(40, 112, 172) + wr("40,172 40,220") + wr("240,40 240,52") + zig(240, 52, 240, 102) + bat(240, 112, 172) + wr("240,172 240,220") + wr("140,40 140,100") + zig(140, 100, 140, 160) + wr("140,160 140,220");
-      o += '<circle class="nd" cx="140" cy="40" r="3.5"/><circle class="nd" cx="140" cy="220" r="3.5"/>' + flow([[140, 40], [140, 220]], ph[0], "g", 32) + tx(52, 82, "R₁ 2", "start") + tx(228, 82, "R₂ 3", "end") + tx(150, 130, "R₃ 6", "start") + tx(70, 150, "E₁ " + v.e1, "start") + tx(212, 150, "E₂ " + v.e2, "end") + tx(140, 250, "current in R₃ = I₃");
+      o += '<circle class="nd" cx="140" cy="40" r="3.5"/><circle class="nd" cx="140" cy="220" r="3.5"/>' + flow([[140, 40], [140, 220]], ph[0], "g", 32) + tx(52, 82, "R₁+R₂ 16", "start") + tx(228, 82, "R₃+R₄ 16", "end") + tx(150, 130, "R₅ 16", "start") + tx(70, 150, "E₁ " + v.e1, "start") + tx(212, 150, "E₂ " + v.e2, "end") + tx(140, 250, "current in R₅ = I_c");
       for (i = 0; i < 3; i++){
         var y = 62 + i * 62, w = s[i] * sc;
         o += tx(x0 + 6, y - 14, rows[i][0], "start", i === 2 ? "a" : "") + '<rect x="' + x0 + '" y="' + (y - 8) + '" width="' + Math.max(0, w).toFixed(1) + '" height="16" rx="3" fill="' + (i === 0 ? "#14803c" : i === 1 ? "#c0392b" : "#0b6bab") + '"/>' + tx(x0 + Math.max(0, w) + 6, y + 5, nf(s[i], 3) + " A", "start");
@@ -68,9 +68,9 @@ SIMS["5"] = [
       o += '<line class="axis2" x1="' + x0 + '" y1="40" x2="' + x0 + '" y2="205"/>';
       return o;
     },
-    out: function(v){ var s = this.sol(v); return ["E₁ alone (E₂ shorted): I₃′ = " + nf(s[0], 3) + " A", "E₂ alone (E₁ shorted): I₃″ = " + nf(s[1], 3) + " A", "I₃ = I₃′ + I₃″ = " + nf(s[2], 3) + " A", "R₁ = 2 Ω, R₂ = 3 Ω, R₃ = 6 Ω"]; },
-    look: ["The bars add up: the third bar is the sum of the first two.", "Set E₂ = 0. Only the first bar is left.", "Both partial currents flow the same way in R₃, so they add."],
-    tryit: [["Set E₁ = 0 and E₂ = 10 V. What is I₃?", "I₃ = I₃″ = 1.85 A."], ["Why is superposition not used for power?", "Power depends on the square of the current, so it is not linear."]] }
+    out: function(v){ var s = this.sol(v); return ["E₁ alone (E₂ shorted): I_c′ = " + nf(s[0], 3) + " A", "E₂ alone (E₁ shorted): I_c″ = " + nf(s[1], 3) + " A", "I_c = I_c′ + I_c″ = " + nf(s[2], 3) + " A", "R₁ = R₂ = R₃ = R₄ = 8 Ω, R₅ = 16 Ω (Example 5.1)"]; },
+    look: ["The bars add up: the third bar is the sum of the first two.", "Set E₂ = 0. Only the first bar is left.", "Both partial currents flow the same way in R₅, so they add."],
+    tryit: [["Example 5.1 uses E₁ = 48 V and E₂ = 24 V. What is I_c?", "I_c′ = 1 A, I_c″ = 0.5 A, so I_c = 1.5 A."], ["Why is superposition not used for power?", "Power depends on the square of the current, so it is not linear."]] }
 ];
 
 // ---------- Chapter 6 ----------
