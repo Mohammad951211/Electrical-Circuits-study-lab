@@ -1,0 +1,10 @@
+0|A 6 Ω resistor carries 2 A. Fi|Idea: power in a resistor can be found from the current and R.\nFormula: P = I² R\nValues: P = 2² × 6\nResult: P = 24 W, positive, so the resistor takes in energy.
+1|I = 2 A and E = 20 V. Find the|Idea: the sign of power follows the reference direction.\nLook: the current enters the − end of the source, so the source gives out energy.\nFormula: P = −E I\nValues: P = −20 V × 2 A\nResult: P = −40 W, the source supplies the circuit.
+2|Write KVL for this loop, going|Idea: KVL: add the drops and subtract the rises going round the loop.\nGo clockwise: the three resistor drops are V1, V2 and V3.\nBoth sources are crossed from − to +, so they are rises and get a minus sign.\nResult: V1 + V2 + V3 − E2 − E1 = 0
+3|E = 5 V and I = 0.25 A. Find R|Idea: use KVL to find the unknown drop, then Ohm's law for R3.\nKVL: V3 = 5 − 0.625 − 1.25 − 1 = 2.125 V\nOhm's law: R3 = V3 / I\nValues: R3 = 2.125 V / 0.25 A\nResult: R3 = 8.5 Ω\nCheck: 0.625 + 1.25 + 2.125 + 1 = 5 V = E.
+4|Find Vab.|Idea: Vab can be found along any path from a to b.\nTake the source side: Vab = E − V1 − V4.\nValues: Vab = 5 − 1.5 − 1\nResult: Vab = 2.5 V
+5|15 A and 10 A enter the node. |Idea: KCL: what enters a node must leave it.\nEquation: 15 + 10 = 7 + 8 + I5\nSolve: I5 = 25 − 15 = 10 A\nResult: I5 = 10 A, leaving the node.
+6|I₁ = 5 A enters the ring. Use |Idea: a closed ring holds no charge.\nKCL on the ring: current in = current out.\nResult: I7 = I1 = 5 A
+7|The ammeter reads 3 A. Find Va|Idea: KVL in the left loop.\nThe ammeter current of 3 A flows in the 2 Ω resistor, so its drop is 3 A × 2 Ω = 6 V.\nFormula: Vab = 12 − 3 × 2\nResult: Vab = 6 V
+8|A real source has VS = 9 V and|Idea: a real source loses voltage in RS, so RS adds to the load resistance.\nFormula: I = VS / (RS + RL)\nValues: I = 9 V / (0.5 + 4) Ω\nResult: I = 2 A\nCheck: the drop in RS is 2 × 0.5 = 1 V, the load gets 8 V, 8 + 1 = 9 V.
+9|An ideal 5 mA current source f|Idea: an ideal current source forces its current through the load.\nFormula: Vab = IS RL\nValues: Vab = 5 mA × 2 kΩ = 5 × 10⁻³ × 2 × 10³\nResult: Vab = 10 V

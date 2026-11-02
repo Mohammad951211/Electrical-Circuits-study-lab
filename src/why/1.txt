@@ -1,0 +1,60 @@
+0|Which three parts form a basic|Rule: a basic circuit needs a source, a load and wires.\nApply: the power supply is the source, the load uses the energy and the wires close the path.\nCheck: a switch, fuse, meter, capacitor or inductor are extra parts, they are not the three required ones.
+1|What does a load do?|Rule: a source gives energy and a load takes it.\nApply: the lamp, motor or heater changes electrical energy into light, heat or motion.\nCheck: producing energy is the job of the source, joining parts is the job of the wires, measuring is the job of a meter.
+2|Which part is a power supply?|Rule: the power supply gives the source voltage E.\nApply: a battery stores chemical energy and gives a voltage, so it is the supply.\nCheck: a lamp and a resistor are loads, a switch only opens or closes the path.
+3|A switch is open. What is the |Rule: current needs a closed loop.\nApply: an open switch breaks the loop, so no charge moves anywhere in it.\nCheck: I = 0 A, not half the value, and charge does not jump through air at these voltages.
+4|Current flows only when the pa|Rule: charge moves only along a complete path from the source, through the load and back.\nApply: the path must be a closed loop.\nCheck: an open path stops the current, and ground alone does not complete the loop.
+5|Why are schematic diagrams use|Rule: a schematic uses standard symbols for parts and lines for wires.\nApply: this makes the connections easy to read and to analyse.\nCheck: a schematic does not show size, wire colour or price.
+6|What is the unit of current?|Rule: current is the flow of charge and is measured in amperes.\nApply: the symbol is A.\nCheck: V is voltage, Ω is resistance, S is conductance.
+7|Which instrument measures curr|Rule: each quantity has its own meter.\nApply: the ammeter reads current.\nCheck: the voltmeter reads voltage, the ohmmeter reads resistance, the wattmeter reads power.
+8|How is an ammeter connected?|Rule: a meter must see the quantity it measures.\nApply: current passes through the part, so the ammeter is placed in series with it.\nCheck: a parallel connection would give a short path for the current and read wrongly.
+9|Conventional current leaves th|Rule: conventional current is the flow of positive charge.\nApply: it leaves the + terminal of the source, goes through the load and returns to the − terminal.\nCheck: the − terminal is where it returns.
+10|Electrons move outside the sou|Rule: electrons carry negative charge, so they move opposite to conventional current.\nApply: outside the source they go from − to +.\nCheck: + to − is the conventional direction.
+11|Do electron flow and conventio|Rule: the two models differ only in the arrow direction.\nApply: the magnitudes of I, V and P are the same.\nCheck: the current does not double and the voltage does not change sign, in any type of circuit.
+12|I = Q / t. The charge doubles |Rule: I = Q / t, with I in A, Q in C and t in s.\nApply: Q becomes 2Q and t stays the same, so I becomes 2Q / t = 2 I.\nCheck: I is proportional to Q, so it doubles.
+13|What is the unit of charge?|Rule: charge is measured in coulombs.\nApply: the symbol is C.\nCheck: J is energy, W is power, F is capacitance.
+14|1 A equals|Rule: I = Q / t.\nApply: Q = 1 C and t = 1 s give I = 1 A.\nCheck: J/C is the unit of voltage, not of current.
+15|Which quantity is the same eve|Rule: a single loop has one path.\nApply: the same charge per second passes every point, so the current is the same everywhere.\nCheck: voltage and power change from part to part and resistance depends on the part.
+16|To measure a current you must|Rule: the ammeter must be in the path of the current.\nApply: open the circuit at one point and insert the meter there, in series.\nCheck: touching the meter across a part is a voltmeter connection.
+17|What is the unit of voltage?|Rule: voltage is measured in volts.\nApply: the symbol is V.\nCheck: A is current, W is power, C is charge.
+18|1 V equals|Rule: V = W / Q.\nApply: 1 J of work on 1 C of charge gives 1 V.\nCheck: C per second is the ampere.
+19|Which instrument measures volt|Rule: the voltmeter measures voltage.\nApply: it reads the difference between two points.\nCheck: the ammeter reads current and the ohmmeter reads resistance.
+20|How is a voltmeter connected?|Rule: voltage is a difference between two points.\nApply: the voltmeter is placed across the part, in parallel.\nCheck: a series connection would put the meter in the current path.
+21|Which meter can be connected w|Rule: the voltmeter is placed across a part.\nApply: the circuit stays closed while you touch the two points.\nCheck: the ammeter needs the loop to be opened.
+22|What does E or Vs mean?|Rule: the slides write the source voltage as E or Vs.\nApply: it is the voltage the source keeps at its terminals.\nCheck: current is I, load resistance is R, power is P.
+23|Where does a voltage drop appe|Rule: a resistor or load takes energy from the charge.\nApply: the voltage drop V = I R appears across it.\nCheck: an ideal wire has R = 0, so V = 0 along it.
+24|24 J of work moves 4 C through|Rule: V = W / Q.\nApply: V = 24 J / 4 C = 6 V.\nCheck: 96 comes from multiplying W and Q, 20 from subtracting, 0.17 from the inverted ratio.
+25|The EMF of a source is|Rule: EMF is the voltage a source produces.\nApply: it is the source voltage E.\nCheck: it is not a current, a resistance or a power loss.
+26|Voltage is always measured|Rule: voltage is the potential difference between two points.\nApply: one point alone has no voltage reading.\nCheck: a meter needs two leads, so the reading is always between two points.
+27|What is the unit of resistance|Rule: resistance is measured in ohms.\nApply: the symbol is Ω.\nCheck: S is conductance, V is voltage, F is capacitance.
+28|Which instrument measures resi|Rule: the ohmmeter measures resistance.\nApply: it sends a small current and reads R.\nCheck: the ammeter reads current and the voltmeter reads voltage.
+29|An ohmmeter measures a resisto|Rule: the ohmmeter supplies its own test voltage.\nApply: the resistor must be out of the powered circuit, otherwise the reading is wrong and the meter can be damaged.\nCheck: connecting it to the source or short-circuiting it spoils the reading.
+30|The resistance of a wire grows|Rule: R is proportional to length.\nApply: R = ρ l / A, so a longer wire gives a larger R.\nCheck: a shorter or equal length does not raise R.
+31|The resistance of a wire falls|Rule: R is inversely proportional to the area A.\nApply: R = ρ l / A, so a larger A gives a smaller R.\nCheck: a smaller or zero area raises R.
+32|Which list has the four factor|Rule: R depends on material, length, cross-section area and temperature.\nApply: choose the list that holds these four.\nCheck: voltage, current, power and time are circuit quantities, not wire properties.
+33|A material with low resistivit|Rule: R = ρ l / A.\nApply: a low resistivity ρ gives a low R for the same size, so the material is a good conductor.\nCheck: a good insulator has a high ρ.
+34|What is conductance G?|Rule: G = 1 / R.\nApply: conductance is the reciprocal of resistance.\nCheck: it is not R, R × I or V × I.
+35|What is the unit of conductanc|Rule: conductance is measured in siemens.\nApply: the symbol is S.\nCheck: Ω is for R, H for inductance, Hz for frequency.
+36|R = 5 Ω. Then G is|Rule: G = 1 / R.\nApply: G = 1 / 5 Ω = 0.2 S.\nCheck: 5 S is R written as G, 2 S and 0.5 S come from wrong arithmetic.
+37|When R increases, G|Rule: G = 1 / R.\nApply: a larger R gives a smaller G.\nCheck: G cannot stay the same or equal R.
+38|G = 0.25 S. Then R is|Rule: R = 1 / G.\nApply: R = 1 / 0.25 S = 4 Ω.\nCheck: 0.25 Ω copies G, 2.5 Ω and 40 Ω come from wrong arithmetic.
+39|Which equation is Ohm's law?|Rule: Ohm's law says V = I R.\nApply: the voltage across a resistor is the current times the resistance.\nCheck: V = I / R and V = R / I have wrong units and V = I + R adds unlike quantities.
+40|The I to V characteristic of a|Rule: V = I R gives I = V / R.\nApply: I is proportional to V, so the plot is a straight line through the origin.\nCheck: a curve, a horizontal line or a vertical line does not describe a fixed R.
+41|V doubles and R stays the same|Rule: I = V / R.\nApply: V becomes 2V with the same R, so I becomes 2V / R = 2 I.\nCheck: the current doubles, it does not halve or stay the same.
+42|R doubles and V stays the same|Rule: I = V / R.\nApply: R becomes 2R with the same V, so I becomes V / 2R = I / 2.\nCheck: the current halves, it does not double.
+43|10 V is applied to 5 Ω. The cu|Rule: I = V / R.\nApply: I = 10 V / 5 Ω = 2 A.\nCheck: 50 A multiplies V and R, 0.5 A inverts the ratio.
+44|2 A flows through 6 Ω. The vol|Rule: V = I R.\nApply: V = 2 A × 6 Ω = 12 V.\nCheck: 3 V divides, 8 V adds, 0.33 V inverts the ratio.
+45|12 V and 3 A. The resistance i|Rule: R = V / I.\nApply: R = 12 V / 3 A = 4 Ω.\nCheck: 36 Ω multiplies, 9 Ω subtracts, 0.25 Ω inverts the ratio.
+46|E = 2.5 V and R = 125 Ω. The c|Rule: I = E / R.\nApply: I = 2.5 V / 125 Ω = 0.02 A.\nCheck: 312.5 A multiplies, 50 A and 0.2 A have the decimal point in the wrong place.
+47|A 12 V lamp carries 0.5 A. Its|Rule: R = V / I.\nApply: R = 12 V / 0.5 A = 24 Ω.\nCheck: 6 Ω multiplies, 12.5 Ω subtracts, 0.04 Ω inverts the ratio.
+48|E stays the same and R is repl|Rule: I = E / R.\nApply: E is fixed and R is smaller, so I = E / R becomes larger.\nCheck: the current does not decrease, stay the same or reverse.
+49|When is a reference direction |Rule: the reference direction is a choice made before the solution.\nApply: draw the arrows first, then write the equations with them.\nCheck: choosing after the answer makes the sign meaningless.
+50|The result is I = −2 A. This m|Rule: the sign of the result is compared with the arrow you drew.\nApply: I = −2 A means the real current of 2 A flows against the arrow.\nCheck: a negative value is not zero, and it does not mean a broken source or a negative resistor.
+51|In a four-band resistor, the f|Rule: on a four-band resistor, bands 1 and 2 are digits.\nApply: they give the first two digits of the value.\nCheck: band 3 is the multiplier and band 4 is the tolerance.
+52|The third band gives|Rule: band 3 is the multiplier.\nApply: it tells how many zeros follow the two digits.\nCheck: tolerance is band 4 and the first digit is band 1.
+53|The fourth band gives|Rule: band 4 is the tolerance.\nApply: it shows how far the real value can differ from the marked value.\nCheck: the multiplier is band 3 and the second digit is band 2.
+54|A gold fourth band means a tol|Rule: gold means ±5%.\nApply: a gold fourth band gives a tolerance of ±5%.\nCheck: ±1% is brown, ±20% means no band.
+55|Red, red, orange, gold. The va|Rule: value = (digit 1)(digit 2) × multiplier.\nApply: red = 2, red = 2, orange = 10³, so 22 × 10³ Ω = 22 kΩ, gold = ±5%.\nCheck: 22 Ω, 220 Ω and 2.2 kΩ use the wrong number of zeros.
+56|Brown, black, red, gold. The v|Rule: value = (digit 1)(digit 2) × multiplier.\nApply: brown = 1, black = 0, red = 10², so 10 × 10² Ω = 1000 Ω = 1 kΩ, gold = ±5%.\nCheck: 10 Ω, 100 kΩ and 10 kΩ use the wrong multiplier.
+57|Yellow, violet, orange, gold. |Rule: value = (digit 1)(digit 2) × multiplier.\nApply: yellow = 4, violet = 7, orange = 10³, so 47 × 10³ Ω = 47 kΩ, gold = ±5%.\nCheck: 4.7 kΩ, 470 kΩ and 47 Ω have the wrong number of zeros.
+58|Orange, orange, brown, gold. T|Rule: value = (digit 1)(digit 2) × multiplier.\nApply: orange = 3, orange = 3, brown = 10¹, so 33 × 10 Ω = 330 Ω, gold = ±5%.\nCheck: 3.3 kΩ, 33 Ω and 33 kΩ use the wrong multiplier.
+59|A 22 kΩ resistor has a toleran|Rule: range = R ± tolerance × R.\nApply: 5% of 22 kΩ = 1.1 kΩ, so the range is 22 − 1.1 = 20.9 kΩ to 22 + 1.1 = 23.1 kΩ.\nCheck: ±0.1 kΩ is 0.5%, ±4.4 kΩ is 20% and ±11 kΩ is 50%.

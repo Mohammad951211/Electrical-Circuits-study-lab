@@ -1,0 +1,62 @@
+0|A voltage source with RS in se|Rule: source conversion swaps series and parallel.\nApply: a voltage source E with RS in series becomes a current source IS with RS in parallel.\nCheck: RS in series for a current source, or RS in parallel for a voltage source, gives a different circuit.
+1|Equivalent sources give the sa|Rule: equivalent sources look the same from the load.\nApply: they give the same V and I at the terminals a and b.\nCheck: the power inside, the internal resistance only and the number of parts may differ.
+2|The conversion from voltage to|Rule: Ohm's law inside the source.\nApply: IS = E / RS.\nCheck: E RS and RS / E have wrong units, E + RS adds unlike quantities.
+3|The conversion from current to|Rule: the reverse conversion also follows Ohm's law.\nApply: E = IS RS.\nCheck: IS / RS and RS / IS have wrong units, IS + RS adds unlike quantities.
+4|E = 6 V and RS = 2 Ω. IS is|Rule: IS = E / RS.\nApply: IS = 6 V / 2 Ω = 3 A.\nCheck: 12 A multiplies, 0.33 A inverts the ratio, 8 A adds.
+5|IS = 2 A and RS = 4 Ω. E is|Rule: E = IS RS.\nApply: E = 2 A × 4 Ω = 8 V.\nCheck: 0.5 V divides, 6 V adds, 2 V is only IS.
+6|E = 12 V and RS = 3 Ω. IS is|Rule: IS = E / RS.\nApply: IS = 12 V / 3 Ω = 4 A.\nCheck: 36 A multiplies, 9 A subtracts, 0.25 A inverts the ratio.
+7|0.5 A with 20 Ω converts to|Rule: E = IS RS, and RS goes in series with the voltage source.\nApply: E = 0.5 A × 20 Ω = 10 V with 20 Ω in series.\nCheck: RS in parallel keeps the current-source form, 40 V and 0.025 V come from wrong arithmetic.
+8|RS keeps the same value in the|Rule: RS keeps its value in the conversion.\nApply: it moves from series to parallel, or back.\nCheck: it does not move to the load, to ground or into the source.
+9|In Example 4.1 (E = 6 V, RS = |Rule: IL = E / (RS + RL).\nApply: IL = 6 V / (2 Ω + 10 Ω) = 0.5 A.\nCheck: 3 A ignores RL, 0.6 A ignores RS, 1 A is a wrong sum.
+10|In Example 4.1, after conversi|Rule: after conversion IS = 6 / 2 = 3 A with 2 Ω in parallel with RL.\nApply: CDR: IL = 3 A × 2 Ω / (2 Ω + 10 Ω) = 0.5 A.\nCheck: the result equals the first method, so the sources are equivalent.
+11|9 V with RS = 1 Ω feeds 8 Ω. I|Rule: IL = E / (RS + RL).\nApply: IL = 9 V / (1 Ω + 8 Ω) = 1 A.\nCheck: 9 A ignores the resistors, 8 A is RL, 0.11 A inverts the ratio.
+12|The same circuit converted: IS|Rule: IS = E / RS, with RS in parallel.\nApply: IS = 9 V / 1 Ω = 9 A with 1 Ω in parallel.\nCheck: 1 Ω in series keeps the voltage-source form, and 81 A multiplies by E again.
+13|After the conversion of that c|Rule: CDR: IL = IS RS / (RS + RL).\nApply: IL = 9 A × 1 Ω / 9 Ω = 1 A.\nCheck: this agrees with the voltage-source result.
+14|The polarity rule says the arr|Rule: the polarity rule fixes the arrow direction.\nApply: the arrow of IS points to the + of E.\nCheck: pointing to the − or to the load reverses the load current.
+15|The + of E is on the left. The|Rule: arrow toward the +.\nApply: the + of E is on the left, so the arrow of IS points left.\nCheck: right or down would reverse the source.
+16|IS points left in Example 4.2.|Rule: the rule works both ways.\nApply: IS points left, so the + of ES is on the left.\nCheck: a + on the right would reverse the polarity.
+17|If the polarity rule is broken|Rule: a wrong polarity reverses the source.\nApply: the converted source drives the current the wrong way.\nCheck: it is not equivalent and the load current changes sign.
+18|Terminal a has the + of E = 12|Rule: the arrow points toward the +.\nApply: terminal a has the +, so the arrow points toward a.\nCheck: pointing toward b would reverse the load current.
+19|Converting 5 A with 10 Ω (arro|Rule: E = IS RS, + on the arrow side.\nApply: ES = 5 A × 10 Ω = 50 V, + on the left.\nCheck: + on the right is the wrong side, 0.5 V and 15 V are wrong arithmetic.
+20|Voltage sources in series|Rule: series voltage sources add with signs (KVL).\nApply: a source in the same direction as E gets +, in the opposite direction gets −.\nCheck: they are not always subtracted, multiplied or left unchanged.
+21|Three 1.5 V cells in series, o|Rule: add with signs.\nApply: 1.5 V + 1.5 V − 1.5 V = 1.5 V.\nCheck: 4.5 V ignores the reversed cell, 0 V and 3 V are wrong sums.
+22|Three 1.5 V cells in series, a|Rule: add the voltages.\nApply: 1.5 V + 1.5 V + 1.5 V = 4.5 V.\nCheck: 1.5 V is one cell, 3 V is two cells, 0 V cancels.
+23|Two cells of 1.5 V in series, |Rule: add with signs.\nApply: 1.5 V − 1.5 V = 0 V.\nCheck: 3 V ignores the reversal, 1.5 V is one cell, 2.25 V is an average.
+24|Voltage sources in parallel ar|Rule: ideal voltage sources in parallel must be equal.\nApply: they must also have the same polarity.\nCheck: unequal ideal sources would break KVL.
+25|Why must voltage sources in pa|Rule: KVL around the loop of the two sources.\nApply: two different voltages between the same two points are impossible.\nCheck: KCL is not the problem and overheating is not the reason.
+26|Current sources in series are |Rule: current sources in series must carry the same current.\nApply: they must be equal and in the same direction.\nCheck: different values would break KCL.
+27|Why does KCL fail for differen|Rule: KCL at the junction.\nApply: the same wire would carry two different currents, which is impossible.\nCheck: voltage, an open load and RS are not the reason.
+28|Current sources in parallel|Rule: parallel current sources add with signs (KCL).\nApply: add the ones in one direction as + and subtract the ones in the other direction.\nCheck: they are not multiplied and not always cancelled.
+29|2 A and 4 A both point up in p|Rule: add the currents in the same direction.\nApply: 2 A + 4 A = 6 A up.\nCheck: 2 A is one source, 8 A is 2 × 4, −2 A is a wrong subtraction.
+30|4 A up and 2 A down in paralle|Rule: add with signs.\nApply: 4 A − 2 A = 2 A in the direction of the larger one, up.\nCheck: 6 A ignores the reversal, 2 A down has the wrong direction, 8 A multiplies.
+31|Two 4 Ω resistors in parallel |Rule: Req = R1 R2 / (R1 + R2).\nApply: Req = 4 × 4 / 8 = 2 Ω.\nCheck: 8 Ω is the series value, 4 Ω is one resistor, 16 Ω is the product.
+32|In Example 4.3, 2 A + 4 A give|Rule: parallel current sources add.\nApply: 2 A + 4 A = 6 A.\nCheck: 8 A, 2 A and 3 A are wrong combinations.
+33|In Example 4.3, 8 Ω ∥ 8 Ω give|Rule: equal resistors in parallel halve.\nApply: 8 Ω ∥ 8 Ω = 8 / 2 = 4 Ω.\nCheck: 16 Ω is the series value, 8 Ω is one resistor, 2 Ω divides by 4.
+34|In Example 4.3, 6 A with 2 Ω c|Rule: E = IS RS, with RS in series.\nApply: E = 6 A × 2 Ω = 12 V with 2 Ω in series.\nCheck: RS stays 2 Ω but must move to series, and 3 V and 6 V are wrong arithmetic.
+35|In the one-loop circuit of Exa|Rule: I = ΣE / ΣR in a loop.\nApply: ΣE = 12 − 4 − 2 = 6 V, I = 6 V / 10 Ω = 0.6 A.\nCheck: 1.8 A, 6 A and 1.2 A come from wrong sums.
+36|In that circuit, VL = I RL wit|Rule: VL = I RL.\nApply: VL = 0.6 A × 2 Ω = 1.2 V.\nCheck: 0.6 V is the current, 6 V is ΣE, 12 V is one source.
+37|Each step of Example 4.3|Rule: each step combines or converts.\nApply: each step makes the circuit smaller until one loop remains.\nCheck: no step adds a source or a node or removes the load.
+38|In branch current analysis, th|Rule: branch current analysis uses one unknown per branch.\nApply: the unknowns are the branch currents.\nCheck: the node voltages belong to another method.
+39|A circuit has b branches. The |Rule: b unknowns need b independent equations.\nApply: the number of equations is b.\nCheck: b − 1 and 2b do not match the unknowns.
+40|The number of KCL equations is|Rule: KCL gives n − 1 independent equations.\nApply: the last node equation follows from the others.\nCheck: n equations are not independent.
+41|The remaining equations are wr|Rule: b − (n − 1) equations remain.\nApply: write KVL in the meshes, their number is b − (n − 1).\nCheck: KCL in loops is not used and Ohm's law is not enough alone.
+42|5 branches and 3 nodes. KCL eq|Rule: KCL equations = n − 1.\nApply: 3 − 1 = 2.\nCheck: 3 is n, 5 is b, 1 is n − 2.
+43|5 branches and 3 nodes. KVL eq|Rule: KVL equations = b − (n − 1).\nApply: 5 − (3 − 1) = 3.\nCheck: 2 is the KCL count, 5 is b, 1 is too few. Total 2 + 3 = 5 = b.
+44|Example 4.4 has b = 3 and n = |Rule: KCL equations = n − 1.\nApply: 2 − 1 = 1.\nCheck: 2 is n, 3 is b, 0 would give no equation.
+45|Example 4.4 has b = 3 and n = |Rule: KVL equations = b − (n − 1).\nApply: 3 − (2 − 1) = 2, which is the number of meshes.\nCheck: 1 is the KCL count, 3 is b. Total 1 + 2 = 3 = b.
+46|Step 1 of the procedure is to|Rule: always draw before you write equations.\nApply: Step 1 is to label the nodes, the current arrows and the clockwise loops.\nCheck: solving, finding power and writing KVL come later.
+47|Step 4 of the procedure is to|Rule: slide 13 lists five steps.\nApply: Step 4 is to solve the equations by substitution.\nCheck: labelling is step 1, power comes at the end, polarity belongs to the writing of equations.
+48|Step 5 of the procedure is to|Rule: the last step uses the solved currents.\nApply: Step 5 is to find the rest, such as V and P, then check.\nCheck: labelling, KCL and source conversion come earlier.
+49|A negative current in the answ|Rule: the arrow is only a reference.\nApply: a negative current flows the other way.\nCheck: it does not mean a wrong answer, a negative resistor or a wrong node.
+50|In KVL, going against a curren|Rule: in KVL a drop gets + when you go along the current.\nApply: going against the arrow the I R term gets a minus sign.\nCheck: plus is for going along the arrow, and I R is never squared here.
+51|In Example 4.4, KCL at node a |Rule: KCL at node a: in = out.\nApply: I1 and I2 enter, I3 leaves, so I1 + I2 = I3.\nCheck: the other forms use the wrong directions.
+52|In Example 4.4, KVL in mesh 1 |Rule: KVL in mesh 1: E1 = R1 I1 + R3 I3.\nApply: 2 I1 + 3 I3 = 10.\nCheck: the other equations use the wrong resistors or the wrong source.
+53|In Example 4.4, I₃ is|Rule: solve by substitution.\nApply: use I1 + I2 = I3 and the two KVL equations: I3 = 1.875 A.\nCheck: 2.19 A is I1, 0.31 A is the size of I2, 5 A is E2. KCL: 2.19 − 0.31 = 1.88 A.
+54|In Example 4.4, I₂ ≈ −0.31 A. |Rule: the sign shows the direction relative to the arrow.\nApply: I2 = −0.31 A means the current flows opposite to its arrow, to the right.\nCheck: it is not zero and it does not enter node a against the data.
+55|Practice problem (E₁ = 14 V, E|Rule: KCL and KVL for the practice circuit.\nApply: I1 = 4 A and I2 = 1 A, so I3 = I1 + I2 = 5 A.\nCheck: 4 A, 1 A are the other branches, 2 A does not satisfy KCL.
+56|In the practice problem, a wir|Rule: a wire across E2 forces its voltage to zero.\nApply: the equations then give I1 = 7 A, I2 = −3.5 A and I3 = 3.5 A.\nCheck: KCL: 7 A − 3.5 A = 3.5 A.
+57|In Example 4.4, the power of E|Rule: P = E I.\nApply: P(E1) = 10 V × 2.19 A = 21.9 W.\nCheck: 10 W is E1 only, 2.19 W is I1 only, 5 W is E2.
+58|If a branch holds a current so|Rule: a current source fixes the current in its branch.\nApply: that current is known, so it is one unknown less.\nCheck: it is not zero or negative by rule.
+59|Why is no KVL written for a me|Rule: KVL needs every voltage in the loop.\nApply: the voltage of a current source is unknown, so KVL would add one more unknown.\nCheck: its current is known, and the mesh has nodes.
+60|Example 4.5 has I₄ = 6 A known|Rule: known currents are not unknowns.\nApply: I4 = 6 A is known, so the unknowns are I1, I2 and I3.\nCheck: I1 to I4 counts I4 again, and the unknowns are not none.
+61|Example 4.5 uses|Rule: 3 unknowns need 3 equations.\nApply: 1 KCL equation plus 2 KVL equations, because mesh 3 holds the current source and is skipped.\nCheck: 3 KCL or 3 KVL equations would not match the circuit.

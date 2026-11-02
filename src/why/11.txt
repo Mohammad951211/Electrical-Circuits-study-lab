@@ -1,0 +1,30 @@
+0|How does a transformer pass en|Rule: Faraday's law.\nApply: the primary current changes the flux in the common core, and the changing flux induces a voltage in the secondary.\nCheck: there is no wire between the coils, and neither stored charge nor friction transfers the energy.
+1|Which coil is connected to the|Rule: the primary takes energy from the source.\nApply: the primary winding is connected to the source.\nCheck: the secondary feeds the load, the core links the windings.
+2|Can a transformer work on stea|Rule: a voltage is induced only by a changing flux.\nApply: steady DC gives a constant flux, so the transformer cannot work on it.\nCheck: an iron core or a step-up ratio does not change this.
+3|Where are air-core transformer|Rule: an air core has no iron losses at high frequency.\nApply: air-core transformers are used in radio and TV circuits.\nCheck: power stations, locomotives and batteries need iron-core or other devices.
+4|Where are iron-core transforme|Rule: an iron core links the flux well at low frequency.\nApply: iron-core transformers are used in audio circuits and power systems.\nCheck: radio-frequency circuits use air cores, batteries and solar cells give DC.
+5|How is the core of an iron-cor|Rule: the core is laminated to reduce eddy currents.\nApply: it is made from ferromagnetic sheets insulated from each other.\nCheck: copper, plastic, wood or an air gap are not used as the iron core.
+6|What is the coupling coefficie|Rule: the coupling coefficient k measures how much flux links both coils.\nApply: an ideal transformer has k = 1, all the flux links the secondary.\nCheck: 0 means no link, 0.5 is partial, infinity has no meaning.
+7|Which losses does an ideal tra|Rule: an ideal transformer is lossless.\nApply: it neglects winding resistance and magnetic losses.\nCheck: the load, the source voltage and the turns ratio are still part of the model.
+8|How does the book define the t|Rule: the book defines n from the secondary to the primary.\nApply: n = N_S / N_P.\nCheck: N_P / N_S is the inverse used in other books.
+9|n = 2. V_P = 120 V. What is V_|Rule: V_S = n V_P.\nApply: V_S = 2 × 120 V = 240 V.\nCheck: 60 V divides, 120 V ignores n, 480 V uses n².
+10|n = 2. I_P = 4 A. What is I_S?|Rule: I_S = I_P / n.\nApply: I_S = 4 A / 2 = 2 A.\nCheck: 8 A multiplies, 4 A ignores n, 16 A uses n².
+11|In an ideal transformer, how a|Rule: an ideal transformer has no loss.\nApply: V_P I_P = V_S I_S, so the input and output power are equal.\nCheck: the output cannot be larger, half or the input zero.
+12|n = 2.5 and Z_L = 2 Ω. What is|Rule: Z_P = Z_L / n².\nApply: Z_P = 2 Ω / 2.5² = 2 / 6.25 = 0.32 Ω.\nCheck: 5 Ω multiplies by n, 12.5 Ω multiplies by n², 0.8 Ω divides by n.
+13|Example 11.1. V_S = 125 V and |Rule: P_S = V_S I_S.\nApply: P_S = 125 V × 2 A = 250 W.\nCheck: 62.5 W divides, 127 W adds, 500 W doubles.
+14|The voltage is stepped up by n|Rule: the power stays the same.\nApply: if the voltage is multiplied by n, the current is divided by n.\nCheck: multiplying the current by n or n² would raise the power.
+15|An impedance is moved from the|Rule: impedance moves with the turns ratio squared.\nApply: from the secondary to the primary, Z_P = Z_L / n².\nCheck: multiplied by n, divided by n or unchanged are wrong.
+16|N_S > N_P. Which type is it?|Rule: n = N_S / N_P.\nApply: N_S > N_P gives n > 1 and V_S > V_P, a step-up transformer.\nCheck: step-down has n < 1, isolation is n = 1, an auto-transformer has one winding.
+17|Example 11.2. N_S = 125 and N_|Rule: n = N_S / N_P.\nApply: n = 125 / 250 = 0.5, less than 1, so step-down.\nCheck: n = 2 would be step-up, n = 0.5 cannot be step-up.
+18|Why is a step-up transformer p|Rule: P = V I with the same power.\nApply: a higher voltage means a lower line current, so the I² R loss falls.\nCheck: the transformer does not raise the line current, change frequency or store energy.
+19|Which transformer is used at a|Rule: homes and businesses need a lower voltage.\nApply: a local distribution station uses a step-down transformer.\nCheck: step-up raises the voltage, air-core and impedance matching are for other jobs.
+20|The line current is halved. Th|Rule: P_loss = I² R_w.\nApply: I becomes I / 2, so P_loss becomes (I / 2)² R_w = P_loss / 4.\nCheck: the loss does not halve, double or stay the same.
+21|Which transformer gives two eq|Rule: a center-tapped secondary has a tap in the middle.\nApply: it gives two equal output voltages.\nCheck: an auto-transformer has one winding, adjustable and air-core types are for other jobs.
+22|Which transformer has one wind|Rule: one winding serves as primary and secondary.\nApply: that is an auto-transformer, smaller and lighter.\nCheck: a center-tapped or multiple-tapped type has a separate secondary, iron-core describes the core.
+23|Which transformer gives an out|Rule: an adjustable transformer has a sliding tap.\nApply: the output runs from zero to its maximum.\nCheck: a center-tapped type has fixed outputs, step-down only has a fixed ratio.
+24|Which transformer gives severa|Rule: several taps give several voltages.\nApply: a multiple-tapped transformer has several taps on the secondary.\nCheck: an auto-transformer has one winding, an ideal transformer is a model.
+25|When does the load receive max|Rule: the maximum power theorem of Chapter 5, in AC form.\nApply: the load receives maximum power when Z_L = Z_S.\nCheck: Z_L = 0 or very large gives little power.
+26|Which turns ratio matches a lo|Rule: Z_L / n² = Z_S.\nApply: n² = Z_L / Z_S, so n = √(Z_L / Z_S).\nCheck: Z_L / Z_S and Z_S / Z_L skip the root, Z_L Z_S is wrong.
+27|Example 11.3. R_S = 100 Ω and |Rule: n = √(Z_L / Z_S).\nApply: n = √(4 / 100) = √0.04 = 0.2 = 1/5.\nCheck: 5 inverts n, 1/25 and 25 forget the root.
+28|Example 11.3. With n = 1/5, wh|Rule: Z_P = Z_L / n².\nApply: Z_P = 4 Ω / 0.2² = 4 / 0.04 = 100 Ω, equal to R_S.\nCheck: 4 Ω is the load, 20 Ω and 0.16 Ω are wrong arithmetic.
+29|Which transformer is used to m|Rule: Example 11.3 matches an amplifier to a speaker.\nApply: an audio iron-core transformer is used.\nCheck: radio air-core and power auto-transformers are for other frequencies and jobs.

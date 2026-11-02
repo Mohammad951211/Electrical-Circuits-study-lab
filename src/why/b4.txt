@@ -1,0 +1,10 @@
+0|Convert the voltage source E =|Idea: a voltage source with RS in series becomes a current source with RS in parallel.\nFormula: IS = E / RS\nValues: IS = 6 V / 2 Ω\nResult: IS = 3 A, with RS = 2 Ω in parallel.
+1|Convert this current source to|Idea: a current source with RS in parallel becomes a voltage source with RS in series.\nFormula: ES = IS RS\nValues: ES = 2 A × 4 Ω\nResult: ES = 8 V, with RS = 4 Ω in series.\nPolarity: the + of ES is on the side the arrow of IS points to.
+2|Convert this voltage source to|Idea: convert voltage to current source.\nFormula: IS = E / RS\nValues: IS = 12 V / 3 Ω\nResult: IS = 4 A, with 3 Ω in parallel.
+3|Find IL.|Idea: the real source has RS in series with the load.\nFormula: IL = E / (RS + RL)\nValues: IL = 9 V / (1 + 8) Ω\nResult: IL = 1 A\nCheck: convert to IS = 9 A, CDR: 9 × 1 / 9 = 1 A.
+4|Three 1.5 V cells are in serie|Idea: series voltage sources add with signs.\nSame direction as E: plus. Opposite direction: minus.\nValues: E = 1.5 + 1.5 − 1.5\nResult: E = 1.5 V
+5|Two current sources are in par|Idea: parallel current sources add with signs.\nBoth point up, so both are plus.\nValues: IS = 2 A + 4 A\nResult: IS = 6 A
+6|The 12 V source aids the curre|Idea: one loop, so I = ΣE / ΣR with signs.\nSources: 12 V aids, 4 V and 2 V oppose, so ΣE = 12 − 4 − 2 = 6 V.\nResistors in series: ΣR = 2 + 2 + 4 + 2 = 10 Ω.\nFormula: I = ΣE / ΣR\nValues: I = 6 V / 10 Ω\nResult: I = 0.6 A
+7|I₄ = 6 A is known. How many eq|Idea: count the unknowns, then count the equations.\nUnknowns: I1, I2, I3, because I4 = 6 A is known, so 3 equations.\nKCL: n − 1 = 1 equation.\nKVL: 2 equations, because mesh 3 has the current source and its voltage is unknown.\nResult: 1 + 2 = 3 equations.
+8|Write KCL at node a.|Idea: KCL at node a, in = out.\nI1 and I2 enter node a, I3 leaves it.\nResult: I1 + I2 = I3
+9|Write KVL for mesh 1, clockwis|Idea: KVL in mesh 1, going clockwise.\nThe source E1 is the rise, the resistor drops are R1 I1 and R3 I3.\nEquation: E1 = R1 I1 + R3 I3\nValues: 10 = 2 I1 + 3 I3\nResult: 2 I1 + 3 I3 = 10

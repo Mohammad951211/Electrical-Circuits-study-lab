@@ -1,0 +1,64 @@
+0|What is the unit of power?|Rule: power is energy per unit time, and its unit is the watt.\nApply: 1 W = 1 J/s.\nCheck: J is energy, V is voltage, A is current.
+1|What is the unit of energy?|Rule: energy and work are measured in joules.\nApply: the symbol is J.\nCheck: W is power, S is conductance, Ω is resistance.
+2|Power is|Rule: P = W / t.\nApply: work divided by time gives power, and 1 W = 1 J per second.\nCheck: work times time has the wrong unit, charge per second is current, voltage per ohm is current.
+3|The electrical power of a part|Rule: P = V I, with V in volts and I in amperes.\nApply: voltage times current gives watts.\nCheck: V / I is resistance and I / V is conductance, V + I adds unlike quantities.
+4|Which expression is also the p|Rule: P = V I and V = I R.\nApply: P = (I R) I = I² R.\nCheck: I R² and V R have the wrong dimension, I / R is not a power.
+5|Which expression is also the p|Rule: P = V I and I = V / R.\nApply: P = V (V / R) = V² / R.\nCheck: V R², R / V² and V / R² give wrong units.
+6|12 V and 2 A. The power is|Rule: P = V I.\nApply: P = 12 V × 2 A = 24 W.\nCheck: 6 W divides, 14 W adds, 0.17 W inverts the ratio.
+7|A 6 Ω resistor carries 2 A. Th|Rule: P = I² R.\nApply: P = (2 A)² × 6 Ω = 4 × 6 = 24 W.\nCheck: 12 W forgets to square I, 72 W squares R, 3 W divides.
+8|12 V is across 6 Ω. The power |Rule: P = V² / R.\nApply: P = (12 V)² / 6 Ω = 144 / 6 = 24 W.\nCheck: 72 W multiplies by R, 2 W divides V by R, 6 W forgets to square V.
+9|A 100 W load works for 10 s. T|Rule: W = P t.\nApply: W = 100 W × 10 s = 1000 J.\nCheck: 10 J and 100 J drop a factor, and W is the unit of power, not energy.
+10|The current doubles in a fixed|Rule: P = I² R.\nApply: I becomes 2I, so P = (2I)² R = 4 I² R.\nCheck: power grows with the square of the current, so it is 4 times larger.
+11|The voltage doubles across a f|Rule: P = V² / R.\nApply: V becomes 2V, so P = (2V)² / R = 4 V² / R.\nCheck: power grows with the square of the voltage, so it is 4 times larger.
+12|Positive power in the referenc|Rule: the slides define the reference direction of power for a part.\nApply: positive power means the part takes in energy.\nCheck: a resistor always takes energy, so its power is positive.
+13|Negative power in the referenc|Rule: the sign of power follows the reference direction.\nApply: negative power means the part gives out energy.\nCheck: a source that supplies the circuit has negative power.
+14|The sum of the powers of all p|Rule: energy is conserved, so the power balance is ΣP = 0.\nApply: the energy given out by sources equals the energy taken in by loads.\nCheck: the sum is not E, not the largest power and not a current.
+15|Parts take in 12 W and 28 W. T|Rule: ΣP = 0.\nApply: 12 W + 28 W + P_source = 0, so P_source = −40 W.\nCheck: +40 W would break the balance, ±16 W comes from subtracting.
+16|The current enters the − end o|Rule: P = −E I when the current enters the − end of a source.\nApply: the sign is negative, so the source gives out energy.\nCheck: positive power means taking in energy, and the power is not a fixed 1 W.
+17|What does KVL state?|Rule: KVL is Kirchhoff's voltage law.\nApply: the sum of the voltages around any closed loop is zero.\nCheck: the sum of currents at a node is KCL, V = I R is Ohm's law.
+18|In the slides, going round a l|Rule: KVL needs a sign convention.\nApply: going round the loop, the slides add the drops and subtract the rises.\nCheck: adding both or subtracting both would not give a total of zero.
+19|A loop has E = 20 V and a drop|Rule: E = V1 + V2.\nApply: V2 = E − V1 = 20 V − 6 V = 14 V.\nCheck: 26 V adds, 120 V multiplies, −14 V has the wrong sign.
+20|KVL can be written as|Rule: move the source terms to one side of the KVL equation.\nApply: ΣE = ΣI R, source voltages equal the resistor drops.\nCheck: the other forms divide current by current or mix up units.
+21|KVL also works for a path that|Rule: KVL holds for any closed path, even one that crosses open terminals.\nApply: for Vab, add the voltages along any path from a to b.\nCheck: a path with no voltage or no resistor is not a special condition.
+22|Vab is found along two differe|Rule: voltage is a potential difference.\nApply: Vab does not depend on the path taken from a to b.\nCheck: the paths must agree, they are not different by the current or the source.
+23|E = 5 V, V₁ = 1.5 V and V₄ = 1|Rule: Vab = E − V1 − V4 along the source side.\nApply: Vab = 5 V − 1.5 V − 1 V = 2.5 V.\nCheck: 7.5 V adds the drops, 3.5 V forgets one drop, 1.5 V is only V1.
+24|E = 12 V with drops of 5 V and|Rule: KVL gives E = ΣV drops.\nApply: 5 V + 7 V = 12 V, which equals E.\nCheck: the sum is not 2 V or 35 V, and the current value does not matter.
+25|Going clockwise, a source is c|Rule: in the slides, rises are subtracted and drops are added.\nApply: crossing a source from − to + is a rise, so it gets a minus sign.\nCheck: a plus sign is used for a drop, and a source has no I R term.
+26|Three resistors with 2.5 V eac|Rule: KVL gives a total of zero around the loop.\nApply: 2.5 + 2.5 + 2.5 − 5 − 2.5 = 0.\nCheck: the other expressions do not sum the signed terms of the loop.
+27|What does KCL state?|Rule: KCL is Kirchhoff's current law.\nApply: the current into a node equals the current out of it.\nCheck: the sum of voltages in a loop is KVL, V = I R is Ohm's law.
+28|KCL can be written as|Rule: charge does not collect at a node.\nApply: Σ I(in) = Σ I(out).\nCheck: Σ I = Σ V and Σ I = Σ R mix units, and KCL is about nodes, not loops.
+29|15 A and 10 A enter a node. 7 |Rule: Σ I(in) = Σ I(out).\nApply: 15 A + 10 A = 7 A + 8 A + I5, so I5 = 25 − 15 = 10 A.\nCheck: 25 A is the total in, 15 A and 0 A do not balance the node.
+30|4 A and 6 A enter a node. One |Rule: Σ I(in) = Σ I(out).\nApply: I out = 4 A + 6 A = 10 A.\nCheck: 2 A subtracts, 24 A multiplies, 0 A breaks KCL.
+31|5 A enters a node and 8 A leav|Rule: Σ I(in) = Σ I(out).\nApply: out = 8 A and known in = 5 A, so the unknown wire must bring in 8 − 5 = 3 A.\nCheck: taking out 3 A or 13 A would unbalance the node.
+32|KCL also applies to|Rule: KCL applies to any closed surface.\nApply: the surface is a supernode, as in Example 2.12.\nCheck: it is not limited to open wires, a voltage source or ground.
+33|A ring encloses part of a circ|Rule: a closed ring (supernode) holds no charge.\nApply: 5 A in means 5 A out.\nCheck: 0 A, 10 A and 2.5 A all break the balance.
+34|A negative answer for a curren|Rule: the arrow is only a reference direction.\nApply: a negative answer means the real current flows opposite to the arrow.\nCheck: it does not mean zero current or a wrong node.
+35|A node is|Rule: a node is a junction point.\nApply: two or more parts join there.\nCheck: a single resistor is a part, a closed path is a loop, a source is a part.
+36|A branch is|Rule: a branch is one part, or parts in series, between two nodes.\nApply: it carries one current.\nCheck: a closed path is a loop and a point is a node.
+37|A loop is|Rule: a loop is any closed path.\nApply: start at a node and return to it without repeating a branch.\nCheck: a junction of three wires is a node, a single resistor is a part.
+38|A mesh is|Rule: a mesh is the smallest kind of loop.\nApply: no other loop is inside it.\nCheck: the biggest loop usually contains meshes.
+39|Is every mesh a loop?|Rule: a mesh is a special loop.\nApply: every mesh is a closed path, so every mesh is a loop.\nCheck: the answer is yes in every circuit type.
+40|Is every loop a mesh?|Rule: a loop may contain other loops.\nApply: a loop around two meshes is not a mesh, so not every loop is a mesh.\nCheck: this holds for any number of sources.
+41|A circuit has 4 nodes, 6 branc|Rule: count the junction points.\nApply: the circuit has 4 nodes, as stated.\nCheck: 6 is the number of branches and 3 the number of meshes.
+42|The circuit with 4 nodes and 6|Rule: meshes = b − (n − 1).\nApply: 6 − (4 − 1) = 3 meshes.\nCheck: 2, 4 and 6 do not satisfy the formula.
+43|An ideal voltage source|Rule: an ideal voltage source fixes its terminal voltage.\nApply: the load only sets the current.\nCheck: a fixed current is a current source, and RS is zero, not large.
+44|A real voltage source is model|Rule: a real voltage source has an internal resistance.\nApply: model it as E or VS with RS in series.\nCheck: RS in parallel or a current source gives a different model.
+45|The RS of an ideal voltage sou|Rule: an ideal source loses no voltage inside.\nApply: the drop I RS is zero, so RS = 0.\nCheck: a large RS is a poor source.
+46|As the load current of a real |Rule: Vab = VS − I RS.\nApply: more current gives a larger I RS, so the terminal voltage falls.\nCheck: it cannot rise or stay the same unless RS = 0.
+47|VS = 9 V, RS = 0.5 Ω and RL = |Rule: I = VS / (RS + RL).\nApply: I = 9 V / (0.5 Ω + 4 Ω) = 9 / 4.5 = 2 A.\nCheck: 18 A ignores RL, 2.25 A ignores RS, 1 A is wrong arithmetic.
+48|VS = 9 V, RS = 0.5 Ω and RL = |Rule: Vab = I RL.\nApply: Vab = 2 A × 4 Ω = 8 V.\nCheck: 9 V is the ideal value, 4.5 V and 1 V are wrong products.
+49|In the same circuit the voltag|Rule: V(RS) = I RS.\nApply: V = 2 A × 0.5 Ω = 1 V.\nCheck: KVL: 8 V + 1 V = 9 V = VS.
+50|An ideal current source|Rule: an ideal current source fixes its current.\nApply: the load sets the voltage.\nCheck: fixing the voltage describes a voltage source.
+51|A real current source is model|Rule: a real current source has an internal resistance.\nApply: model it as IS with RS in parallel.\nCheck: RS in series belongs to a voltage source model.
+52|An ideal 5 mA source feeds 2 k|Rule: Vab = IS RL.\nApply: Vab = 5 mA × 2 kΩ = 5 × 10⁻³ × 2 × 10³ = 10 V.\nCheck: 2.5 V divides, 0.0025 V and 7 kV have the wrong power of ten.
+53|The same 5 mA source feeds 500|Rule: Vab = IS RL.\nApply: Vab = 5 mA × 500 Ω = 2.5 V.\nCheck: 10 V is the earlier result with 2 kΩ, 5 V and 0.25 V have the wrong factor.
+54|For an ideal current source, t|Rule: an ideal current source keeps its current.\nApply: when RL changes, only the voltage changes.\nCheck: the source current does not follow RL.
+55|Which real source loses less v|Rule: the internal drop is I RS.\nApply: the source with the smaller RS loses less voltage inside.\nCheck: the load does not change the internal loss for the same current.
+56|1 kΩ equals|Rule: k = 10³.\nApply: 1 kΩ = 1 × 10³ Ω = 1000 Ω.\nCheck: 100 Ω, 10⁶ Ω and 0.001 Ω use other prefixes.
+57|1 MΩ equals|Rule: M = 10⁶.\nApply: 1 MΩ = 10⁶ Ω.\nCheck: 10³ is k, 10⁹ is G, 10⁻⁶ is µ.
+58|1 mA equals|Rule: m = 10⁻³.\nApply: 1 mA = 10⁻³ A.\nCheck: 10³ is k, 10⁻⁶ is µ.
+59|1 µA equals|Rule: µ = 10⁻⁶.\nApply: 1 µA = 10⁻⁶ A.\nCheck: 10⁻³ is m, 10⁻⁹ is n.
+60|2 200 000 Ω written with a pre|Rule: 1 MΩ = 10⁶ Ω.\nApply: 2 200 000 Ω = 2.2 × 10⁶ Ω = 2.2 MΩ.\nCheck: 2.2 kΩ, 22 MΩ and 220 kΩ are off by powers of ten.
+61|0.000 047 A written with a pre|Rule: 1 µA = 10⁻⁶ A.\nApply: 0.000 047 A = 47 × 10⁻⁶ A = 47 µA.\nCheck: 47 mA, 4.7 µA and 470 µA are off by powers of ten.
+62|3.3 kΩ in ohms is|Rule: k = 10³.\nApply: 3.3 kΩ = 3.3 × 10³ Ω = 3300 Ω.\nCheck: 330 Ω, 33 000 Ω and 3.3 Ω move the decimal point wrongly.
+63|250 mA in amperes is|Rule: m = 10⁻³.\nApply: 250 mA = 250 × 10⁻³ A = 0.25 A.\nCheck: 250 A, 2.5 A and 0.025 A move the decimal point wrongly.

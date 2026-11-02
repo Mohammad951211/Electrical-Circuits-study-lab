@@ -1,0 +1,10 @@
+0|Find RT.|Idea: series resistances add.\nFormula: RT = R1 + R2 + R3\nValues: RT = 10 + 20 + 30\nResult: RT = 60 kΩ
+1|E = 24 V. Find I.|Idea: find RT first, then use Ohm's law.\nStep 1: RT = 2 + 4 + 6 = 12 Ω\nStep 2: I = E / RT\nValues: I = 24 V / 12 Ω\nResult: I = 2 A
+2|Use the voltage-divider rule t|Idea: in series the voltage divides in proportion to R.\nFormula: V2 = E × R2 / (R1 + R2)\nValues: V2 = 12 × 4 / 6\nResult: V2 = 8 V\nCheck: with V1 = 4 V, 4 + 8 = 12 V = E.
+3|E = 120 V and point e is groun|Idea: with e as ground, Vb equals Vbe, the voltage across all resistors below b.\nFormula: Vb = Vbe = E × (R2 + R3 + R4) / RT\nValues: Vb = 120 × 50 / 60\nResult: Vb = 100 V
+4|One lamp in the series string |Idea: a series circuit has one path.\nLook: the burnt lamp opens the path.\nResult: the current is zero, so all the other lamps go off.
+5|Find Req.|Idea: parallel conductances add and Req = 1 / G.\nFormula: Req = 1 / (1/10 + 1/20 + 1/30)\nValues: Req = 1 / (0.1 + 0.05 + 0.0333)\nResult: Req ≈ 5.455 Ω\nCheck: the result is smaller than the smallest resistor, 10 Ω.
+6|Find Req of the two parallel r|Idea: for two parallel resistors use product over sum.\nFormula: Req = R1 R2 / (R1 + R2)\nValues: Req = (4 × 12) / (4 + 12) = 48 / 16\nResult: Req = 3 Ω
+7|9 mA enters the two resistors.|Idea: current divider rule, the other resistor goes on top.\nFormula: I = IT × R_other / (R1 + R2)\nValues: I = 9 mA × 2 / (1 + 2)\nResult: I = 6 mA\nCheck: the other branch takes 3 mA, 6 + 3 = 9 mA.
+8|R₁ = 10 Ω, IT = 30 mA and I₂ =|Idea: write the CDR for I2 and solve for R2.\nEquation: 10 = 30 × 10 / (10 + R2)\nSolve: 10 + R2 = 300 / 10 = 30, so R2 = 20 Ω\nCheck: I1 = 20 mA, 20 + 10 = 30 mA = IT.
+9|Find Req.|Idea: reduce from the far end.\nAB: 6 // 3 = 18 / 9 = 2 Ω\nBC: 4 + 8 = 12 Ω, then 12 // 12 = 6 Ω\nSeries: Req = 2 + 6\nResult: Req = 8 Ω
