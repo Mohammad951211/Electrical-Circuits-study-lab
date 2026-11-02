@@ -1,0 +1,45 @@
+0|What does a capacitor store?|Rule: a capacitor stores charge on two plates.\nApply: the energy is held in the electric field between the plates.\nCheck: a magnetic field belongs to the inductor, and current and resistance are not stored.
+1|What is the unit of capacitanc|Rule: capacitance is charge per volt.\nApply: 1 F = 1 C/V.\nCheck: H is inductance, Ω is resistance, S is conductance.
+2|Which equation links charge, c|Rule: Q = C V.\nApply: more voltage on the same C stores more charge.\nCheck: Q / V and V / C have the wrong units, C V² is energy-like.
+3|Which factors raise the capaci|Rule: C = 8.85 × 10⁻¹² k A / d.\nApply: C grows with a larger area A and a smaller gap d.\nCheck: a smaller area or a larger gap lowers C.
+4|In C = 8.85 × 10⁻¹² k A / d, w|Rule: k is the relative permittivity of the dielectric.\nApply: a higher k gives a larger C.\nCheck: k is not the number of plates, the charge or the frequency.
+5|The gap d between the plates i|Rule: C is inversely proportional to d.\nApply: d becomes d / 2, so C = ε A / (d / 2) = 2 C.\nCheck: C does not halve and it does not grow four times.
+6|What is the breakdown voltage?|Rule: every dielectric has an electric strength.\nApply: the breakdown voltage is where the dielectric fails and conducts.\nCheck: it is not the voltage at full or zero charge or the source voltage.
+7|How does an ideal capacitor be|Rule: i = C dv/dt.\nApply: in DC steady state dv/dt = 0, so i = 0 and the capacitor acts as an open circuit.\nCheck: a short circuit would carry current and a battery would supply it.
+8|Which equation gives the curre|Rule: current flows only while the voltage changes.\nApply: i = C dv/dt.\nCheck: C v and v / C have wrong units and L dv/dt mixes the inductor symbol.
+9|Which equation gives the store|Rule: energy of a capacitor is W = ½ C V².\nApply: Example 6.3: ½ × 2.2 μF × 15² = 247.5 μJ.\nCheck: C V² forgets ½, the other forms have wrong powers.
+10|A 100 μF capacitor is charged |Rule: Q = C V.\nApply: Q = 100 μF × 10 V = 1000 μC = 1 mC.\nCheck: 10 μC, 100 μC and 10 mC have the wrong power of ten.
+11|Capacitors C₁ and C₂ are in se|Rule: series capacitors combine like parallel resistors.\nApply: C_eq = C1 C2 / (C1 + C2).\nCheck: C1 + C2 is the parallel value.
+12|Capacitors in parallel. What i|Rule: parallel plates add area.\nApply: C_eq = C1 + C2 + …, for example Example 6.5: 450 μF.\nCheck: a product, the smallest value or the reciprocal sum are wrong.
+13|Four equal capacitors of 100 μ|Rule: n equal capacitors in series give C / n.\nApply: C_eq = 100 μF / 4 = 25 μF.\nCheck: 400 μF is the parallel value, 100 μF is one capacitor, 50 μF is C / 2.
+14|In a series string of capacito|Rule: the same current flows in a series string.\nApply: the same charge Q builds on each capacitor.\nCheck: the voltages divide by C and the capacitances differ.
+15|In a parallel group of capacit|Rule: parallel parts are across the same two nodes.\nApply: all capacitors have the same voltage.\nCheck: the charges are Q = C V, so they differ.
+16|What does an inductor store?|Rule: an inductor stores energy with a current in its coil.\nApply: the energy is held in the magnetic field.\nCheck: an electric field belongs to the capacitor, charge and voltage are not stored.
+17|What is the unit of inductance|Rule: inductance is measured in henries.\nApply: the symbol is H.\nCheck: F is capacitance, Wb is flux, Ω is resistance.
+18|Which equation gives the volta|Rule: voltage appears only while the current changes.\nApply: v = L di/dt.\nCheck: L i and i / L have wrong units, C di/dt is wrong.
+19|How does an ideal inductor beh|Rule: v = L di/dt.\nApply: in DC steady state di/dt = 0, so v = 0 and the inductor acts as a short circuit.\nCheck: an open circuit belongs to the capacitor.
+20|What does Lenz's law state?|Rule: Lenz's law.\nApply: the induced voltage opposes the change of current that causes it.\nCheck: it does not help the change, it is not zero and it is not constant.
+21|Which equation gives the energ|Rule: W = ½ L I².\nApply: the energy depends on the square of the current.\nCheck: L I² forgets ½, the other forms have wrong powers or units.
+22|Inductors L₁ and L₂ are in ser|Rule: inductors combine like resistors.\nApply: in series L_eq = L1 + L2.\nCheck: L1 L2 / (L1 + L2) is the parallel value.
+23|Which change raises the induct|Rule: L = N² A μ / l.\nApply: more turns raise L.\nCheck: fewer turns, a smaller area or removing the core lowers L.
+24|What is the dielectric of a ca|Rule: the dielectric is the insulator between the plates.\nApply: examples are paper, air, glass, mica and ceramics.\nCheck: plates are metal, wires are leads, the case is outside.
+25|Which capacitors are usually p|Rule: only some capacitors are polarized.\nApply: electrolytic capacitors have + and − terminals.\nCheck: air, mica and ceramic capacitors are not polarized.
+26|When charging ends in a DC cir|Rule: in DC the charging current falls to zero.\nApply: when charging ends, V_C = E and I = 0.\nCheck: V_C = 0, I at maximum, or E / 2 describe other moments.
+27|A charged capacitor is shorted|Rule: a short gives a path for the charge.\nApply: the capacitor discharges and releases its stored energy.\nCheck: it does not charge more, and C does not double.
+28|Example 6.1. Q = 50 μC and C =|Rule: V = Q / C.\nApply: V = 50 × 10⁻⁶ C / 1000 × 10⁻¹² F = 50 000 V = 50 kV.\nCheck: 50 V, 0.05 V and 5 kV have the wrong power of ten.
+29|Example 6.2 uses mica as the d|Rule: Example 6.2 uses a value for the dielectric.\nApply: mica has k = 5 in the example.\nCheck: 1, 2.5 and 7.5 are not the example value.
+30|Example 6.3. W = ½ × 2.2 μF × |Rule: W = ½ C V².\nApply: W = ½ × 2.2 × 10⁻⁶ × 225 = 247.5 × 10⁻⁶ J = 247.5 μJ.\nCheck: 495 μJ forgets ½, 16.5 μJ and 33 μJ are wrong products.
+31|Example 6.5. C_eq = 450 μF on |Rule: Q = C V.\nApply: Q = 450 × 10⁻⁶ F × 60 V = 0.027 C = 27 mC.\nCheck: 7.5 μC divides, 2.7 mC and 450 mC have the wrong power of ten.
+32|Series capacitors behave like |Rule: series capacitors add their gaps.\nApply: a larger total gap lowers C_eq.\nCheck: a larger area or a higher k would raise C.
+33|Parallel capacitors behave lik|Rule: parallel capacitors add their plate areas.\nApply: a larger total area raises C_eq.\nCheck: a larger gap or smaller area would lower C.
+34|Which law gives the induced vo|Rule: a changing magnetic flux induces a voltage.\nApply: that is Faraday's law.\nCheck: Ohm's law, KCL and Coulomb's law are about other relations.
+35|Which factor lowers the induct|Rule: L = N² A μ / l.\nApply: a longer core length l gives a smaller L.\nCheck: more turns, a larger area or a higher permeability raise L.
+36|The number of turns of a coil |Rule: L is proportional to N².\nApply: N becomes 2N, so L becomes (2N)² = 4 N², which is 4 times larger.\nCheck: L does not simply double.
+37|Why does an iron-core inductor|Rule: L is proportional to the permeability.\nApply: iron gives a better path for the flux than air, so L is larger.\nCheck: the turns are the same, resistance and charge are not the reason.
+38|What is the winding resistance|Rule: a real coil is made of wire.\nApply: the winding resistance is the resistance of that wire.\nCheck: it is not the core, a reactance or the source.
+39|Example 6.8. E = 20 V, R = 45 |Rule: in DC steady state the inductor acts as a wire.\nApply: I = E / (R + R_w) = 20 V / (45 Ω + 5 Ω) = 0.4 A.\nCheck: 0.44 A ignores R_w, 4 A and 0.5 A are wrong ratios.
+40|Example 6.8. W_L = 4 J and I =|Rule: W = ½ L I², so L = 2 W / I².\nApply: L = 2 × 4 J / (0.4 A)² = 8 / 0.16 = 50 H.\nCheck: 25 H forgets the 2, 20 H and 10 H are wrong arithmetic.
+41|Two inductors L₁ and L₂ are in|Rule: inductors combine like resistors.\nApply: in parallel L_eq = L1 L2 / (L1 + L2).\nCheck: L1 + L2 is the series value.
+42|Example 6.10. Three inductors |Rule: parallel first, then series.\nApply: 40 H // 40 H = 20 H, then 20 H + 50 H = 70 H.\nCheck: all three in series give 130 H, all three in parallel give less than 20 H.
+43|Example 6.9. Which value is L_|Rule: work from the far end.\nApply: (L4 + L5) // L3 = 1 H, adding L2 and L6 gives 3 H, then 3 H // 3 H = 1.5 H.\nCheck: 3 H and 9 H skip the last parallel step, 0.5 H is too small.
+44|A capacitor and an inductor ar|Rule: in DC the capacitor blocks and the inductor passes.\nApply: after a long time the capacitor is charged and has zero current.\nCheck: the inductor passes the DC current, so it does not have zero current.

@@ -82,12 +82,20 @@ function ring(p, label){
 function bar(p, cls){ return '<div class="bar ' + (cls || "") + '"><i style="width:' + (p || 0) + '%"></i></div>'; }
 function esc2(s){ return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
 var HIST = [];
+function snap(){ return { page: S.page, ch: S.ch, tab: S.tab, pr: { ch: PR.ch, topic: PR.topic, type: PR.type } }; }
+function pushHist(){ var h = snap(), l = HIST[HIST.length - 1]; if (l && JSON.stringify(l) === JSON.stringify(h)) return; HIST.push(h); if (HIST.length > 40) HIST.shift(); try { history.pushState({ n: HIST.length }, ""); } catch (e) {} }
 function go(page, ch, tab, noPush){
-  if (!noPush && !(page === S.page && (!ch || ch === S.ch))){ HIST.push({ page: S.page, ch: S.ch, tab: S.tab }); if (HIST.length > 30) HIST.shift(); }
-  if (page === "dash" && !noPush) HIST = [];
+  if (page === "dash" && !noPush){ HIST = []; }
+  else if (!noPush && !(page === S.page && (!ch || ch === S.ch))) pushHist();
   S.page = page; if (ch) S.ch = ch; if (tab) S.tab = tab; render(); window.scrollTo(0, 0);
 }
-function goBack(){ var h = HIST.pop(); if (!h) return go("dash", null, null, true); if (h.page === "quiz" && QZ && QZ.stage === "run") QZ = null; go(h.page, h.ch, h.tab, true); }
+function goBack(fromPop){
+  var h = HIST.pop(); if (!h) return go("dash", null, null, true);
+  if (QZ && QZ.stage === "run") QZ = null;
+  if (h.pr){ PR.ch = h.pr.ch; PR.topic = h.pr.topic; PR.type = h.pr.type; PR.q = null; PR.last = null; }
+  go(h.page, h.ch, h.tab, true);
+}
+window.addEventListener("popstate", function(){ if (HIST.length) goBack(true); });
 
 var NAV = [["dash", "Chapters"], ["progress", "My progress"]];
 function addBack(){
@@ -366,7 +374,7 @@ document.addEventListener("click", function(e){
   if (a === "go") go(v);
   else if (a === "back") goBack();
   else if (a === "study") go("study", v);
-  else if (a === "tab"){ S.tab = v; pStudy(); }
+  else if (a === "tab"){ if (S.tab !== v) pushHist(); S.tab = v; pStudy(); }
   else if (a === "tool"){ }
   else if (a === "prac"){ PR.ch = v; PR.topic = "all"; PR.q = null; go("practice"); }
   else if (a === "praction"){ var p = v.split("|"); PR.ch = p[0]; PR.topic = p[1]; PR.q = null; go("practice"); }
@@ -395,7 +403,7 @@ document.addEventListener("click", function(e){
 });
 document.addEventListener("change", function(e){
   var t = e.target;
-  if (t.dataset.a === "pf"){ PR.ch = $("fch").value; if (t.id === "fch") PR.topic = "all"; else PR.topic = $("ftp").value; PR.type = $("fty").value; PR.q = null; PR.last = null; pPractice(); }
+  if (t.dataset.a === "pf"){ pushHist(); PR.ch = $("fch").value; if (t.id === "fch") PR.topic = "all"; else PR.topic = $("ftp").value; PR.type = $("fty").value; PR.q = null; PR.last = null; pPractice(); }
   if (t.id === "qch") QZCH = t.value; if (t.id === "qn") QZN = +t.value;
 });
 // the Calculate tab buttons use data-tool

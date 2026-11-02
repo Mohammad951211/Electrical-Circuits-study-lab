@@ -1,0 +1,46 @@
+0|What are the three components |Rule: a sine wave is v = V_m sin(ωt + ψ).\nApply: its three components are the amplitude V_m, the angular frequency ω and the phase angle ψ.\nCheck: voltage, current and power, or R, L and C, are circuit quantities, not wave components.
+1|What is the relation between p|Rule: the period T is the time of one cycle.\nApply: f = 1 / T, for example T = 20 ms gives f = 50 Hz.\nCheck: T / f, 2π T and T² have wrong units.
+2|What is the relation between ω|Rule: one cycle is 2π rad.\nApply: ω = 2π f, with ω in rad/s and f in Hz.\nCheck: f, f / 2π and π f miss the 2π factor.
+3|A wave has f = 60 Hz. What is |Rule: ω = 2π f.\nApply: ω = 2π × 60 Hz = 377 rad/s.\nCheck: 60 and 120 rad/s skip 2π, 188 rad/s uses π.
+4|What is the unit of frequency?|Rule: frequency is the number of cycles per second.\nApply: the unit is hertz, 1 Hz = 1 cycle/s.\nCheck: rad is an angle, s is time, W is power.
+5|What is V_pp of a sine wave wi|Rule: the wave goes from −V_m to +V_m.\nApply: V_pp = 2 V_m.\nCheck: V_m is only the peak, V_m / 2 and V_m / √2 are other values.
+6|What is the RMS value of a sin|Rule: the rms value gives the same heating as a DC value.\nApply: V = V_m / √2 = 0.707 V_m.\nCheck: V_m is the peak, 0.637 V_m is the half-cycle average, 2 V_m is the peak-to-peak value.
+7|A sine voltage has V_m = 170 V|Rule: V = 0.707 V_m.\nApply: V = 0.707 × 170 V = 120.2 V.\nCheck: 170 V is the peak, 240 V is 2 × V, 108 V uses 0.637.
+8|What is the half-cycle average|Rule: the full-cycle average is zero, so the half cycle is used.\nApply: V_avg = 2 V_m / π = 0.637 V_m.\nCheck: 0.707 V_m is the rms value, V_m is the peak, 0.5 V_m is a guess.
+9|Example 8.3. V_m = 5 V. What i|Rule: v = V_m sin θ.\nApply: v = 5 V × sin 30° = 5 × 0.5 = 2.5 V.\nCheck: 5 V is the peak, 4.33 V uses sin 60°, 0 V is sin 0°.
+10|What does a household reading |Rule: V_m = √2 × V.\nApply: V_m = 1.414 × 120 V = 169.7 V, about 170 V.\nCheck: 120 V is the rms value, 85 V divides by √2, the average over a cycle is zero.
+11|v leads i by 50°. What does th|Rule: lead means earlier in time.\nApply: v leads i by 50°, so v reaches its peak 50° earlier.\nCheck: later describes a lag, equal peaks mean in phase.
+12|v = V_m sin(ωt + 30°) and i = |Rule: φ = ψv − ψi.\nApply: φ = 30° − (−20°) = 50°, positive, so v leads i.\nCheck: 10° subtracts the magnitudes, a negative φ would mean i leads.
+13|Two waves have the same phase |Rule: waves with the same phase angle peak together.\nApply: they are in phase.\nCheck: 90° is quadrature and 180° is opposite.
+14|What does a phasor contain?|Rule: a phasor stores the magnitude (rms) and the phase angle.\nApply: V∠ψ.\nCheck: frequency, power and resistance are not stored in a phasor.
+15|Convert 3 + j4 to polar form.|Rule: |Z| = √(a² + b²) and θ = tan⁻¹(b / a).\nApply: |Z| = √(9 + 16) = 5, θ = tan⁻¹(4 / 3) = 53.13°.\nCheck: 7 adds, 36.87° uses 3/4, 25 forgets the root.
+16|Convert 10∠30° to rectangular |Rule: a = r cos θ and b = r sin θ.\nApply: 10 cos 30° = 8.66 and 10 sin 30° = 5, so 8.66 + j5.\nCheck: 5 + j8.66 swaps cos and sin, 8.66 − j5 has the wrong sign.
+17|In a phasor diagram, what does|Rule: angles are measured from the real axis.\nApply: counterclockwise is positive, which means a lead.\nCheck: clockwise is negative, which means a lag.
+18|What is the phase between v an|Rule: v = R i.\nApply: there is no time shift, so v and i are in phase, 0°.\nCheck: 90° belongs to L and C, 180° is opposite.
+19|What is the phase between v an|Rule: ELI.\nApply: in an inductor the voltage E leads the current I by 90°.\nCheck: i leading v is the capacitor, 45° is not an ideal L.
+20|What is the phase between v an|Rule: ICE.\nApply: in a capacitor the current I leads the voltage E by 90°.\nCheck: v leading i is the inductor, in phase is the resistor.
+21|What is the inductive reactanc|Rule: X_L = ω L.\nApply: X_L = 2π f L, in ohms, and it grows with f.\nCheck: 1 / (ω L) falls with f, L / ω and ω / L have wrong units.
+22|What is the capacitive reactan|Rule: X_C = 1 / (ω C).\nApply: in ohms, and it falls as f grows.\nCheck: ω C is a susceptance, C / ω and ω / C are wrong.
+23|Example 8.11. ω = 60 rad/s and|Rule: X_L = ω L.\nApply: X_L = 60 rad/s × 0.2 H = 12 Ω.\nCheck: 0.33 Ω divides, 300 Ω multiplies by 5, 60 Ω ignores L.
+24|What is the main difference be|Rule: the polarity or direction of AC changes with time.\nApply: AC changes its polarity periodically, DC does not.\nCheck: AC has a frequency and DC is not always larger.
+25|Example 8.1. v(t) = 6 sin(25t |Rule: v = V_m sin(ωt + ψ).\nApply: the number before sin is V_m, so V_m = 6 V.\nCheck: 25 is ω, 30° is the phase, 3 V is half of V_m.
+26|Example 8.1. v(t) = 6 sin(25t |Rule: the number multiplying t is ω.\nApply: ω = 25 rad/s.\nCheck: 6 is V_m, 30 is the phase, 157 rad/s is 2π × 25.
+27|Example 8.1. v(t) = 6 sin(25t |Rule: ψ is the angle added to ωt.\nApply: ψ = −30°.\nCheck: +30° has the wrong sign, 25 is ω, 6 is V_m.
+28|Example 8.1. ω = 25 rad/s. Wha|Rule: f = ω / (2π).\nApply: T = 2π / 25 = 0.25 s and f = 1 / 0.25 s ≈ 4 Hz (3.98 Hz).\nCheck: 25 Hz and 157 Hz mix ω with f, 0.25 Hz is the period value.
+29|Example 8.3. V_m = 5 V. What i|Rule: v = V_m sin θ.\nApply: v = 5 V × sin 135° = 5 × 0.707 = 3.54 V.\nCheck: 5 V is the peak, 2.5 V is sin 30°, −3.54 V has the wrong sign.
+30|The instantaneous value is wri|Rule: lowercase letters mark values that change with time.\nApply: v and i are instantaneous values.\nCheck: uppercase letters are fixed values such as rms, and V_m is the peak.
+31|A meter shows 220 V AC. Which |Rule: meters and ratings use rms values.\nApply: 220 V AC means 220 V rms.\nCheck: the peak is about 311 V, the half-cycle average is lower.
+32|The rms current of a sine wave|Rule: I_m = √2 I.\nApply: I_m = 1.414 × 10 A = 14.14 A.\nCheck: 7.07 A divides, 10 A is the rms value, 6.37 A uses 0.637.
+33|Why is the half-cycle average |Rule: a symmetric sine wave has a zero full-cycle average.\nApply: the half-cycle average is used because it is not zero.\nCheck: it is not larger than the peak and it differs from the rms value.
+34|V_m = 100 V. What is the half-|Rule: V_avg = 0.637 V_m.\nApply: V_avg = 0.637 × 100 V = 63.7 V.\nCheck: 70.7 V is the rms value, 100 V is the peak, 50 V is a guess.
+35|i₁ = sin(ωt + 60°), i₂ = sin(ω|Rule: φ = ψ1 − ψ2.\nApply: φ = 60° − (−30°) = 90°, positive, so i1 leads.\nCheck: 30° subtracts wrongly, a negative φ would mean i2 leads.
+36|φ = 180°. What does it mean?|Rule: φ = 180° means opposite phase.\nApply: one wave is at its positive peak when the other is at its negative peak.\nCheck: in phase is 0°, 90° is quadrature.
+37|Can the phase difference be fo|Rule: the phase difference compares waves of the same ω.\nApply: waves of different frequency drift apart, so the difference changes with time.\nCheck: equal peaks or DC do not remove this condition.
+38|A phasor is written with|Rule: a phasor has a magnitude and an angle.\nApply: for example 10∠30°, and ω is left out because it is the same for all quantities.\nCheck: the frequency alone, the period or t are not phasor data.
+39|(3 + j4) + (1 − j2) = ?|Rule: add rectangular numbers part by part.\nApply: real: 3 + 1 = 4, imaginary: 4 − 2 = 2, so 4 + j2.\nCheck: 2 + j6 subtracts the real parts, 4 + j6 adds the sign wrongly, 3 − j8 multiplies.
+40|10∠30° × 2∠20° = ?|Rule: multiply the magnitudes and add the angles.\nApply: 10 × 2 = 20 and 30° + 20° = 50°, so 20∠50°.\nCheck: 12∠50° adds the magnitudes, 20∠10° subtracts the angles, 5∠10° divides.
+41|10∠30° ÷ 2∠20° = ?|Rule: divide the magnitudes and subtract the angles.\nApply: 10 / 2 = 5 and 30° − 20° = 10°, so 5∠10°.\nCheck: 20∠50° multiplies, 5∠50° adds the angles, 8∠10° subtracts the magnitudes.
+42|Example 8.11 gives I_Lm = 0.5√|Rule: the time form keeps the same ω.\nApply: i_L = I_Lm sin(ωt + angle) = 0.5√2 sin(60t − 55°) A.\nCheck: +35° and +125° change the phase, 6√2 changes the amplitude.
+43|Example 8.12. X_C = 63.65 Ω an|Rule: I_Cm = V_Cm / X_C.\nApply: I_Cm = 50√2 V / 63.65 Ω = 1.111 A = 786√2 mA.\nCheck: 50√2 mA and 63.65 mA copy the inputs, 3.18√2 A has the wrong value.
+44|In an inductor, what happens t|Rule: X_L = 2π f L.\nApply: f becomes 2f, so X_L doubles and I = V / X_L is halved.\nCheck: the current does not double, stay the same or become zero.
+45|In a resistor with R = 10 Ω, V|Rule: for a resistor I = V / R and the phase is 0°.\nApply: I = 60 V / 10 Ω = 6 A rms, in phase with v.\nCheck: 90° behind belongs to an inductor, 600 A multiplies, 0.6 A is a wrong ratio.

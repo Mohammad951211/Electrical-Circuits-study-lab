@@ -1,0 +1,63 @@
+0|In a series circuit, the same |Rule: a series circuit has one path.\nApply: the same charge per second passes every part, so the current is the same.\nCheck: voltage and power differ from part to part and resistance is a property of each part.
+1|Parts are in series when they |Rule: series parts are joined end to end on one path.\nApply: no branching point lies between them.\nCheck: parts across the same two points are parallel.
+2|The total resistance of resist|Rule: series resistances add.\nApply: RT = R1 + R2 + R3.\nCheck: product over sum is for two parallel resistors, 1/(R1+R2) has the wrong unit, a difference lowers RT.
+3|RT of a series circuit is alwa|Rule: RT = R1 + R2 + R3.\nApply: every added R increases the total, so RT is bigger than the biggest R.\nCheck: RT is not smaller, not an average and not a voltage.
+4|10 kΩ, 20 kΩ and 30 kΩ are in |Rule: RT = R1 + R2 + R3.\nApply: RT = 10 kΩ + 20 kΩ + 30 kΩ = 60 kΩ.\nCheck: 5.45 kΩ is the parallel value, 30 kΩ and 6 kΩ are wrong sums.
+5|E = 60 V across 60 kΩ. The cur|Rule: I = E / RT.\nApply: I = 60 V / 60 kΩ = 60 / 60 000 = 1 mA.\nCheck: 1 A and 3600 A ignore the k, 0.1 mA is a wrong power of ten.
+6|In a series circuit, the sourc|Rule: KVL gives E = V1 + V2 + V3.\nApply: the source voltage is shared by the resistors.\nCheck: each resistor does not get the full E, and E is not zero.
+7|The total power of a series ci|Rule: total power is the power of the source.\nApply: PT = E I = I² RT = E² / RT.\nCheck: E / I is resistance, I / RT and E + I mix units.
+8|1 mA flows through 10 kΩ. The |Rule: V = I R.\nApply: V = 1 mA × 10 kΩ = 10⁻³ × 10⁴ = 10 V.\nCheck: 10 mV, 0.1 V and 100 V use the wrong power of ten.
+9|60 V and 1 mA. The total power|Rule: P = E I.\nApply: P = 60 V × 1 mA = 60 mW.\nCheck: 60 W forgets m, 0.06 mW and 1 mW have the wrong factor.
+10|2 Ω, 4 Ω and 6 Ω are in series|Rule: RT = 2 + 4 + 6 = 12 Ω, then I = E / RT.\nApply: I = 24 V / 12 Ω = 2 A.\nCheck: 12 A divides by 2, 4 A uses the wrong sum, 1 A inverts the ratio.
+11|In that circuit the voltage on|Rule: V = I R.\nApply: V = 2 A × 6 Ω = 12 V.\nCheck: KVL: 2×2 + 2×4 + 12 = 4 + 8 + 12 = 24 V = E.
+12|In that circuit the total powe|Rule: PT = E I.\nApply: PT = 24 V × 2 A = 48 W.\nCheck: I² RT = 4 × 12 = 48 W gives the same value.
+13|One lamp of a series string bu|Rule: a series circuit has one path.\nApply: a burnt lamp opens the path, so the current is zero everywhere.\nCheck: no lamp can stay on, get brighter or receive half the voltage.
+14|In the voltage-divider rule, a|Rule: the same current flows in every series resistor, so V = I R.\nApply: a bigger R gets a bigger share of the voltage.\nCheck: the share is proportional to R, so a bigger R never gets less.
+15|The VDR for resistor Rx in ser|Rule: Vx = I Rx and I = E / RT.\nApply: Vx = E Rx / RT, the wanted resistor on top.\nCheck: E RT / Rx and E / Rx have the wrong units.
+16|12 V is across 2 Ω and 4 Ω in |Rule: V = E R / RT.\nApply: RT = 2 + 4 = 6 Ω, V(4 Ω) = 12 V × 4 / 6 = 8 V.\nCheck: KVL: 8 V + 4 V = 12 V.
+17|12 V is across 2 Ω and 4 Ω in |Rule: V = E R / RT.\nApply: V(2 Ω) = 12 V × 2 / 6 = 4 V.\nCheck: KVL: 4 V + 8 V = 12 V.
+18|The VDR gives a voltage withou|Rule: the VDR combines Ohm's law and RT in one step.\nApply: you get the voltage without finding the current first.\nCheck: E, the resistors and KVL are still used.
+19|E = 60 V on 10 kΩ, 20 kΩ and 3|Rule: Vx = E Rx / RT.\nApply: RT = 60 kΩ, V = 60 V × 20 kΩ / 60 kΩ = 20 V.\nCheck: 10 V is for 10 kΩ, 30 V is for 30 kΩ, 60 V is E.
+20|10 V across 1 kΩ and 4 kΩ. V o|Rule: Vx = E Rx / RT.\nApply: RT = 5 kΩ, V = 10 V × 4 kΩ / 5 kΩ = 8 V.\nCheck: KVL: 2 V + 8 V = 10 V.
+21|Check of the VDR with KVL: the|Rule: KVL gives ΣV = E.\nApply: the divided voltages must add up to E, for example 4 V + 8 V = 12 V.\nCheck: voltages are equal only for equal resistors, and they are not zero.
+22|Ground is the point of|Rule: voltages are potential differences, so a reference is needed.\nApply: ground is the 0 V reference and the other voltages are measured from it.\nCheck: ground is not a maximum of voltage or current.
+23|Vb means the voltage|Rule: one subscript means the voltage of a point from ground.\nApply: Vb is the voltage of b measured from ground.\nCheck: a voltage between b and c is Vbc.
+24|Vbc means the voltage|Rule: two subscripts mean a voltage between two points.\nApply: Vbc = Vb − Vc.\nCheck: the voltage of one point from ground has one subscript.
+25|Earth ground is|Rule: earth ground is a real connection to the earth.\nApply: it is used mainly for safety.\nCheck: the common point of a chassis is chassis ground, and earth ground has no fixed 12 V value.
+26|Chassis ground is|Rule: chassis ground is the common point of the circuit.\nApply: it is used as the 0 V reference.\nCheck: it is not always joined to the earth and it is not the supply terminal.
+27|In Example 3.3, point e is gro|Rule: with e as ground, Vb = Vbe.\nApply: Vb = 100 V.\nCheck: 0 V is the ground itself, 40 V and 60 V are other points.
+28|In Example 3.3 (E = 120 V, RT |Rule: Vbc = E R / RT with R = 20 kΩ in the example.\nApply: Vbc = 120 V × 20 kΩ / 60 kΩ = 40 V.\nCheck: 100 V, 60 V and 20 V belong to other points or resistors.
+29|In Example 3.3, Vc (from groun|Rule: Vc = E (R below c) / RT.\nApply: Vc = 120 V × (20 + 10) kΩ / 60 kΩ = 60 V.\nCheck: 40 V is Vbc, 100 V is Vb, 120 V is E.
+30|In a parallel circuit every br|Rule: parallel branches are across the same two points.\nApply: every branch has the same voltage.\nCheck: current and power differ by branch and resistance is a property of each branch.
+31|Parts are in parallel when the|Rule: parallel parts are across the same two points.\nApply: the current has two or more paths.\nCheck: series parts share the same current and are joined one after the other.
+32|The total current of a paralle|Rule: KCL at the node.\nApply: IT = I1 + I2 + I3.\nCheck: IT is not the biggest branch current, not an average and not zero.
+33|In parallel, the smaller R tak|Rule: I = V / R with the same V in every branch.\nApply: the smaller R takes more current.\nCheck: the voltage is the same in all branches.
+34|The equivalent conductance in |Rule: conductances add in parallel.\nApply: Geq = G1 + G2 + …\nCheck: G1 G2 and 1/(G1+G2) have wrong units, a difference lowers Geq.
+35|Req of two resistors in parall|Rule: for two resistors Req = product over sum.\nApply: Req = R1 R2 / (R1 + R2).\nCheck: R1 + R2 is the series value.
+36|Req in parallel is always|Rule: Req = 1 / (G1 + G2 + …).\nApply: more paths give more conductance and lower resistance, so Req is below the smallest R.\nCheck: Req is never above the biggest R in parallel.
+37|6 Ω in parallel with 3 Ω gives|Rule: Req = R1 R2 / (R1 + R2).\nApply: Req = 6 × 3 / (6 + 3) = 18 / 9 = 2 Ω.\nCheck: 9 Ω is the series value, 4.5 Ω is the average, 18 Ω is the product.
+38|4 Ω in parallel with 12 Ω give|Rule: Req = R1 R2 / (R1 + R2).\nApply: Req = 4 × 12 / 16 = 48 / 16 = 3 Ω.\nCheck: 16 Ω is the series value, 8 Ω is the average, 48 Ω is the product.
+39|Three 30 Ω resistors in parall|Rule: n equal resistors in parallel give R / n.\nApply: Req = 30 Ω / 3 = 10 Ω.\nCheck: 90 Ω is the series value, 30 Ω is one resistor, 3 Ω divides by 10.
+40|10 Ω, 20 Ω and 30 Ω in paralle|Rule: Geq = G1 + G2 + G3, Req = 1 / Geq.\nApply: Geq = 0.1 + 0.05 + 0.0333 = 0.1833 S, Req = 1 / 0.1833 = 5.455 Ω.\nCheck: the result is smaller than the smallest R (10 Ω).
+41|12 V is across 4 Ω in parallel|Rule: IT = V / Req.\nApply: Req = 4 × 12 / 16 = 3 Ω, IT = 12 V / 3 Ω = 4 A.\nCheck: KCL: 3 A + 1 A = 4 A.
+42|In that circuit the current in|Rule: I = V / R with V = 12 V.\nApply: I = 12 V / 4 Ω = 3 A.\nCheck: the 12 Ω branch takes 1 A, and 3 A + 1 A = 4 A.
+43|One lamp of a parallel circuit|Rule: each parallel branch is a separate path.\nApply: a burnt lamp opens only its own branch.\nCheck: the others keep the same voltage, so their brightness does not change.
+44|Houses use parallel wiring bec|Rule: parallel branches share the same voltage and work independently.\nApply: one failing lamp does not stop the others.\nCheck: parallel wiring does not save wire and does not change the voltage.
+45|In the CDR for two resistors, |Rule: I1 = IT R2 / (R1 + R2).\nApply: the resistor in the numerator is the other one, not the one you want.\nCheck: this differs from the VDR.
+46|In the CDR, the smaller R take|Rule: parallel branches have the same V, so I = V / R.\nApply: the smaller R takes the bigger share of the current.\nCheck: current takes the easy path, so the smaller R never takes less.
+47|9 mA enters 1 kΩ ∥ 2 kΩ. The c|Rule: I1 = IT R2 / (R1 + R2).\nApply: I1 = 9 mA × 2 kΩ / 3 kΩ = 6 mA.\nCheck: 3 mA is the other branch, 4.5 mA would be an equal split, 9 mA is IT.
+48|9 mA enters 1 kΩ ∥ 2 kΩ. The c|Rule: I2 = IT R1 / (R1 + R2).\nApply: I2 = 9 mA × 1 kΩ / 3 kΩ = 3 mA.\nCheck: KCL: 6 mA + 3 mA = 9 mA.
+49|IT = 60 mA splits in 10 Ω, 20 |Rule: Ix = IT Req / Rx.\nApply: Req = 5.455 Ω, I = 60 mA × 5.455 / 10 = 32.73 mA.\nCheck: 10, 20 and 60 mA are not the result of the formula.
+50|Check of the CDR with KCL: the|Rule: KCL gives ΣI = IT.\nApply: branch currents add up, for example 6 mA + 3 mA = 9 mA.\nCheck: they are equal only for equal resistors, and they are not zero.
+51|R₁ = 10 Ω, IT = 30 mA and I₂ =|Rule: I2 = IT R1 / (R1 + R2).\nApply: 10 = 30 × 10 / (10 + R2), so 10 + R2 = 30 and R2 = 20 Ω.\nCheck: I1 = 20 mA, and 20 + 10 = 30 mA.
+52|The VDR and the CDR differ bec|Rule: the VDR puts the wanted resistor on top.\nApply: the CDR puts the other resistor on top.\nCheck: the CDR uses the current IT, not the voltage.
+53|The method for series–parallel|Rule: slide 22 gives two steps.\nApply: first reduce to Req and find IT, then go back to find each part.\nCheck: the other lists do not describe the method.
+54|To find Req you start at|Rule: combine from the end of the circuit.\nApply: start at the far end and combine the series and parallel parts toward the source.\nCheck: do not start at the source or at the largest resistor.
+55|2 Ω in series with (6 Ω ∥ 3 Ω)|Rule: parallel first, then series.\nApply: 6 ∥ 3 = 18 / 9 = 2 Ω, then 2 Ω + 2 Ω = 4 Ω.\nCheck: 11 Ω adds everything, 2 Ω and 6 Ω use only one part.
+56|That circuit is on 8 V. The to|Rule: IT = E / Req.\nApply: IT = 8 V / 4 Ω = 2 A.\nCheck: 4 A divides by 2, 0.5 A inverts the ratio, 8 A is E.
+57|In that circuit the voltage on|Rule: V = I Req of the parallel part.\nApply: V = 2 A × 2 Ω = 4 V.\nCheck: KVL: 2 A × 2 Ω + 4 V = 8 V = E.
+58|In Example 3.7, R₅ + R₆ comes|Rule: reduce from the far end.\nApply: R5 + R6 are combined first.\nCheck: they are not left to the last step.
+59|In the challenge circuit on 24|Rule: IT = E / Req.\nApply: IT = 24 V / 8 Ω = 3 A.\nCheck: 8 A is Req, 192 A multiplies, 0.33 A inverts the ratio.
+60|In the challenge circuit, VAB |Rule: V = IT R.\nApply: VAB = 3 A × 2 Ω = 6 V.\nCheck: KVL: 6 V + 18 V = 24 V = E.
+61|In the challenge circuit, VBC |Rule: V = IT R.\nApply: VBC = 3 A × 6 Ω = 18 V.\nCheck: 6 V is VAB, 24 V is E, 8 V is Req.
+62|After finding IT, the currents|Rule: after IT, work back through the circuit.\nApply: use Ohm's law, the CDR and KCL step by step.\nCheck: KVL alone, the ohmmeter alone or Req alone cannot give every branch current.

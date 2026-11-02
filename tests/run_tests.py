@@ -17,11 +17,14 @@ def content_checks(pg):
     r = pg.evaluate('''()=>{ var ids=__X('CHAPTER_IDS'),MCQ=__X('MCQ'),GENS=__X('GENS'),CH=__X('CHAPTERS'),L=__X('LESSONS'),T=__X('TOOLS'),SIMS=__X('SIMS'),I=__X('IDEAS'),bad=[],counts={};
       ids.forEach(function(c){
         counts[c]={mcq:MCQ[c].length,gens:GENS[c].length,bank:CH[c].questions.length,lessons:L[c].length,tools:T[c].length,sims:SIMS[c].length};
-        MCQ[c].forEach(function(m,i){ var o=[m.ok].concat(m.wrong); if(new Set(o).size!==4||m.wrong.length!==3||!m.why) bad.push("mcq "+c+"-"+i); });
-        GENS[c].forEach(function(g){ for(var k=0;k<200;k++){ try{ var r=g.make(), s=JSON.stringify(r); if(!(typeof r.ans==="number"&&isFinite(r.ans))||/NaN|undefined|Infinity/.test(s)){ bad.push(g.id+" "+s.slice(0,160)); break; } }catch(e){ bad.push(g.id+" "+e.message); break; } } });
+        MCQ[c].forEach(function(m,i){ var o=[m.ok].concat(m.wrong); if(new Set(o).size!==4||m.wrong.length!==3||!m.why) bad.push("mcq "+c+"-"+i); if(String(m.why).split("\\n").length<3) bad.push("mcq without steps "+c+"-"+i); });
+        CH[c].questions.forEach(function(q,i){ if(String(q.a).split("\\n").length<3) bad.push("bank answer without steps "+c+"-"+i); });
+        (__X('EXAMPLES')[c]||[]).forEach(function(e){ if(!/^Idea:/.test(e.steps[0])||e.steps.length<3) bad.push("example without idea "+c+" "+e.id); });
+        GENS[c].forEach(function(g){ for(var k=0;k<200;k++){ try{ var r=g.make(), s=JSON.stringify(r); if(String(r.sol).split("\\n").length<3){ bad.push("generator without steps "+g.id); break; } if(!(typeof r.ans==="number"&&isFinite(r.ans))||/NaN|undefined|Infinity/.test(s)){ bad.push(g.id+" "+s.slice(0,160)); break; } }catch(e){ bad.push(g.id+" "+e.message); break; } } });
         CH[c].questions.forEach(function(q,i){ var f=q.fig(); if(/NaN|undefined|Infinity/.test(f)) bad.push("fig "+c+"."+i); });
         L[c].forEach(function(l){ if(!I[l.t]) bad.push("no idea for lesson "+l.t); if(l.fig&&/NaN|undefined/.test(l.fig())) bad.push("lesson fig "+l.t); });
       });
+      if(__X('WHYBAD')!==0) bad.push("WHY mismatch "+__X('WHYBAD'));
       return {bad:bad,counts:counts}; }''')
     fails.extend(r["bad"]); return r["counts"]
 
@@ -32,6 +35,16 @@ def ui_checks(pg, w):
     pg.goto(URL); pg.wait_for_timeout(200)
     if pg.query_selector("#nameIn"): pg.fill("#nameIn", "Test"); pg.fill("#sidIn", "20231234"); pg.click('[data-a="setname"]')
     ids = pg.evaluate('__X("CHAPTER_IDS")')
+    # Back must return to the previous page and tab, step by step
+    pg.click('[data-a="study"][data-v="2"]'); pg.click('[data-a="tab"][data-v="watch"]'); pg.click('[data-a="tab"][data-v="calc"]')
+    pg.click(".back"); 
+    if pg.evaluate('__X("S.tab")') != "watch": errs.append("back did not return to the Watch tab")
+    pg.click(".back")
+    if pg.evaluate('__X("S.tab")') != "learn": errs.append("back did not return to the Learn tab")
+    pg.click('[data-a="prac"]'); pg.click(".back")
+    if not pg.query_selector("nav.tabs"): errs.append("back from exercises did not return to study")
+    pg.click(".back"); pg.click(".back") if pg.query_selector(".back") else None
+    if pg.evaluate('__X("S.page")') != "dash": errs.append("back did not end on the chapter list")
     for ch in ids:
         pg.click('[data-a="go"][data-v="dash"]'); pg.click(f'[data-a="study"][data-v="{ch}"]'); pg.wait_for_timeout(50)
         for t in ("learn", "watch", "calc"):
@@ -64,10 +77,10 @@ def ui_checks(pg, w):
             elif pg.query_selector('[data-a="opt"]'): pg.click('[data-a="opt"]')
             elif pg.query_selector('[data-a="reveal"]'): pg.click('[data-a="reveal"]'); pg.click('[data-a="self"][data-v="1"]'); continue
             if pg.query_selector('[data-a="next"]'): pg.click('[data-a="next"]')
-        pg.click(".back")
+        pg.click('[data-a="go"][data-v="dash"]')
         pg.click(f'[data-a="study"][data-v="{ch}"]'); pg.click(f'[data-a="sheet"][data-v="{ch}"]'); pg.wait_for_timeout(50)
         if any(b in pg.inner_html("#page") for b in BAD) or not pg.query_selector(".sheet"): errs.append(f"sheet {ch}")
-        pg.click(".back"); pg.click(f'[data-a="quizch"][data-v="{ch}"]'); pg.wait_for_timeout(50)
+        pg.click('[data-a="go"][data-v="dash"]'); pg.click(f'[data-a="quizch"][data-v="{ch}"]'); pg.wait_for_timeout(50)
         if w == 1366:
             pg.click('[data-a="startquiz"]'); pg.wait_for_timeout(50)
             for _ in range(40):
@@ -79,7 +92,7 @@ def ui_checks(pg, w):
             except Exception: pass
             if not pg.query_selector(".res") or any(b in pg.inner_html("#page") for b in BAD): errs.append(f"quiz {ch}: " + pg.inner_text("#page")[:200].replace("\n", " | "))
             pg.click('[data-a="go"][data-v="dash"]')
-        else: pg.click(".back")
+        else: pg.click('[data-a="go"][data-v="dash"]')
     sw, iw = pg.evaluate("document.documentElement.scrollWidth"), pg.evaluate("innerWidth")
     if sw > iw: errs.append(f"horizontal overflow {sw}>{iw}")
     fails.extend(f"[{w}px] {e}" for e in errs)

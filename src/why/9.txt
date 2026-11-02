@@ -1,0 +1,50 @@
+0|What is impedance?|Rule: impedance is the opposition to AC.\nApply: Z = V / I, a complex number measured in ohms.\nCheck: it is not limited to DC, it is not stored energy and it is not capacitance.
+1|What is the impedance of a res|Rule: a resistor has no phase shift.\nApply: Z_R = R, with no imaginary part.\nCheck: j R and −j R belong to reactive parts, 1 / R is conductance.
+2|What is the impedance of an in|Rule: the voltage leads the current by 90° in an inductor.\nApply: Z_L = j X_L = j ω L.\nCheck: −j X_L is the capacitor sign, X_L alone has no phase, 1 / (j ω L) is an inverse.
+3|What is the impedance of a cap|Rule: the current leads the voltage by 90° in a capacitor.\nApply: Z_C = −j X_C = 1 / (j ω C).\nCheck: j X_C is the inductor sign, j ω C is an admittance.
+4|What is the total reactance in|Rule: the inductor and the capacitor have opposite signs.\nApply: X = X_L − X_C and Z = R + jX.\nCheck: X_L + X_C ignores the sign, X_C − X_L reverses it, X_L X_C is a product.
+5|Example 9.1. R = 1.5 Ω, X_L = |Rule: X = X_L − X_C.\nApply: X = 2.5 − 3 = −0.5 Ω, Z = 1.5 − j0.5 Ω = 1.58∠−18.44° Ω.\nCheck: 1.5 + j5.5 adds the reactances, 4 + j0 adds all the numbers, 1.5 + j0.5 has the wrong sign.
+6|Z = 1.5 − j0.5 Ω. Is the circu|Rule: the sign of X sets the type.\nApply: X = −0.5 Ω is negative, so the circuit is capacitive and the current leads the voltage.\nCheck: a positive R does not decide, and the circuit has a reactance, so it is not resistive only.
+7|Z = 3 + j4 Ω. What is |Rule: |Z| = √(R² + X²).\nApply: |Z| = √(3² + 4²) = √25 = 5 Ω.\nCheck: 7 Ω adds, 25 Ω forgets the root, 1 Ω subtracts.
+8|How are impedances in series c|Rule: series impedances add as complex numbers.\nApply: Z_T = Z1 + Z2 + …\nCheck: the product over sum is the parallel form.
+9|How are two impedances in para|Rule: parallel impedances follow the resistor form.\nApply: Z_T = Z1 Z2 / (Z1 + Z2).\nCheck: the sum is the series form, the other forms are wrong.
+10|Which rule gives the voltage a|Rule: the VDR puts the wanted impedance on top.\nApply: V2 = V Z2 / (Z1 + Z2).\nCheck: Z1 on top gives V1, the other forms have wrong units.
+11|Which complex form is best for|Rule: real and imaginary parts add directly.\nApply: rectangular form is best for adding.\nCheck: polar form needs a conversion before adding.
+12|Which complex form is best for|Rule: magnitudes multiply and angles add.\nApply: polar form is best for multiplying and dividing.\nCheck: rectangular form needs more steps.
+13|In the impedance triangle, wha|Rule: the impedance triangle has R as the adjacent side and X as the opposite side.\nApply: φ = tan⁻¹(X / R).\nCheck: tan⁻¹(R / X) swaps the sides, cos⁻¹ and sin⁻¹ use the wrong ratios.
+14|What is the unit of active pow|Rule: P is the average power turned into work or heat.\nApply: its unit is the watt.\nCheck: VA is for S, var is for Q, J is energy.
+15|What is the unit of reactive p|Rule: Q moves back and forth between the source and the reactive parts.\nApply: its unit is the var.\nCheck: W is for P, VA is for S.
+16|What is the unit of apparent p|Rule: S = V I with rms values.\nApply: its unit is the volt-ampere.\nCheck: W is for P, var is for Q, V is voltage.
+17|What is the complex power?|Rule: complex power has a real and an imaginary part.\nApply: S = P + jQ, and |S| is the apparent power.\nCheck: P − Q, P Q and P / Q are not complex power.
+18|Which equation links P, Q and |Rule: the power triangle has P and Q as sides and S as the hypotenuse.\nApply: S = √(P² + Q²).\nCheck: P + Q, P − Q and P Q are not the hypotenuse.
+19|What is the power factor?|Rule: the power factor is the ratio of real to apparent power.\nApply: PF = cos φ = P / S, between 0 and 1.\nCheck: sin φ and Q / S belong to Q, S / P is above 1.
+20|A load is inductive. Is the po|Rule: an inductive load has a lagging current.\nApply: the current lags the voltage, so the PF is lagging.\nCheck: leading belongs to capacitive loads, unity is resistive, zero is purely reactive.
+21|Example 9.5. P₁ = 10 W, P₂ = 3|Rule: active powers add.\nApply: P_T = 10 + 30 + 20 = 60 W.\nCheck: 30 W and 20 W are single values, 600 W multiplies.
+22|Example 9.5. Q_L = 70 var and |Rule: Q_T = Q_L − Q_C.\nApply: Q_T = 70 − 15 = 55 var.\nCheck: 85 var adds, −55 var reverses the sign, 1050 var multiplies.
+23|Why is the power factor correc|Rule: P = V I cos φ.\nApply: a higher PF lowers the current for the same P, so the line loss is smaller.\nCheck: PF correction does not raise the voltage or the frequency, and it does not remove R.
+24|What is placed in parallel wit|Rule: the capacitor supplies reactive power opposite to the inductive load.\nApply: a capacitor in parallel lowers the total Q.\nCheck: an inductor adds Q, a resistor adds P, a battery is DC.
+25|Z = R + jX. What is X when X_L|Rule: X = X_L − X_C.\nApply: X = 8 − 8 = 0 Ω, the circuit is resistive.\nCheck: 16 Ω adds, 8 Ω is one reactance, 64 Ω multiplies.
+26|Z = 10∠90° Ω. Which element is|Rule: Z_L = j X_L = X_L∠90°.\nApply: Z = 10∠90° Ω is a pure inductor.\nCheck: a resistor has angle 0°, a capacitor has −90°.
+27|Z = 10∠−90° Ω. Which element i|Rule: Z_C = −j X_C = X_C∠−90°.\nApply: Z = 10∠−90° Ω is a pure capacitor.\nCheck: an inductor has +90°, a resistor has 0°.
+28|φ > 0 in Z. What does it mean?|Rule: φ is the angle of Z.\nApply: φ > 0 means X > 0, so X_L > X_C and the circuit is inductive.\nCheck: a capacitive circuit has φ < 0 and R is never negative here.
+29|Example 9.1. Z = 1.5 − j0.5 Ω.|Rule: φ = tan⁻¹(X / R).\nApply: φ = tan⁻¹(−0.5 / 1.5) = −18.44°.\nCheck: +18.44° loses the sign, −71.57° swaps the sides, 0° would be resistive.
+30|Example 9.3. Z₃ = R_L + jX_L =|Rule: |Z| = √(R² + X²), θ = tan⁻¹(X / R).\nApply: |Z| = √(16 + 64) = 8.94 kΩ, θ = tan⁻¹(8 / 4) = 63.44°.\nCheck: 12∠45° adds, 8.94∠26.57° uses 4/8, 4∠63.44° keeps R as magnitude.
+31|Example 9.3. Z₂ // Z₃ = 16 − j|Rule: add the real parts and the imaginary parts.\nApply: Z_eq = 4 + (16 − j8) = 20 − j8 kΩ.\nCheck: 12 − j8 subtracts, 20 + j8 changes the sign, 4 − j8 forgets 16.
+32|Example 9.3. E = 100∠0° V and |Rule: I = E / Z_eq, divide the magnitudes and subtract the angles.\nApply: I1 = 100∠0° / 21.54∠−21.8° kΩ = 4.64∠21.8° mA.\nCheck: −21.8° ignores the subtraction of a negative angle, 2154 and 0.46 have the wrong power of ten.
+33|Which phasor form of KVL is co|Rule: KVL holds in AC with phasors.\nApply: the phasor sum of the voltages around a loop is zero.\nCheck: magnitudes do not add to zero, the real parts alone are not enough.
+34|Two impedances 4 Ω and j4 Ω ar|Rule: Z = 4 + j4 Ω, |Z| = √(R² + X²).\nApply: |Z| = √(16 + 16) = 4√2 = 5.66 Ω.\nCheck: 8 Ω adds the magnitudes, 4 Ω and 2 Ω are single values.
+35|What is the instantaneous powe|Rule: the instantaneous power is the product at each moment.\nApply: p = v i.\nCheck: V I cos φ is the average, I² X and V / I are not p.
+36|What is the average power of a|Rule: an inductor stores and returns energy every cycle.\nApply: the average power is zero.\nCheck: V I and I² X_L assume a real power, V I / 2 is a guess.
+37|What is the average power of a|Rule: P = V I cos φ.\nApply: for a resistor φ = 0°, so cos φ = 1 and P = V I.\nCheck: P = 0 is for pure L or C, V I sin φ is Q, V / I is resistance.
+38|Which formula gives P for a ge|Rule: only the in-phase part of the current does work.\nApply: P = V I cos φ.\nCheck: sin φ gives Q, tan φ and V / I are not P.
+39|Which formula gives Q for a ge|Rule: the 90° part of the current gives Q.\nApply: Q = V I sin φ.\nCheck: V I cos φ is P, P + S and V I are not Q.
+40|S = 100 VA and PF = 0.6. What |Rule: P = S × PF and Q = √(S² − P²).\nApply: P = 100 × 0.6 = 60 W, Q = √(100² − 60²) = 80 var.\nCheck: 60 var is P, 40 var and 100 var do not satisfy the triangle.
+41|Example 9.5. S_T = 81.39 VA an|Rule: PF = P / S.\nApply: PF = 60 W / 81.39 VA = 0.74.\nCheck: 0.68 and 0.81 are wrong ratios, 1.36 is S / P.
+42|Example 9.5. PF = 0.74. What i|Rule: φ = cos⁻¹ PF.\nApply: φ = cos⁻¹ 0.74 = 42.3°.\nCheck: 47.7° is the complement, 36.9° belongs to 0.8, 74° copies the PF.
+43|Example 9.6 adds lamps of 5 × |Rule: a lamp is resistive.\nApply: Q = 0 var.\nCheck: 500, 100 and 50 var would need a reactive part.
+44|Example 9.6. P_T = 7000 W and |Rule: S = √(P² + Q²).\nApply: S = √(7000² + 5790²) = 9084 VA.\nCheck: 12 790 VA adds, 1210 VA subtracts, 7000 VA is P.
+45|Example 9.6. S_T = 9084.3 VA o|Rule: I = S / V.\nApply: I = 9084.3 VA / 110 V = 82.6 A.\nCheck: 63.6 A and 9.08 A are wrong ratios, 110 A is the voltage.
+46|Example 9.6 raises the PF to 0|Rule: φ′ = cos⁻¹ PF′.\nApply: φ′ = cos⁻¹ 0.87 = 29.5°.\nCheck: 39.7° and 60.5° are other angles, 0.87° copies the PF.
+47|Example 9.6. P_T = 7000 W and |Rule: Q′ = P tan φ′.\nApply: Q′ = 7000 W × tan 29.5° = 7000 × 0.566 ≈ 3960 var.\nCheck: 5790 var is the old Q, 7000 var is P, 1830 var is a wrong product.
+48|After PF correction, what happ|Rule: I = S / V and P = S cos φ.\nApply: P stays the same and S falls, so the source current falls.\nCheck: it does not rise, stay the same or become zero.
+49|Slide 33. Q₁ = 3000 var and Q₂|Rule: Q_C = Q1 − Q2.\nApply: Q_C = 3000 var − 1315 var = 1685 var.\nCheck: 4315 var adds, 3000 var and 1315 var are single values.

@@ -1,0 +1,10 @@
+0|The lamp stays dark. Why?|Idea: current flows only in a closed loop.\nLook: the switch is open, so the loop is broken.\nResult: I = 0 A in every part, so the lamp stays dark.\nFix: close the switch.
+1|Is the ammeter connected corre|Idea: an ammeter reads the current that passes through it.\nLook: the meter is in parallel with R, so the current does not pass through it.\nResult: the connection is wrong.\nFix: open the circuit and place the ammeter in series with R.
+2|Which way does conventional cu|Idea: conventional current is the flow of positive charge.\nLook: it leaves the + terminal, goes through the lamp and returns to the − terminal.\nResult: in this circuit that direction is clockwise.\nCheck: electrons move the opposite way, the calculation results are the same.
+3|100 C passes through the ammet|Idea: current is charge per second.\nFormula: I = Q / t\nValues: I = 100 C / 50 s\nResult: I = 2 A
+4|24 J of work moves 4 C through|Idea: voltage is work per unit charge.\nFormula: V = W / Q\nValues: V = 24 J / 4 C\nResult: V = 6 V
+5|E = 2.5 V and R = 125 Ω. Find |Idea: Ohm's law gives the current in a resistor.\nFormula: I = E / R\nValues: I = 2.5 V / 125 Ω\nResult: I = 0.02 A = 20 mA
+6|A 9 V source drives 0.3 A. Fin|Idea: Ohm's law solved for R.\nFormula: R = V / I\nValues: R = 9 V / 0.3 A\nResult: R = 30 Ω
+7|The 47 Ω resistor carries 0.1 |Idea: the voltmeter reads the voltage across the resistor, V = I R.\nFormula: V = I R\nValues: V = 0.1 A × 47 Ω\nResult: V = 4.7 V
+8|Red, red, orange, gold. Find t|Idea: read the four-band code from left to right.\nBands 1 and 2: red = 2, red = 2, so the digits are 22.\nBand 3: orange = 10³, so three zeros follow: 22 000 Ω = 22 kΩ.\nBand 4: gold = ±5%.\nResult: 22 kΩ ± 5%.
+9|The resistor has G = 0.2 S. Fi|Idea: R is the reciprocal of G.\nFormula: R = 1 / G\nValues: R = 1 / 0.2 S\nResult: R = 5 Ω

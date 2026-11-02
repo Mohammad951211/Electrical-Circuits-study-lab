@@ -1,0 +1,30 @@
+0|What produces the force in a D|Rule: a current-carrying wire in a magnetic field feels a force.\nApply: this force turns the rotor.\nCheck: a charged capacitor, a changing resistance or friction do not produce the force.
+1|Which part of the motor turns |Rule: the rotor is the rotating part.\nApply: it carries the windings and turns the shaft.\nCheck: the stator is fixed, the brushes carry current, the frame holds the parts.
+2|What does the stator provide?|Rule: the stator is the fixed part.\nApply: it provides the fixed magnetic field with permanent magnets or electromagnets.\nCheck: the shaft and the commutation belong to the rotor side.
+3|What are the brushes of a brus|Rule: brushes press on the commutator and carry current.\nApply: they are made of graphite.\nCheck: copper wire, iron sheets and plastic do not suit a sliding contact.
+4|What does the commutator do?|Rule: the commutator reverses the coil connection.\nApply: it reverses when the armature becomes horizontal, so the rotation continues.\nCheck: it does not store energy, measure speed or cool the motor.
+5|Which motor has a stator made |Rule: a permanent magnet stator gives a fixed field.\nApply: this is the PM DC motor.\nCheck: series and shunt motors use field coils, the induction motor has no permanent magnets.
+6|In a series-wound motor, how a|Rule: in a series-wound motor the field coil is in series with the armature.\nApply: the same current flows in both.\nCheck: parallel is a shunt motor.
+7|Why must a series-wound motor |Rule: the speed rises when the load falls.\nApply: without load a series-wound motor can accelerate out of control.\nCheck: it does not stop at once, reverse or have zero current.
+8|Which motor suits elevators an|Rule: a series-wound motor gives very large torque at low speed.\nApply: it suits elevators and electric locomotives.\nCheck: shunt-wound motors suit constant speed, PM toy motors are small.
+9|Which motor keeps an almost co|Rule: a shunt-wound motor keeps an almost constant speed.\nApply: it suits fans, blowers and machine tools.\nCheck: series-wound speed varies with load, a PM motor at stall has no speed.
+10|Which motor has both series an|Rule: a compound motor combines both fields.\nApply: it has a series field and a shunt field.\nCheck: PM, induction and series-wound motors do not have both.
+11|Where is a PM DC motor typical|Rule: PM DC motors are small and low cost.\nApply: they are typical in windshield wipers and electric toothbrushes.\nCheck: locomotives, cranes and power stations need larger machines.
+12|In the motor model, what repre|Rule: the back EMF opposes the supply.\nApply: it is modelled as a voltage source V_bemf = K_E ω.\nCheck: a capacitor, a current source or a second resistor do not represent it.
+13|Which element is neglected in |Rule: the model keeps the main effects.\nApply: the coil inductance is usually small and is neglected.\nCheck: the coil resistance, the back EMF and the supply are kept.
+14|Which equation gives the motor|Rule: KVL in the armature circuit.\nApply: I = (V_in − V_bemf) / R.\nCheck: V_in R has a wrong unit, + would help the supply, K_E ω is the back EMF.
+15|Which equation gives the torqu|Rule: torque is proportional to the current.\nApply: T = K_T I.\nCheck: K_E ω is a voltage, I / K_T inverts the constant, V I is power.
+16|What happens to the back EMF w|Rule: V_bemf = K_E ω.\nApply: a higher speed gives a higher back EMF.\nCheck: it does not fall, stay the same or become negative.
+17|What is the starting (stall) t|Rule: at stall ω = 0, so V_bemf = 0.\nApply: I = V_in / R and T_s = K_T V_in / R.\nCheck: V_in / K_E is a speed, K_T K_E / R is α, zero is the no-load torque.
+18|In T = T_s − α ω, what is α?|Rule: combine T = K_T I with I = (V_in − K_E ω) / R.\nApply: T = K_T V_in / R − (K_T K_E / R) ω, so α = K_T K_E / R.\nCheck: K_T V_in / R is T_s, V_in / K_E is ω_NL.
+19|What is the no-load speed ω_NL|Rule: at no load T = 0.\nApply: the current is zero, so K_E ω = V_in and ω_NL = V_in / K_E.\nCheck: T_s and α² are not speeds, zero would be stall.
+20|Where is the mechanical power |Rule: P = T ω with T = T_s − α ω.\nApply: P is a parabola that peaks in the middle, at half the no-load speed.\nCheck: at stall ω = 0 and at no load T = 0, both give zero power.
+21|Which unit pairs give K_T = K_|Rule: in SI units K_T = K_E.\nApply: N·m/A and V/(rad/s) give the same number.\nCheck: V/rpm and in·oz/A use other units and W and J are not constants.
+22|What is the motor efficiency?|Rule: efficiency is output over input.\nApply: η = T ω / (V I), mechanical over electrical power.\nCheck: V I / (T ω) is inverted, T / ω and V / I are not power ratios.
+23|Motors file example. What is t|Rule: stall torque is where the line meets the torque axis.\nApply: in the file example it is 100 in·oz.\nCheck: 20, 260 and 1000 in·oz are other values or axes.
+24|Motors file example. What is t|Rule: at stall the back EMF is zero.\nApply: the current is the largest, 260 mA in the example.\nCheck: 100 mA is the torque value, 125 mA and 0 mA are not the stall reading.
+25|A 10 oz weight hangs from a 2 |Rule: T = F × r.\nApply: T = 10 oz × 2 in = 20 in·oz.\nCheck: 5 in·oz divides, 12 in·oz adds, 200 in·oz multiplies by 10 again.
+26|Which motor is the most widely|Rule: the AC induction motor is rugged and cheap.\nApply: it is the most widely used motor, with high efficiency and low maintenance.\nCheck: series, PM and stepper motors are used less.
+27|How does the rotor of an induc|Rule: the rotor of an induction motor is passive.\nApply: it gets its power by electromagnetic induction, with no brushes.\nCheck: brushes, a commutator or a battery belong to brushed DC motors.
+28|How far apart are the windings|Rule: three-phase windings are spaced equally around the circle.\nApply: 360° / 3 = 120°.\nCheck: 90°, 180° and 60° are other spacings.
+29|What happens at the pull-out t|Rule: the torque to speed curve of an induction motor has a peak.\nApply: beyond the pull-out torque the torque drops sharply and the motor cannot carry more load.\nCheck: the speed does not jump, the motor does not reverse, the current does not become zero.

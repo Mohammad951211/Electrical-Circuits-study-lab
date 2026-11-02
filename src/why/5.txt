@@ -1,0 +1,46 @@
+0|What does the superposition th|Rule: superposition applies to a linear circuit with several sources.\nApply: solve with each source acting alone, then add the partial responses.\nCheck: a product, the largest source only or an average do not follow the theorem.
+1|The theorem holds for which ki|Rule: the partial responses can be added only if the circuit is linear.\nApply: a circuit of linear elements such as resistors and independent sources qualifies.\nCheck: diodes are not linear, and the theorem does not need one source or capacitors.
+2|When one voltage source is tur|Rule: turning off a source means setting its value to zero.\nApply: a voltage source with 0 V is a wire, so it becomes a short circuit.\nCheck: an open circuit would block the current, a 1 Ω resistor adds resistance.
+3|When one current source is tur|Rule: turning off a source means setting its value to zero.\nApply: a current source with 0 A is a break in the wire, so it becomes an open circuit.\nCheck: a short circuit would carry current.
+4|Two sources give I' = 3 A and |Rule: the algebraic sum of the partial currents.\nApply: I = I′ + I″ = 3 A + 1 A = 4 A.\nCheck: 2 A subtracts, 3 A and 1 A use only one source.
+5|Two sources give I' = 3 A and |Rule: opposite directions subtract.\nApply: I = 3 A − 1 A = 2 A, in the direction of the larger one, I′.\nCheck: 4 A adds, 2 A in the direction of I″ has the wrong sign.
+6|Can superposition be used for |Rule: P = I² R is not linear in the current.\nApply: add the currents first, then find P.\nCheck: adding or multiplying partial powers gives the wrong result.
+7|What does Thevenin's theorem r|Rule: Thevenin's theorem simplifies a two-terminal linear network.\nApply: replace it by V_TH in series with R_TH.\nCheck: a current source alone, one resistor alone or two batteries are not the Thevenin form.
+8|How is V_TH found?|Rule: V_TH is the open-circuit voltage.\nApply: remove the load and find V_ab at the terminals a and b.\nCheck: the short-circuit current gives I_N, the loaded voltage is not V_TH.
+9|How is R_TH found?|Rule: R_TH is the resistance seen from a and b with all sources off.\nApply: short the voltage sources, open the current sources, then reduce the resistors.\nCheck: dividing V_TH by the load or adding all resistors is not the method.
+10|Example 5.4. Three 12 Ω resist|Rule: with E shorted the three 12 Ω resistors are in parallel.\nApply: R_TH = 12 Ω / 3 = 4 Ω.\nCheck: 36 Ω is the series value, 12 Ω is one resistor, 8 Ω is wrong arithmetic.
+11|V_TH = 16 V and R_TH = 4 Ω. Wh|Rule: I_L = V_TH / (R_TH + R_L).\nApply: I_L = 16 V / (4 Ω + 8 Ω) = 1.33 A.\nCheck: 2 A ignores R_L, 4 A ignores V_TH, 0.5 A is a wrong ratio.
+12|Where is the load placed in th|Rule: the Thevenin source is a series circuit.\nApply: the load closes the loop in series with V_TH and R_TH.\nCheck: parallel with V_TH or instead of a source is not the connection.
+13|Which step comes first in the |Rule: define the terminals first.\nApply: step 1 is to remove the load and mark a and b.\nCheck: I_N, maximum power and turning on sources twice are not the first step.
+14|What does Norton's theorem rep|Rule: Norton's theorem is the current-source form of Thevenin.\nApply: replace the network by I_N in parallel with R_N.\nCheck: a voltage source alone or a capacitor is not the Norton form.
+15|How is I_N found?|Rule: I_N is the short-circuit current.\nApply: short a and b and find the current through the short.\nCheck: the open-circuit voltage gives V_TH.
+16|What is the link between Norto|Rule: Norton and Thevenin are source conversions, as in Chapter 4.\nApply: R_N = R_TH and I_N = V_TH / R_TH.\nCheck: 2 R_TH, V_TH R_TH and zero do not match.
+17|V_TH = 16 V and R_TH = 4 Ω. Wh|Rule: I_N = V_TH / R_TH.\nApply: I_N = 16 V / 4 Ω = 4 A.\nCheck: 64 A multiplies, 12 A subtracts, 0.25 A inverts the ratio.
+18|I_N = 1 mA, R_N = 250 Ω, R_L =|Rule: CDR: I_L = I_N R_N / (R_N + R_L).\nApply: I_L = 1 mA × 250 Ω / (250 Ω + 100 Ω) = 0.71 mA.\nCheck: 1 mA ignores the split, 0.4 mA and 2.5 mA use the wrong resistor on top.
+19|When does a source deliver max|Rule: maximum power transfer needs matching.\nApply: the power is maximum when R_L = R_TH.\nCheck: R_L = 0 gives zero power, a very large R_L gives almost no current.
+20|What is the maximum load power|Rule: at R_L = R_TH the load voltage is V_TH / 2.\nApply: P = (V_TH / 2)² / R_TH = V_TH² / (4 R_TH).\nCheck: V_TH² / R_TH is four times too large.
+21|V_TH = 16 V and R_TH = 4 Ω. Wh|Rule: P_max = V_TH² / (4 R_TH).\nApply: P_max = 16² / (4 × 4) = 256 / 16 = 16 W.\nCheck: 64 W forgets the 4, 4 W and 32 W are wrong arithmetic.
+22|At maximum power transfer, wha|Rule: at R_L = R_TH the same current flows in R_L and R_TH.\nApply: half of the power is lost in R_TH, so the efficiency is 50 %.\nCheck: 100 % would mean no loss, 25 % and 75 % do not match equal resistors.
+23|If R_L is larger than R_TH, wh|Rule: the power curve has one peak at R_L = R_TH.\nApply: for R_L larger than R_TH the power is lower than P_max.\nCheck: it is not higher, equal or infinite.
+24|Example 5.1. E₁ = 48 V acts al|Rule: I = E / R′eq with E2 off.\nApply: I_a′ = 48 V / 24 Ω = 2 A.\nCheck: 0.5 A, 1 A and 4 A are wrong ratios.
+25|Example 5.1. I_c′ = 1 A and I_|Rule: same direction, so add.\nApply: I_c = 1 A + 0.5 A = 1.5 A.\nCheck: 0.5 A and 1 A use one source, 2 A is a wrong sum.
+26|Example 5.1. When E₂ acts alon|Rule: a voltage source that is turned off becomes a short circuit.\nApply: E1 is replaced by a jump wire.\nCheck: an open circuit would block the path.
+27|Example 5.2 has a voltage sour|Rule: a current source that is turned off becomes an open circuit.\nApply: I1 is removed when E acts alone.\nCheck: a short, a resistor or a voltage source are not equivalent to zero current.
+28|What is the last step of the s|Rule: superposition ends with an algebraic sum.\nApply: slide 3, step 4: add the contributions with their signs.\nCheck: multiplying, keeping the largest or averaging is wrong.
+29|A partial current points oppos|Rule: direction gives the sign.\nApply: a partial current against the reference direction is added with a minus sign.\nCheck: a plus sign, ignoring it or doubling it gives the wrong total.
+30|Example 5.4. Why does I_N equa|Rule: I_N is the short-circuit current.\nApply: the short across a and b carries all the current, so R2 and R3 get none: I_N = E / R1 = 4 A.\nCheck: R2 and R3 are not in series with R1 and E is not turned off.
+31|When R_TH is found, a current |Rule: R_TH needs all sources off.\nApply: a current source is replaced by an open circuit.\nCheck: a short, a resistor equal to R_L or a voltage source is wrong. Slide 12.
+32|Which equation links the three|Rule: V_TH = I_N R_TH.\nApply: for Example 5.4: 4 A × 4 Ω = 16 V.\nCheck: I_N / R_TH and I_N + R_TH have the wrong units.
+33|Thevenin's theorem is applied |Rule: slide 12, step 1.\nApply: remove the load branch, the branch with the unknown.\nCheck: the source branch or all resistors are not removed.
+34|V_TH = 16 V and R_TH = 4 Ω. R_|Rule: voltage divider.\nApply: V_L = V_TH R_L / (R_TH + R_L) = 16 V × 4 / 8 = 8 V.\nCheck: 16 V ignores R_TH, 4 V and 2 V are wrong ratios.
+35|Two networks have the same V_T|Rule: equivalence holds only at the terminals.\nApply: networks with the same V_TH and R_TH give the same load current and voltage.\nCheck: their inside resistors and internal losses can differ.
+36|Example 5.6. R_N = (R₁ // R₂ +|Rule: R_N = (R1 // R2 + R3) // R4.\nApply: 200 // 200 = 100 Ω, 100 + 400 = 500 Ω, 500 // 500 = 250 Ω.\nCheck: 500 Ω and 1300 Ω skip the parallel steps, 100 Ω is only the first step.
+37|Example 5.6. Why is I_N = I = |Rule: I_N is the short-circuit current.\nApply: the short has no resistance, so it takes the whole source current: I_N = I = 1 mA.\nCheck: equal resistors or turning the source off do not explain it.
+38|A Norton equivalent has I_N = |Rule: V_ab = I_N R_N.\nApply: V_ab = 4 A × 4 Ω = 16 V.\nCheck: 1 V divides, 8 V and 0 V are wrong.
+39|In the Norton circuit, how is |Rule: the Norton current splits between R_N and R_L.\nApply: I_L = I_N R_N / (R_N + R_L), the current divider rule.\nCheck: I_L = I_N ignores R_N, I_N R_L has the wrong unit.
+40|Book Table 5.1. V_S = 10 V and|Rule: P_L = I² R_L with I = V_S / (R_S + R_L).\nApply: I = 10 / 40 = 0.25 A, P_L = 0.25² × 10 = 0.625 W.\nCheck: 0.833 W is the maximum at 30 Ω.
+41|Book Table 5.1. At which load |Rule: the maximum is at R_L = R_S.\nApply: R_S = 30 Ω, so P_L = 0.833 W at R_L = 30 Ω.\nCheck: 10 Ω gives 0.625 W and 50 Ω gives 0.781 W.
+42|At maximum power transfer, wha|Rule: equal resistors split V_TH in half.\nApply: at maximum power the load voltage is V_TH / 2.\nCheck: zero, V_TH and 2 V_TH do not match the divider.
+43|R_TH = 8 Ω. Which load gives t|Rule: R_L = R_TH.\nApply: R_TH = 8 Ω, so the load for maximum power is 8 Ω.\nCheck: 4 Ω, 16 Ω and 0 Ω do not match.
+44|V_TH = 20 V and R_TH = 5 Ω. Wh|Rule: P_max = V_TH² / (4 R_TH).\nApply: P_max = 20² / (4 × 5) = 400 / 20 = 20 W.\nCheck: 80 W forgets the 4, 40 W and 10 W are wrong arithmetic.
+45|Book Table 5.1. V_S = 10 V, R_|Rule: P_L = I² R_L.\nApply: I = 10 / (30 + 50) = 0.125 A, P_L = 0.125² × 50 = 0.781 W.\nCheck: 0.833 W is the maximum at 30 Ω, 0.625 W is for 10 Ω.

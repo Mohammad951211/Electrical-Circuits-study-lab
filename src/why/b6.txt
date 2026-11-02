@@ -1,0 +1,8 @@
+0|Example 6.1. A charge of 50 μC|Idea: capacitor voltage is charge over capacitance.\nFormula: V = Q / C\nValues: V = 50 × 10⁻⁶ C / 1000 × 10⁻¹² F\nResult: V = 50 000 V = 50 kV
+1|Example 6.2. A = 0.004 m², d =|Idea: capacitance grows with the area and with k, and falls with the gap.\nFormula: C = 8.85 × 10⁻¹² k A / d\nValues: C = 8.85×10⁻¹² × 5 × 0.004 / 0.006\nResult: C = 29.5 pF
+2|Example 6.3. Find the energy s|Idea: the electric field stores energy.\nFormula: W = ½ C V²\nValues: W = ½ × 2.2 μF × (15 V)² = ½ × 2.2×10⁻⁶ × 225\nResult: W = 247.5 μJ
+3|Example 6.4. Find C_eq and the|Idea: four equal capacitors in series.\nStep 1: C_eq = 1 / (4 / 100 μF) = 100 / 4 = 25 μF.\nStep 2: Q = C_eq E = 25 μF × 25 V = 625 μC.\nResult: the same charge, 625 μC, is on each capacitor, because the same current flows.
+4|Example 6.5. Find C_eq and the|Idea: capacitors in parallel add.\nStep 1: C_eq = 100 + 10 + 20 + 320 = 450 μF.\nStep 2: Q = C_eq E = 450 μF × 60 V.\nResult: Q = 27 000 μC = 27 mC
+5|Example 6.6. Find C_eq between|Idea: reduce from the far end, in μF.\nStep 1: C4,5 in series = 0.5 × 2 / (0.5 + 2) = 0.4 μF.\nStep 2: parallel part: C2,3,4,5 = 2 + 0.6 + 0.4 = 3 μF.\nStep 3: in series with 6 μF: C_eq = 6 × 3 / (6 + 3).\nResult: C_eq = 2 μF
+6|Example 6.8. In steady state t|Idea: in DC steady state the inductor is a wire, so only R and R_w limit the current.\nStep 1: I = E / (R + R_w) = 20 / (45 + 5) = 0.4 A.\nStep 2: W = ½ L I², so L = 2 W / I².\nValues: L = 2 × 4 / 0.16\nResult: L = 50 H
+7|In DC steady state, how does e|Idea: in DC steady state the changing terms are zero.\nCapacitor: dv/dt = 0, so I = 0 and it acts as an open circuit, blocking DC.\nInductor: di/dt = 0, so V = 0 and it acts as a short circuit, passing DC.

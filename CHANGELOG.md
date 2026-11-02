@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.8.0 (2026-11-02)
+- Back button: every tab switch and filter change is kept in the page history. Back returns to the previous page and tab, and the phone Back gesture follows the same history.
+- Every quiz question (456) now explains the rule, the application to the numbers, and why the other options fail, in numbered steps.
+- Every practice question (84) has a worked answer with the idea, the formula, the values and the result. Circuit questions also show a check.
+- Every random question (84 types) starts with an Idea line and ends with a unit check.
+- Every worked example (80) starts with an Idea line that names the rule and why it is used.
+- New tests make sure that no question, answer or example is left without steps, and that Back works step by step.
+
 ## 1.7.0 (2026-11-01)
 - Worked examples moved from the Study page into Exercises: each chapter opens with 8 examples solved step by step, then the practice questions.
 - Examples now stay inside the slide material: book examples only where the slides name them, plus practice examples written for the slide topics (80 in total).
