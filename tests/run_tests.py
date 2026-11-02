@@ -74,8 +74,10 @@ def ui_checks(pg, w):
                 if not pg.query_selector('[data-a="qnext"]'): break
                 if pg.query_selector("#numIn"): pg.fill("#numIn", "1")
                 elif pg.query_selector('[data-a="opt"]'): pg.click('[data-a="opt"]')
-                pg.click('[data-a="qnext"]'); pg.wait_for_timeout(20)
-            if not pg.query_selector(".res") or any(b in pg.inner_html("#page") for b in BAD): errs.append(f"quiz {ch}")
+                pg.click('[data-a="qnext"]'); pg.wait_for_timeout(40)
+            try: pg.wait_for_selector(".res", timeout=3000)
+            except Exception: pass
+            if not pg.query_selector(".res") or any(b in pg.inner_html("#page") for b in BAD): errs.append(f"quiz {ch}: " + pg.inner_text("#page")[:200].replace("\n", " | "))
             pg.click('[data-a="go"][data-v="dash"]')
         else: pg.click(".back")
     sw, iw = pg.evaluate("document.documentElement.scrollWidth"), pg.evaluate("innerWidth")
