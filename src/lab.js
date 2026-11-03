@@ -155,27 +155,35 @@ function tpcs(){ return LESSONS[S.ch].map(function(l){ return l.t; }); }
 function curTopic(){ return S.ti < 0 ? "all" : tpcs()[S.ti]; }
 function topicCount(c, t){ return POOL[c].filter(function(d){ return d.topic === t; }).length; }
 function pStudy0(){
-  var tp = tpcs(); if (S.ti >= tp.length) S.ti = 0; if (S.tab === "study" && S.ti < 0) S.ti = 0;
-  var showPills = !(S.tab === "study" && S.view !== "learn"), allPill = S.tab !== "study";
+  var tp = tpcs(); if (S.ti >= tp.length) S.ti = 0; if (S.tab !== "study" && S.ti >= tp.length) S.ti = 0;
+  var showPills = S.tab !== "study", allPill = true;
+  WHOST = null; CHOST = null;
   $("page").innerHTML = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
     '<nav class="tabs main" role="tablist" aria-label="Chapter sections">' + MTABS.map(function(t){ return '<button class="tab" role="tab" data-a="mtab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + "</nav>" +
     (showPills ? '<div class="picker topics" aria-label="Topics">' + (allPill ? '<button class="pill" data-a="topic" data-v="-1" aria-pressed="' + (S.ti < 0) + '">All topics</button>' : "") + tp.map(function(t, i){ return '<button class="pill" data-a="topic" data-v="' + i + '" aria-pressed="' + (S.ti === i) + '">' + t + "</button>"; }).join("") + "</div>" : "") +
-    (S.tab === "study" ? '<nav class="tabs sub" role="tablist" aria-label="Study views">' + VIEWS.map(function(t){ return '<button class="tab" role="tab" data-a="view" data-v="' + t[0] + '" aria-selected="' + (S.view === t[0]) + '">' + t[1] + "</button>"; }).join("") + "</nav>" : "") +
     '<div id="ctab" class="ctab"></div>';
-  if (S.tab === "study") ({ learn: rLearn, watch: rWatch, calc: rCalc })[S.view]();
+  if (S.tab === "study") rLearn();
   else if (S.tab === "examples") rExamplesTab();
   else if (S.tab === "practice") rPracticeTab();
   else rQuizTab();
 }
-  function lessonCard(l){
+  function lessonCard(l, i){
     var id = IDEAS[l.t];
-    return '<section class="card lesson"><h2>' + l.t + "</h2>" + (id ? '<p class="idea"><b>In plain words.</b> ' + id.i + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" +
+    return '<section class="card lesson" id="les' + i + '"><h2>' + l.t + "</h2>" + (id ? '<p class="idea"><b>In plain words.</b> ' + id.i + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" +
       (l.f ? '<div class="fl">' + l.f.map(function(f){ return '<span class="formula">' + fmtMath(f) + "</span>"; }).join(" ") + "</div>" : "") + (l.fig ? fig(l.fig()) : "") + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + (id ? '<p class="slip"><b>Common slip.</b> ' + id.s + "</p>" : "") +
-      '<div class="btnrow"><button class="btn" data-watch="' + (id && id.w != null ? id.w : 0) + '">Watch</button><button class="btn ghost" data-a="mtab" data-v="examples">See examples</button><button class="btn ghost" data-a="mtab" data-v="practice">Practice this topic</button></div></section>';
+      '<div class="btnrow"><button class="btn" data-watch="' + (id && id.w != null ? id.w : 0) + '" data-les="' + i + '" aria-expanded="false">Watch</button></div><div class="wpanel" id="wp' + i + '"></div></section>';
   }
   function rLearn(){
-    $("ctab").innerHTML = '<div class="lessons">' + lessonCard(LESSONS[S.ch][S.ti]) + "</div>";
-    $("ctab").querySelectorAll("[data-watch]").forEach(function(b){ b.onclick = function(){ pushHist(); (WSIM[S.ch] = WSIM[S.ch] || {}).k = +b.dataset.watch; S.view = "watch"; render(); window.scrollTo(0, 0); }; });
+    $("ctab").innerHTML = '<div class="lessons">' + LESSONS[S.ch].map(lessonCard).join("") + '</div>' +
+      (TOOLS[S.ch] && TOOLS[S.ch].length ? '<details class="card calcwrap"><summary><span>Calculator</span><b>Try your own numbers</b></summary><div id="calcbox"></div></details>' : "");
+    var open = null;
+    function closeW(){ if (open != null){ var o = $("wp" + open); if (o) o.innerHTML = ""; var ob = document.querySelector('[data-les="' + open + '"]'); if (ob){ ob.setAttribute("aria-expanded", "false"); ob.textContent = "Watch"; } open = null; WHOST = null; } }
+    $("ctab").querySelectorAll("[data-watch]").forEach(function(b){ b.onclick = function(){
+      var i = +b.dataset.les, was = open === i; closeW(); if (was) return;
+      open = i; b.setAttribute("aria-expanded", "true"); b.textContent = "Hide animation"; WHOST = $("wp" + i);
+      (WSIM[S.ch] = WSIM[S.ch] || {}).k = +b.dataset.watch; rWatch();
+    }; });
+    var cw = document.querySelector(".calcwrap"); if (cw) cw.addEventListener("toggle", function(){ if (cw.open) rCalc($("calcbox")); else { $("calcbox").innerHTML = ""; CHOST = null; } });
   }
 
   var EXS = {}, EXCH = "1";
@@ -219,9 +227,11 @@ function pStudy0(){
     f("exNext", function(){ st.n++; rExamples(); }); f("exAll", function(){ st.n = steps.length; rExamples(); }); f("exHide", function(){ st.n = 0; rExamples(); }); f("exNew", function(){ st.gen = null; st.n = 0; rExamples(); });
   }
 
-  function rCalc(){
+  var CHOST = null;
+  function rCalc(host){
+    if (host) CHOST = host; var H = CHOST || H;
     var tools = TOOLS[S.ch], k = CALC[S.ch] || 0, t = tools[k];
-    $("ctab").innerHTML = '<div class="picker">' + tools.map(function(x, i){ return '<button class="pill" data-tool="' + i + '" aria-pressed="' + (i === k) + '">' + x.name + "</button>"; }).join("") + "</div>" +
+    H.innerHTML = '<div class="picker">' + tools.map(function(x, i){ return '<button class="pill" data-tool="' + i + '" aria-pressed="' + (i === k) + '">' + x.name + "</button>"; }).join("") + "</div>" +
       '<div class="grid2 wide-left"><section class="card"><p class="hint">' + t.hint + "</p>" + t.fields() + '<div class="btnrow"><button class="btn" id="goCalc">Calculate</button></div><div class="msg" id="cmsg" role="alert"></div></section>' +
       '<section class="card"><div id="cfig"></div><div class="steps" id="csteps"></div></section></div>';
     var run = function(){
@@ -230,7 +240,7 @@ function pStudy0(){
       $("cmsg").textContent = ""; $("cfig").innerHTML = r.raw ? fig(r.fig) : fig(r.fig); $("csteps").innerHTML = r.steps;
     };
     $("goCalc").onclick = run;
-    $("ctab").querySelectorAll("input,select").forEach(function(el){ el.addEventListener("input", run); el.addEventListener("change", run); });
+    H.querySelectorAll("input,select").forEach(function(el){ el.addEventListener("input", run); el.addEventListener("change", run); });
     run();
   }
 
@@ -419,7 +429,6 @@ document.addEventListener("click", function(e){
   else if (a === "study"){ var tb = b.dataset.t || "study"; S.view = "learn"; S.ti = (tb === "study" || tb === "examples") ? 0 : -1; PR.q = null; go("study", v, tb); }
   else if (a === "mtab"){ if (S.tab !== v){ pushHist(); S.tab = v; if (v === "study" && S.ti < 0) S.ti = 0; render(); window.scrollTo(0, 0); } }
   else if (a === "topic"){ if (S.ti !== +v){ pushHist(); S.ti = +v; if (S.tab === "practice") { PR.q = null; PR.last = null; } render(); } }
-  else if (a === "view"){ if (S.view !== v){ pushHist(); S.view = v; render(); } }
   else if (a === "tool"){ }
   else if (a === "praction"){ var p = v.split("|"); PR.q = null; PR.last = null; S.view = "learn"; S.ti = Math.max(0, LESSONS[p[0]].map(function(l){ return l.t; }).indexOf(p[1])); go("study", p[0], "practice"); render(); }
   else if (a === "setname"){ var n = $("nameIn").value.trim(), id = $("sidIn").value.trim();

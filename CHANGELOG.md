@@ -2,7 +2,7 @@
 
 ## 1.9.0 (2026-11-03)
 - New chapter layout with four tabs: Study, Examples, Practice and Quiz. Each tab shows the topics of the chapter as buttons, so the student works on one topic at a time.
-- Study: one topic per page, with a Watch button that opens the interactive animation. The calculator stays in the same tab.
+- Study: all topics of the chapter are listed under each other. Each topic has a Watch button that opens the circuit and the animation in a panel inside the topic, without leaving the page. The calculator is a drop-down at the end of the page.
 - Examples: three or more worked examples per topic (book and slide examples plus similar ones written for the course), each step with a short reason. Chapters 1 to 6 and Motors are complete. Chapters 8, 9 and 11 follow after their slides are processed.
 - Practice: at least 10 questions per topic, solved step by step. Quiz: a quiz for one topic or for the whole chapter.
 - Formulas in the solutions are written as stacked fractions (numerator over denominator).

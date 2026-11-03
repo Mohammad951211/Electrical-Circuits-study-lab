@@ -48,29 +48,32 @@ def ui_checks(pg, w):
     pg.click('[data-a="study"][data-v="2"][data-t="study"]'); pg.click('[data-a="mtab"][data-v="examples"]'); pg.click('[data-a="mtab"][data-v="practice"]')
     pg.click(".back")
     if pg.evaluate('__X("S.tab")') != "examples": errs.append("back did not return to the Examples tab")
-    pg.click(".back")
-    if pg.evaluate('__X("S.tab")') != "study": errs.append("back did not return to the Study tab")
     pg.click('[data-a="topic"][data-v="2"]'); pg.click(".back")
     if pg.evaluate('__X("S.ti")') != 0: errs.append("back did not return to the previous topic")
+    pg.click(".back")
+    if pg.evaluate('__X("S.tab")') != "study": errs.append("back did not return to the Study tab")
     pg.click(".back")
     if pg.evaluate('__X("S.page")') != "dash": errs.append("back did not end on the chapter list")
     done = ("1", "2", "3", "4", "5", "6", "M")
     for ch in ids:
         pg.click('[data-a="go"][data-v="dash"]'); pg.click(f'[data-a="study"][data-v="{ch}"][data-t="study"]'); pg.wait_for_timeout(50)
         nt = pg.evaluate(f'__X("LESSONS[\\"{ch}\\"].length")')
+        if len(pg.query_selector_all(".lesson")) != nt or pg.query_selector(".topics") or pg.query_selector(".tabs.sub"): errs.append(f"study layout {ch}")
+        if any(b in pg.inner_html("#ctab") for b in BAD): errs.append(f"study {ch}")
         for k in range(nt):
-            pg.click(f'[data-a="topic"][data-v="{k}"]'); pg.wait_for_timeout(30)
-            if not pg.query_selector(".lesson") or not pg.query_selector("[data-watch]") or any(b in pg.inner_html("#ctab") for b in BAD): errs.append(f"study {ch} topic {k}")
-        pg.click('[data-watch]'); pg.wait_for_timeout(60)
-        if pg.evaluate('__X("S.view")') != "watch": errs.append(f"Watch button {ch}")
-        n = pg.evaluate(f'__X("SIMS[\\"{ch}\\"].length")')
-        for k in range(n):
-            pg.click(f'[data-sim="{k}"]'); pg.wait_for_timeout(80)
-            for sl in pg.query_selector_all("input[type=range]"):
-                for val in (sl.get_attribute("min"), sl.get_attribute("max")):
-                    sl.evaluate(f'e=>{{e.value={val};e.dispatchEvent(new Event("input"))}}'); pg.wait_for_timeout(30)
-                    if any(b in pg.inner_html("#simsvg") + pg.inner_text("#simout") for b in BAD): errs.append(f"sim {ch}.{k} at {val}")
-        pg.click('[data-a="view"][data-v="calc"]'); pg.wait_for_timeout(60)
+            pg.click(f'[data-les="{k}"]'); pg.wait_for_timeout(80)
+            if not pg.query_selector(f"#wp{k} #simsvg"): errs.append(f"Watch panel {ch} topic {k}")
+            if k == 0:
+                n = pg.evaluate(f'__X("SIMS[\\"{ch}\\"].length")')
+                for j in range(n):
+                    pg.click(f'[data-sim="{j}"]'); pg.wait_for_timeout(80)
+                    for sl in pg.query_selector_all("input[type=range]"):
+                        for val in (sl.get_attribute("min"), sl.get_attribute("max")):
+                            sl.evaluate(f'e=>{{e.value={val};e.dispatchEvent(new Event("input"))}}'); pg.wait_for_timeout(30)
+                            if any(b in pg.inner_html("#simsvg") + pg.inner_text("#simout") for b in BAD): errs.append(f"sim {ch}.{j} at {val}")
+            pg.click(f'[data-les="{k}"]'); pg.wait_for_timeout(30)
+            if pg.query_selector(f"#wp{k} #simsvg"): errs.append(f"Watch panel did not close {ch} {k}")
+        pg.click(".calcwrap summary"); pg.wait_for_timeout(60)
         n = pg.evaluate(f'__X("TOOLS[\\"{ch}\\"].length")')
         for k in range(n):
             pg.click(f'[data-tool="{k}"]'); pg.wait_for_timeout(50)
@@ -118,8 +121,8 @@ def ui_checks(pg, w):
 def axe_checks(pg):
     if not AXE: print("axe-core not found, accessibility check skipped"); return
     src = open(AXE).read(); pg.goto(URL); pg.wait_for_timeout(200)
-    for name, act in [("dashboard", None), ("study", '[data-a="study"][data-v="8"][data-t="study"]'), ("watch", '[data-a="view"][data-v="watch"]'), ("calc", '[data-a="view"][data-v="calc"]'), ("examples", '[data-a="mtab"][data-v="examples"]'), ("practice", '[data-a="mtab"][data-v="practice"]'), ("quiz", '[data-a="mtab"][data-v="quiz"]'), ("progress", '[data-a="go"][data-v="progress"]')]:
-        if act: pg.click(act); pg.wait_for_timeout(150)
+    for name, act in [("dashboard", None), ("study", '[data-a="study"][data-v="8"][data-t="study"]'), ("watch", '[data-les="0"]'), ("calc", '.calcwrap summary'), ("examples", '[data-a="mtab"][data-v="examples"]'), ("practice", '[data-a="mtab"][data-v="practice"]'), ("quiz", '[data-a="mtab"][data-v="quiz"]'), ("progress", '[data-a="go"][data-v="progress"]')]:
+        if act: pg.click(act); pg.mouse.move(5, 5); pg.wait_for_timeout(500)
         pg.add_script_tag(content=src)
         v = pg.evaluate('async()=>(await axe.run(document,{resultTypes:["violations"]})).violations.map(v=>v.id+" ("+v.nodes.length+")")')
         fails.extend(f"axe {name}: {x}" for x in v)
