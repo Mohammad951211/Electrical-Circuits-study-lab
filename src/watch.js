@@ -265,7 +265,8 @@ SIMS["4"] = [
 function flipBat(x, yt, yb){ var m = (yt + yb) / 2; return wr(x + "," + yt + " " + x + "," + (m - 5)) + wr(x + "," + (m + 5) + " " + x + "," + yb) + '<line class="w thick" x1="' + (x - 8) + '" y1="' + (m - 5) + '" x2="' + (x + 8) + '" y2="' + (m - 5) + '"/><line class="w" x1="' + (x - 15) + '" y1="' + (m + 5) + '" x2="' + (x + 15) + '" y2="' + (m + 5) + '"/>' + tx(x + 24, m - 8, "−", "start") + tx(x + 24, m + 16, "+", "start"); }
 
 // ---------- player ----------
-var WSIM = {}, SIMTOK = 0, SIMPLAY = true;
+var WSIM = {}, SIMTOK = 0, SIMPLAY = true, WHOST = null;
+function WH(){ return WHOST || WH(); }
 function simDefaults(sim){ var v = {}; sim.ctl.forEach(function(c){ v[c.id] = c.val; }); return v; }
 function rWatch(){
   var list = SIMS[S.ch], st = WSIM[S.ch] || (WSIM[S.ch] = { k: 0 }), sim = list[st.k], tok = ++SIMTOK, v = st.v && st.k === st.vk ? st.v : (st.v = simDefaults(sim)); st.vk = st.k;
@@ -276,7 +277,7 @@ function rWatch(){
     if (c.type === "sel") return '<div class="ctl"><label class="lbl" for="c_' + c.id + '">' + c.label + '</label><select id="c_' + c.id + '" data-c="' + c.id + '">' + c.opts.map(function(o, i){ return '<option value="' + i + '"' + (v[c.id] === i ? " selected" : "") + ">" + o + "</option>"; }).join("") + "</select></div>";
     return '<div class="ctl"><label class="lbl" for="c_' + c.id + '">' + sbs(c.label) + ' <b id="cv_' + c.id + '">' + v[c.id] + " " + c.unit + '</b></label><input type="range" id="c_' + c.id + '" data-c="' + c.id + '" min="' + c.min + '" max="' + c.max + '" step="' + c.step + '" value="' + v[c.id] + '"></div>';
   }).join("");
-  $("ctab").innerHTML = '<div class="simpick">' + chips + '</div><section class="card sim"><p class="mut simdesc">' + sbs(sim.d) + '</p><div class="simgrid"><div class="simfig"><svg id="simsvg" viewBox="0 0 480 262" role="img" aria-label="' + sim.t + '" data-tok="' + tok + '"></svg><button class="btn sm ghost" id="simplay">' + (SIMPLAY ? "Pause" : "Play") + '</button></div><div class="simctl">' + ctl + '<div class="sol" id="simout" aria-live="polite"></div></div></div></section>' +
+  WH().innerHTML = '<div class="simpick">' + chips + '</div><section class="card sim"><p class="mut simdesc">' + sbs(sim.d) + '</p><div class="simgrid"><div class="simfig"><svg id="simsvg" viewBox="0 0 480 262" role="img" aria-label="' + sim.t + '" data-tok="' + tok + '"></svg><button class="btn sm ghost" id="simplay">' + (SIMPLAY ? "Pause" : "Play") + '</button></div><div class="simctl">' + ctl + '<div class="sol" id="simout" aria-live="polite"></div></div></div></section>' +
     '<div class="grid2"><section class="card"><h2 class="sh">What to notice</h2><ul class="notice">' + sim.look.map(function(x){ return "<li>" + sbs(x) + "</li>"; }).join("") + '</ul></section><section class="card"><h2 class="sh">Try this</h2>' + sim.tryit.map(function(q){ return '<details class="try"><summary>' + sbs(q[0]) + "</summary><p>" + sbs(q[1]) + "</p></details>"; }).join("") + "</section></div>";
   function outs(){ $("simout").innerHTML = sim.out(v).map(function(l){ return "<div>" + sbs(l) + "</div>"; }).join(""); }
   outs();
@@ -288,9 +289,9 @@ function rWatch(){
     el.innerHTML = sim.draw(v, ph); requestAnimationFrame(frame);
   }
   frame(performance.now());
-  $("ctab").querySelectorAll("[data-sim]").forEach(function(b){ b.onclick = function(){ st.k = +b.dataset.sim; rWatch(); }; });
+  WH().querySelectorAll("[data-sim]").forEach(function(b){ b.onclick = function(){ st.k = +b.dataset.sim; rWatch(); }; });
   $("simplay").onclick = function(){ SIMPLAY = !SIMPLAY; st.touched = true; this.textContent = SIMPLAY ? "Pause" : "Play"; };
-  $("ctab").querySelectorAll("input[data-c]").forEach(function(inp){ inp.oninput = function(){ v[inp.dataset.c] = +inp.value; var c = sim.ctl.filter(function(x){ return x.id === inp.dataset.c; })[0]; $("cv_" + c.id).textContent = inp.value + " " + c.unit; outs(); }; });
-  $("ctab").querySelectorAll("select[data-c]").forEach(function(sel){ sel.onchange = function(){ v[sel.dataset.c] = +sel.value; outs(); }; });
-  $("ctab").querySelectorAll("button[data-o]").forEach(function(b){ b.onclick = function(){ v[b.dataset.c] = +b.dataset.o; rWatch(); }; });
+  WH().querySelectorAll("input[data-c]").forEach(function(inp){ inp.oninput = function(){ v[inp.dataset.c] = +inp.value; var c = sim.ctl.filter(function(x){ return x.id === inp.dataset.c; })[0]; $("cv_" + c.id).textContent = inp.value + " " + c.unit; outs(); }; });
+  WH().querySelectorAll("select[data-c]").forEach(function(sel){ sel.onchange = function(){ v[sel.dataset.c] = +sel.value; outs(); }; });
+  WH().querySelectorAll("button[data-o]").forEach(function(b){ b.onclick = function(){ v[b.dataset.c] = +b.dataset.o; rWatch(); }; });
 }

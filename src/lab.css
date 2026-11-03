@@ -177,3 +177,9 @@ select.theme{padding:5px 10px;margin-top:6px;appearance:auto;text-transform:none
 .fl{display:flex;flex-wrap:wrap;gap:8px 14px;margin:8px 0}
 .tabs.main{margin-bottom:6px}
 .lessons .lesson{max-width:980px}
+.wpanel{margin-top:12px}
+.wpanel:empty{display:none}
+.lessons{display:flex;flex-direction:column;gap:16px}
+.calcwrap{margin-top:16px}
+.calcwrap summary{display:flex;justify-content:space-between;cursor:pointer;font-weight:700}
+.tab[aria-selected="true"]{color:#084a78}
