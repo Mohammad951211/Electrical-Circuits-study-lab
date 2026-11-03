@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.0 (2026-11-03)
+- New chapter layout with four tabs: Study, Examples, Practice and Quiz. Each tab shows the topics of the chapter as buttons, so the student works on one topic at a time.
+- Study: one topic per page, with a Watch button that opens the interactive animation. The calculator stays in the same tab.
+- Examples: three or more worked examples per topic (book and slide examples plus similar ones written for the course), each step with a short reason. Chapters 1 to 6 and Motors are complete. Chapters 8, 9 and 11 follow after their slides are processed.
+- Practice: at least 10 questions per topic, solved step by step. Quiz: a quiz for one topic or for the whole chapter.
+- Formulas in the solutions are written as stacked fractions (numerator over denominator).
+- Circuit figures are larger.
+- New tests check that every topic has the required examples, practice questions and quiz questions.
+
 ## 1.8.0 (2026-11-02)
 - Back button: every tab switch and filter change is kept in the page history. Back returns to the previous page and tab, and the phone Back gesture follows the same history.
 - Every quiz question (456) now explains the rule, the application to the numbers, and why the other options fail, in numbered steps.

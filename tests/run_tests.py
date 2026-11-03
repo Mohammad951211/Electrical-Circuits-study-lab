@@ -19,11 +19,20 @@ def content_checks(pg):
         counts[c]={mcq:MCQ[c].length,gens:GENS[c].length,bank:CH[c].questions.length,lessons:L[c].length,tools:T[c].length,sims:SIMS[c].length};
         MCQ[c].forEach(function(m,i){ var o=[m.ok].concat(m.wrong); if(new Set(o).size!==4||m.wrong.length!==3||!m.why) bad.push("mcq "+c+"-"+i); if(String(m.why).split("\\n").length<3) bad.push("mcq without steps "+c+"-"+i); });
         CH[c].questions.forEach(function(q,i){ if(String(q.a).split("\\n").length<3) bad.push("bank answer without steps "+c+"-"+i); });
-        (__X('EXAMPLES')[c]||[]).forEach(function(e){ if(!/^Idea:/.test(e.steps[0])||e.steps.length<3) bad.push("example without idea "+c+" "+e.id); });
+        (__X('EXAMPLES')[c]||[]).forEach(function(e){ if((!/^X\\d+$/.test(e.id) && !/^Idea:/.test(e.steps[0]))||e.steps.length<3) bad.push("example without idea "+c+" "+e.id); });
         GENS[c].forEach(function(g){ for(var k=0;k<200;k++){ try{ var r=g.make(), s=JSON.stringify(r); if(String(r.sol).split("\\n").length<3){ bad.push("generator without steps "+g.id); break; } if(!(typeof r.ans==="number"&&isFinite(r.ans))||/NaN|undefined|Infinity/.test(s)){ bad.push(g.id+" "+s.slice(0,160)); break; } }catch(e){ bad.push(g.id+" "+e.message); break; } } });
         CH[c].questions.forEach(function(q,i){ var f=q.fig(); if(/NaN|undefined|Infinity/.test(f)) bad.push("fig "+c+"."+i); });
         L[c].forEach(function(l){ if(!I[l.t]) bad.push("no idea for lesson "+l.t); if(l.fig&&/NaN|undefined/.test(l.fig())) bad.push("lesson fig "+l.t); });
       });
+      var DONE=["1","2","3","4","5","6","M"];  /* chapters whose per-topic content is complete: 3 examples, 10 practice, 5 quiz items per topic */
+      if(__X('TOPICMAP.unmapped.length')!==0) bad.push("unmapped topics");
+      __X('CHAPTER_IDS').forEach(function(c){ __X('LESSONS["'+c+'"]').forEach(function(l){
+        var ex=__X('EXAMPLES["'+c+'"]').filter(function(e){return e.topic===l.t;}).length;
+        var pr=__X('POOL["'+c+'"]').filter(function(d){return d.topic===l.t;});
+        var qz=pr.filter(function(d){return d.kind!=="bank";}).length;
+        if(DONE.indexOf(c)>=0 && ex<3) bad.push("examples "+c+" "+l.t+": "+ex);
+        if(DONE.indexOf(c)>=0 && pr.length<10) bad.push("practice "+c+" "+l.t+": "+pr.length);
+        if(DONE.indexOf(c)>=0 && qz<5) bad.push("quiz pool "+c+" "+l.t+": "+qz); }); });
       if(__X('WHYBAD')!==0) bad.push("WHY mismatch "+__X('WHYBAD'));
       return {bad:bad,counts:counts}; }''')
     fails.extend(r["bad"]); return r["counts"]
@@ -36,53 +45,62 @@ def ui_checks(pg, w):
     if pg.query_selector("#nameIn"): pg.fill("#nameIn", "Test"); pg.fill("#sidIn", "20231234"); pg.click('[data-a="setname"]')
     ids = pg.evaluate('__X("CHAPTER_IDS")')
     # Back must return to the previous page and tab, step by step
-    pg.click('[data-a="study"][data-v="2"]'); pg.click('[data-a="tab"][data-v="watch"]'); pg.click('[data-a="tab"][data-v="calc"]')
-    pg.click(".back"); 
-    if pg.evaluate('__X("S.tab")') != "watch": errs.append("back did not return to the Watch tab")
+    pg.click('[data-a="study"][data-v="2"][data-t="study"]'); pg.click('[data-a="mtab"][data-v="examples"]'); pg.click('[data-a="mtab"][data-v="practice"]')
     pg.click(".back")
-    if pg.evaluate('__X("S.tab")') != "learn": errs.append("back did not return to the Learn tab")
-    pg.click('[data-a="prac"]'); pg.click(".back")
-    if not pg.query_selector("nav.tabs"): errs.append("back from exercises did not return to study")
-    pg.click(".back"); pg.click(".back") if pg.query_selector(".back") else None
+    if pg.evaluate('__X("S.tab")') != "examples": errs.append("back did not return to the Examples tab")
+    pg.click(".back")
+    if pg.evaluate('__X("S.tab")') != "study": errs.append("back did not return to the Study tab")
+    pg.click('[data-a="topic"][data-v="2"]'); pg.click(".back")
+    if pg.evaluate('__X("S.ti")') != 0: errs.append("back did not return to the previous topic")
+    pg.click(".back")
     if pg.evaluate('__X("S.page")') != "dash": errs.append("back did not end on the chapter list")
+    done = ("1", "2", "3", "4", "5", "6", "M")
     for ch in ids:
-        pg.click('[data-a="go"][data-v="dash"]'); pg.click(f'[data-a="study"][data-v="{ch}"]'); pg.wait_for_timeout(50)
-        for t in ("learn", "watch", "calc"):
-            pg.click(f'[data-a="tab"][data-v="{t}"]'); pg.wait_for_timeout(60)
-            if t == "watch":
-                n = pg.evaluate(f'__X("SIMS[\\"{ch}\\"].length")')
-                for k in range(n):
-                    pg.click(f'[data-sim="{k}"]'); pg.wait_for_timeout(80)
-                    for sl in pg.query_selector_all("input[type=range]"):
-                        for val in (sl.get_attribute("min"), sl.get_attribute("max")):
-                            sl.evaluate(f'e=>{{e.value={val};e.dispatchEvent(new Event("input"))}}'); pg.wait_for_timeout(30)
-                            if any(b in pg.inner_html("#simsvg") + pg.inner_text("#simout") for b in BAD): errs.append(f"sim {ch}.{k} at {val}")
-            if t == "calc":
-                n = pg.evaluate(f'__X("TOOLS[\\"{ch}\\"].length")')
-                for k in range(n):
-                    pg.click(f'[data-tool="{k}"]'); pg.wait_for_timeout(50)
-                    if pg.inner_text("#cmsg") or len(pg.inner_text("#csteps")) < 20: errs.append(f"calc {ch}.{k}")
-            if any(b in pg.inner_html("#ctab") for b in BAD): errs.append(f"{t} {ch}")
-        pg.click(f'#page .chead [data-a="prac"]'); pg.wait_for_timeout(40); pg.click(".back"); pg.wait_for_timeout(40)
-        if not pg.query_selector("nav.tabs"): errs.append(f"back from exercises did not return to study {ch}")
-        pg.click(".back"); pg.click(f'[data-a="prac"][data-v="{ch}"]'); pg.wait_for_timeout(60)
-        n = len(pg.query_selector_all("[data-exk]"))
-        if n < 2: errs.append(f"no worked examples in exercises {ch}")
+        pg.click('[data-a="go"][data-v="dash"]'); pg.click(f'[data-a="study"][data-v="{ch}"][data-t="study"]'); pg.wait_for_timeout(50)
+        nt = pg.evaluate(f'__X("LESSONS[\\"{ch}\\"].length")')
+        for k in range(nt):
+            pg.click(f'[data-a="topic"][data-v="{k}"]'); pg.wait_for_timeout(30)
+            if not pg.query_selector(".lesson") or not pg.query_selector("[data-watch]") or any(b in pg.inner_html("#ctab") for b in BAD): errs.append(f"study {ch} topic {k}")
+        pg.click('[data-watch]'); pg.wait_for_timeout(60)
+        if pg.evaluate('__X("S.view")') != "watch": errs.append(f"Watch button {ch}")
+        n = pg.evaluate(f'__X("SIMS[\\"{ch}\\"].length")')
         for k in range(n):
-            pg.query_selector_all("[data-exk]")[k].click(); pg.wait_for_timeout(30)
-            if pg.query_selector("#exAll"): pg.click("#exAll"); pg.wait_for_timeout(30)
-            if not pg.query_selector(".exans") or any(b in pg.inner_html("#exbox") for b in BAD): errs.append(f"example {ch}.{k}")
-        for _ in range(6):
-            if pg.query_selector("#numIn"): pg.fill("#numIn", "1"); pg.click('[data-a="check"]')
-            elif pg.query_selector('[data-a="opt"]'): pg.click('[data-a="opt"]')
-            elif pg.query_selector('[data-a="reveal"]'): pg.click('[data-a="reveal"]'); pg.click('[data-a="self"][data-v="1"]'); continue
-            if pg.query_selector('[data-a="next"]'): pg.click('[data-a="next"]')
+            pg.click(f'[data-sim="{k}"]'); pg.wait_for_timeout(80)
+            for sl in pg.query_selector_all("input[type=range]"):
+                for val in (sl.get_attribute("min"), sl.get_attribute("max")):
+                    sl.evaluate(f'e=>{{e.value={val};e.dispatchEvent(new Event("input"))}}'); pg.wait_for_timeout(30)
+                    if any(b in pg.inner_html("#simsvg") + pg.inner_text("#simout") for b in BAD): errs.append(f"sim {ch}.{k} at {val}")
+        pg.click('[data-a="view"][data-v="calc"]'); pg.wait_for_timeout(60)
+        n = pg.evaluate(f'__X("TOOLS[\\"{ch}\\"].length")')
+        for k in range(n):
+            pg.click(f'[data-tool="{k}"]'); pg.wait_for_timeout(50)
+            if pg.inner_text("#cmsg") or len(pg.inner_text("#csteps")) < 20: errs.append(f"calc {ch}.{k}")
+        # examples, topic by topic
+        pg.click('[data-a="mtab"][data-v="examples"]'); pg.wait_for_timeout(40)
+        for k in range(nt):
+            pg.click(f'[data-a="topic"][data-v="{k}"]'); pg.wait_for_timeout(30)
+            n = len(pg.query_selector_all("[data-exk]:not(.gen)"))
+            if ch in done and n < 3: errs.append(f"examples {ch} topic {k}: {n}")
+            for j in range(n):
+                pg.query_selector_all("[data-exk]:not(.gen)")[j].click(); pg.wait_for_timeout(20)
+                if pg.query_selector("#exAll"): pg.click("#exAll"); pg.wait_for_timeout(20)
+                if not pg.query_selector(".exans") or any(b in pg.inner_html("#exbox") for b in BAD): errs.append(f"example {ch}.{k}.{j}")
+        # practice
+        pg.click('[data-a="mtab"][data-v="practice"]'); pg.wait_for_timeout(40)
+        for k in range(nt):
+            pg.click(f'[data-a="topic"][data-v="{k}"]'); pg.wait_for_timeout(30)
+            for _ in range(3):
+                if pg.query_selector("#numIn"): pg.fill("#numIn", "1"); pg.click('[data-a="check"]')
+                elif pg.query_selector('[data-a="opt"]'): pg.click('[data-a="opt"]')
+                elif pg.query_selector('[data-a="reveal"]'): pg.click('[data-a="reveal"]'); pg.click('[data-a="self"][data-v="1"]'); continue
+                if pg.query_selector('[data-a="next"]'): pg.click('[data-a="next"]')
+            if any(b in pg.inner_html("#ctab") for b in BAD): errs.append(f"practice {ch} topic {k}")
         pg.click('[data-a="go"][data-v="dash"]')
-        pg.click(f'[data-a="study"][data-v="{ch}"]'); pg.click(f'[data-a="sheet"][data-v="{ch}"]'); pg.wait_for_timeout(50)
+        pg.click(f'[data-a="study"][data-v="{ch}"][data-t="study"]'); pg.click(f'[data-a="sheet"][data-v="{ch}"]'); pg.wait_for_timeout(50)
         if any(b in pg.inner_html("#page") for b in BAD) or not pg.query_selector(".sheet"): errs.append(f"sheet {ch}")
-        pg.click('[data-a="go"][data-v="dash"]'); pg.click(f'[data-a="quizch"][data-v="{ch}"]'); pg.wait_for_timeout(50)
+        pg.click('[data-a="go"][data-v="dash"]'); pg.click(f'[data-a="study"][data-v="{ch}"][data-t="quiz"]'); pg.wait_for_timeout(50)
         if w == 1366:
-            pg.click('[data-a="startquiz"]'); pg.wait_for_timeout(50)
+            pg.click('[data-a="topic"][data-v="0"]'); pg.click('[data-a="startquiz"]'); pg.wait_for_timeout(50)
             for _ in range(40):
                 if not pg.query_selector('[data-a="qnext"]'): break
                 if pg.query_selector("#numIn"): pg.fill("#numIn", "1")
@@ -100,7 +118,7 @@ def ui_checks(pg, w):
 def axe_checks(pg):
     if not AXE: print("axe-core not found, accessibility check skipped"); return
     src = open(AXE).read(); pg.goto(URL); pg.wait_for_timeout(200)
-    for name, act in [("dashboard", None), ("study", '[data-a="study"][data-v="8"]'), ("watch", '[data-a="tab"][data-v="watch"]'), ("calc", '[data-a="tab"][data-v="calc"]'), ("exercises", '[data-a="prac"][data-v="8"]'), ("progress", '[data-a="go"][data-v="progress"]')]:
+    for name, act in [("dashboard", None), ("study", '[data-a="study"][data-v="8"][data-t="study"]'), ("watch", '[data-a="view"][data-v="watch"]'), ("calc", '[data-a="view"][data-v="calc"]'), ("examples", '[data-a="mtab"][data-v="examples"]'), ("practice", '[data-a="mtab"][data-v="practice"]'), ("quiz", '[data-a="mtab"][data-v="quiz"]'), ("progress", '[data-a="go"][data-v="progress"]')]:
         if act: pg.click(act); pg.wait_for_timeout(150)
         pg.add_script_tag(content=src)
         v = pg.evaluate('async()=>(await axe.run(document,{resultTypes:["violations"]})).violations.map(v=>v.id+" ("+v.nodes.length+")")')

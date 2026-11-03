@@ -43,3 +43,12 @@
 42|Example 6.10. Three inductors |Rule: parallel first, then series.\nApply: 40 H // 40 H = 20 H, then 20 H + 50 H = 70 H.\nCheck: all three in series give 130 H, all three in parallel give less than 20 H.
 43|Example 6.9. Which value is L_|Rule: work from the far end.\nApply: (L4 + L5) // L3 = 1 H, adding L2 and L6 gives 3 H, then 3 H // 3 H = 1.5 H.\nCheck: 3 H and 9 H skip the last parallel step, 0.5 H is too small.
 44|A capacitor and an inductor ar|Rule: in DC the capacitor blocks and the inductor passes.\nApply: after a long time the capacitor is charged and has zero current.\nCheck: the inductor passes the DC current, so it does not have zero current.
+45|The capacitance of a parallel-|Rule: C = ε A / d.\nApply: C is proportional to A, so a larger area gives a larger C.\nCheck: a larger gap d or a dielectric with a smaller ε reduces C.
+46|The plate gap of a capacitor i|Rule: C is proportional to 1 / d.\nApply: half the gap gives twice the capacitance.\nCheck: four times would need a quarter of the gap.
+47|A dielectric with a higher per|Rule: C = ε A / d, and ε is the permittivity of the dielectric.\nApply: a higher ε gives a larger C for the same A and d.\nCheck: the dielectric never lowers the capacitance when its permittivity is higher than air.
+48|An air capacitor has C = 20 pF|Rule: C is proportional to A.\nApply: 3 × 20 pF = 60 pF.\nCheck: 6.7 pF divides by 3 and 180 pF multiplies by 9.
+49|Which change gives the largest|Rule: C = ε A / d. Increase A and reduce d.\nApply: both changes act in the same direction, so C grows the most.\nCheck: the other options contain at least one change that lowers C.
+50|In DC steady state, a capacito|Rule: in steady state the capacitor voltage is constant, so i = C dv/dt = 0.\nApply: zero current means an open circuit.\nCheck: a short circuit is the model of an inductor in DC steady state.
+51|In DC steady state, an ideal i|Rule: in steady state the inductor current is constant, so v = L di/dt = 0.\nApply: zero voltage means a short circuit.\nCheck: an open circuit is the model of a capacitor in DC steady state.
+52|Three 6 μF capacitors are in p|Rule: parallel capacitors add, C_eq = C₁ + C₂ + C₃.\nApply: 6 + 6 + 6 = 18 μF.\nCheck: 2 μF is the value for three in series.
+53|Two inductors of 8 mH and 8 mH|Rule: parallel inductors follow L_eq = L₁ L₂ / (L₁ + L₂).\nApply: 8 × 8 / 16 = 4 mH.\nCheck: 16 mH is the series value, and 64 mH is the product only.

@@ -62,3 +62,16 @@
 61|0.000 047 A written with a pre|Rule: 1 µA = 10⁻⁶ A.\nApply: 0.000 047 A = 47 × 10⁻⁶ A = 47 µA.\nCheck: 47 mA, 4.7 µA and 470 µA are off by powers of ten.
 62|3.3 kΩ in ohms is|Rule: k = 10³.\nApply: 3.3 kΩ = 3.3 × 10³ Ω = 3300 Ω.\nCheck: 330 Ω, 33 000 Ω and 3.3 Ω move the decimal point wrongly.
 63|250 mA in amperes is|Rule: m = 10⁻³.\nApply: 250 mA = 250 × 10⁻³ A = 0.25 A.\nCheck: 250 A, 2.5 A and 0.025 A move the decimal point wrongly.
+64|A circuit has 4 branches and 3|Rule: meshes = b − n + 1.\nApply: 4 − 3 + 1 = 2 meshes.\nCheck: 1, 3 and 4 do not satisfy the formula b − n + 1.
+65|A branch in a circuit is|Rule: a branch carries one current through its series elements.\nApply: a source with a resistor in series is one branch, because the same current flows in both.\nCheck: a point of three wires is a node, a closed path is a loop and an empty loop is a mesh.
+66|A mesh is|Rule: a mesh is a loop without another loop inside.\nApply: the smallest windows of a circuit diagram are its meshes.\nCheck: every mesh is a loop, but a large outer path is a loop and not a mesh.
+67|A circuit has 6 branches and 4|Rule: KCL gives n − 1 independent equations.\nApply: 4 − 1 = 3 equations.\nCheck: all four node equations together are dependent, because each current appears once as entering and once as leaving.
+68|Two elements are in series whe|Rule: series elements share one current.\nApply: they are joined at a node where nothing else connects.\nCheck: the same voltage and two common nodes describe a parallel connection.
+69|An ideal current source of 3 A|Rule: an ideal current source holds its current whatever the load is.\nApply: the current stays 3 A. Only the voltage V = I R doubles.\nCheck: a current that changes with R belongs to a voltage source.
+70|An ideal current source of 5 m|Rule: V = I R.\nApply: 5 mA × 2 kΩ = 5×10⁻³ × 2×10³ = 10 V.\nCheck: 2.5 V is I / R, 0.4 V is R / I in the wrong units and 10 mV loses the prefix.
+71|The internal resistance of an |Rule: an ideal current source has infinite internal resistance in parallel.\nApply: no current leaks through it, so the full source current goes to the load.\nCheck: zero internal resistance belongs to an ideal voltage source.
+72|A real current source has I_S |Rule: a short circuit bypasses R_P, so all of I_S flows through the short.\nApply: I_sc = I_S = 2 A.\nCheck: the 10 Ω resistor carries no current when its two ends are shorted together.
+73|Why must an ideal current sour|Rule: V = I R and R is infinite for an open circuit.\nApply: a fixed current through an infinite resistance needs an infinite voltage.\nCheck: the current of an ideal source never becomes zero, so the other options are wrong.
+74|4.7 kΩ is equal to|Rule: k means ×10³.\nApply: 4.7 × 1000 = 4700 Ω.\nCheck: 470 Ω and 47 000 Ω move the decimal point the wrong number of places.
+75|0.025 A written in mA is|Rule: 1 A = 1000 mA.\nApply: 0.025 × 1000 = 25 mA.\nCheck: 0.025 mA would be 25 times 10⁻⁶ A, which is far smaller.
+76|The prefix μ stands for|Rule: μ (micro) is 10⁻⁶. m is 10⁻³, M is 10⁶ and n is 10⁻⁹.\nApply: 10 μF = 10 × 10⁻⁶ F.\nCheck: mixing m and μ is a common error that gives a factor of 1000.

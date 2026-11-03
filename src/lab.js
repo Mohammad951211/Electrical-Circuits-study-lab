@@ -5,7 +5,7 @@ var CH_NAMES = { "1": "Basic Concepts", "2": "Basic Laws", "3": "Series–Parall
 var MCQ = {}; function M(topic, q, ok, wrong, why){ return { topic: topic, q: q, ok: ok, wrong: wrong, why: why }; }
 //@@MCQ@@
 //@@GENS@@
-var S = { page: "dash", ch: "1", tab: "learn" }; var CALC = {};
+var S = { page: "dash", ch: "1", tab: "study", view: "learn", ti: 0 }; var CALC = {};
 var PR = { ch: "all", topic: "all", type: "mixed", q: null, done: false, ses: { n: 0, r: 0 }, last: null };
 var QZ = null;
 
@@ -27,7 +27,7 @@ CHAPTER_IDS.forEach(function(c){
   var l = [];
   MCQ[c].forEach(function(m, i){ l.push({ id: "m" + c + "-" + i, ch: c, topic: m.topic, kind: "mcq", ref: m }); });
   GENS[c].forEach(function(g){ l.push({ id: g.id, ch: c, topic: g.topic, kind: "num", ref: g }); });
-  CHAPTERS[c].questions.forEach(function(q, i){ l.push({ id: "b" + c + "-" + i, ch: c, topic: "Circuit drawings", kind: "bank", ref: q }); });
+  CHAPTERS[c].questions.forEach(function(q, i){ l.push({ id: "b" + c + "-" + i, ch: c, topic: q.tag || "Circuit drawings", kind: "bank", ref: q }); });
   POOL[c] = l;
 });
 function topicsOf(c){ var s = []; POOL[c].forEach(function(d){ if (s.indexOf(d.topic) < 0) s.push(d.topic); }); return s; }
@@ -81,8 +81,23 @@ function ring(p, label){
 }
 function bar(p, cls){ return '<div class="bar ' + (cls || "") + '"><i style="width:' + (p || 0) + '%"></i></div>'; }
 function esc2(s){ return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+
+var UNITW = /^(?:[kMmµnp]?(?:Ω|V|A|W|s|Hz|F|H|J|C|S|VA|var|T|Wb|N|m|g)|rad|min|rpm|kg|h|r)$/;
+var UPAIR = /^(m\/s|V\/m|A\/m|rad\/s|V\/s|A\/s|W\/m|J\/s|r\/min|kg\/m)$/;
+function fmtMath(t){
+  var U = "(?:(?:[kMmµnp]?(?:Ω|V|A|W|s|Hz|F|H|J|C|S|VA|var|T|Wb|N)|rad|[cmk]?m[²³]?)(?:·[cmk]?m)?)(?![A-Za-z])";
+  var OP = "(?:(?:\\([^()<>]*\\)){1,3}|\\d[\\d.]*(?:\\s?×\\s?10[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+)?(?:\\s?" + U + ")?|[A-Za-zα-ωΩφθπ√]+(?:_[A-Za-z0-9]+)?[²³]?)";
+  var re = new RegExp("(^|[\\s=+×·(,−-])(" + OP + ")\\s?/\\s?(" + OP + ")(?![A-Za-z0-9_(])", "g");
+  return String(t).replace(re, function(m, pre, n, d){
+    var strip = function(x){ return x.charAt(0) === "(" && x.charAt(x.length - 1) === ")" && x.indexOf(")(") < 0 ? x.slice(1, -1) : x; };
+    if (UPAIR.test(n + "/" + d) || (/^[a-z]{2,}$/.test(n) && /^[a-z]{2,}$/.test(d))) return m;
+    if (UNITW.test(d) && (/\d/.test(n) && !/\d/.test(d) || (n.length > 1 && UNITW.test(n)))) return m;
+    if (/^\d+$/.test(n) && /^[a-zA-Z]{2,}$/.test(d) && !/^[A-Za-z]$/.test(d) && !UNITW.test(d) && d.length > 3) return m;
+    return pre + '<span class="fr"><span>' + strip(n) + "</span><span>" + strip(d) + "</span></span>";
+  });
+}
 var HIST = [];
-function snap(){ return { page: S.page, ch: S.ch, tab: S.tab, pr: { ch: PR.ch, topic: PR.topic, type: PR.type } }; }
+function snap(){ return { page: S.page, ch: S.ch, tab: S.tab, ti: S.ti, view: S.view, pr: { ch: PR.ch, topic: PR.topic, type: PR.type } }; }
 function pushHist(){ var h = snap(), l = HIST[HIST.length - 1]; if (l && JSON.stringify(l) === JSON.stringify(h)) return; HIST.push(h); if (HIST.length > 40) HIST.shift(); try { history.pushState({ n: HIST.length }, ""); } catch (e) {} }
 function go(page, ch, tab, noPush){
   if (page === "dash" && !noPush){ HIST = []; }
@@ -93,6 +108,7 @@ function goBack(fromPop){
   var h = HIST.pop(); if (!h) return go("dash", null, null, true);
   if (QZ && QZ.stage === "run") QZ = null;
   if (h.pr){ PR.ch = h.pr.ch; PR.topic = h.pr.topic; PR.type = h.pr.type; PR.q = null; PR.last = null; }
+  S.ti = h.ti; S.view = h.view;
   go(h.page, h.ch, h.tab, true);
 }
 window.addEventListener("popstate", function(){ if (HIST.length) goBack(true); });
@@ -121,38 +137,51 @@ function trace(f, label){
 function pDash(){
   var s = allStats(), w = weak(), h = "";
   if (!STORE.name || !STORE.sid || S.editId) h += '<section class="card hello"><h2>Welcome to the ME0212 Study Lab</h2><p>Enter your name and your university ID. They stay on this device only and appear on your progress report.</p><div class="idrow"><label class="idf"><span>Full name</span><input id="nameIn" type="text" placeholder="Your full name" autocomplete="name" maxlength="60" value="' + esc2(STORE.name || "") + '"></label><label class="idf"><span>University ID</span><input id="sidIn" type="text" inputmode="numeric" placeholder="e.g. 20231234" maxlength="20" value="' + esc2(STORE.sid || "") + '"></label><button class="btn" data-a="setname">Save</button></div><p class="msg" id="idmsg" role="alert"></p></section>';
-  if (STORE.help) h += '<section class="card howto"><h2 class="sh">How to use the Study Lab</h2><ol><li><b>Pick a chapter</b> from the cards below.</li><li><b>Study:</b> read the lesson, watch the animation, try the calculator.</li><li><b>Exercises:</b> answer questions one by one and see the solution at once.</li><li><b>Quiz:</b> 10 questions in about 10 minutes, with the results at the end.</li></ol><p class="mut">Your progress is saved on this device only. Each answer shows its source in the book or the slides.</p><button class="btn sm ghost" data-a="hidehelp">Hide this</button></section>';
+  if (STORE.help) h += '<section class="card howto"><h2 class="sh">How to use the Study Lab</h2><ol><li><b>Pick a chapter</b> from the cards below.</li><li><b>Study:</b> pick a topic, read it and press Watch to see the animation.</li><li><b>Examples:</b> worked examples of the topic, one step at a time.</li><li><b>Practice:</b> questions with the solution after every answer.</li><li><b>Quiz:</b> test one topic or the whole chapter.</li></ol><p class="mut">Your progress is saved on this device only. Each answer shows its source in the book or the slides.</p><button class="btn sm ghost" data-a="hidehelp">Hide this</button></section>';
   var f = s.total ? s.seen / s.total : 0;
   h += '<section class="card trace"><div class="trace-top"><h1>' + (STORE.name ? "Hello, " + esc2(STORE.name.split(" ")[0]) : "Dashboard") + '</h1><div class="read"><b>' + s.seen + "</b> of " + s.total + " questions seen</div></div>" + trace(f, s.seen + " of " + s.total + " questions seen") + "</section>";
   h += '<div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(streak(), "Day streak") + stat(CHAPTER_IDS.length, "Chapters") + "</div>";
   h += '<h2 class="sh">Chapters</h2><div class="chgrid">' + CHAPTER_IDS.map(function(c){ var x = chStats(c); return '<section class="card chc">' + ring(x.acc, "Accuracy " + (x.acc == null ? "none" : x.acc + "%")) + "<div><h3>" + chL(c) + "</h3><p>" + CHAPTERS[c].title + '</p><p class="mut">' + x.seen + " of " + x.total + " questions seen</p>" + bar(Math.round(100 * x.seen / x.total)) +
-    '<div class="row"><button class="btn sm" data-a="study" data-v="' + c + '">Study</button><button class="btn sm ghost" data-a="prac" data-v="' + c + '">Exercises</button><button class="btn sm ghost" data-a="quizch" data-v="' + c + '">Quiz</button></div></div></section>'; }).join("") + "</div>";
+    '<div class="row">' + MTABS.map(function(t, k){ return '<button class="btn sm' + (k ? " ghost" : "") + '" data-a="study" data-v="' + c + '" data-t="' + t[0] + '">' + t[1] + "</button>"; }).join("") + '</div></div></section>'; }).join("") + "</div>";
   h += '<div class="grid2"><section class="card"><h2 class="sh">Needs work</h2>' + (w.length ? w.map(function(x){ return '<div class="wk"><span><b>' + x.topic + "</b> · " + chL(x.ch) + '</span><span>' + x.acc + '%</span><button class="btn sm ghost" data-a="praction" data-v="' + x.ch + "|" + x.topic + '">Practise</button></div>'; }).join("") : '<p class="mut">Topics below 70% appear here after a few answers.</p>') + '</section><section class="card"><h2 class="sh">Badges</h2><div class="badges">' + badges().map(function(b){ return '<div class="bdg ' + (b[2] ? "on" : "") + '" title="' + b[1] + '"><b>' + b[0] + "</b><span>" + b[1] + "</span></div>"; }).join("") + "</div></section></div>";
   $("page").innerHTML = h;
 }
 function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</span></div>"; }
 
 // ---------- study ----------
-var TABS = [["learn", "Learn"], ["watch", "Watch"], ["calc", "Calculate"]];
+var MTABS = [["study", "Study"], ["examples", "Examples"], ["practice", "Practice"], ["quiz", "Quiz"]];
+var VIEWS = [["learn", "Explanation"], ["watch", "Watch"], ["calc", "Calculator"]];
+function tpcs(){ return LESSONS[S.ch].map(function(l){ return l.t; }); }
+function curTopic(){ return S.ti < 0 ? "all" : tpcs()[S.ti]; }
+function topicCount(c, t){ return POOL[c].filter(function(d){ return d.topic === t; }).length; }
 function pStudy0(){
-  var x = chStats(S.ch);
-  $("page").innerHTML = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="prac" data-v="' + S.ch + '">Exercises (' + x.total + ')</button><button class="btn ghost" data-a="quizch" data-v="' + S.ch + '">Quiz</button><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
-    '<nav class="tabs" role="tablist">' + TABS.map(function(t){ return '<button class="tab" role="tab" data-a="tab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + '</nav><div id="ctab" class="ctab"></div>';
-  ({ learn: rLearn, watch: rWatch, calc: rCalc })[S.tab]();
+  var tp = tpcs(); if (S.ti >= tp.length) S.ti = 0; if (S.tab === "study" && S.ti < 0) S.ti = 0;
+  var showPills = !(S.tab === "study" && S.view !== "learn"), allPill = S.tab !== "study";
+  $("page").innerHTML = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
+    '<nav class="tabs main" role="tablist" aria-label="Chapter sections">' + MTABS.map(function(t){ return '<button class="tab" role="tab" data-a="mtab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + "</nav>" +
+    (showPills ? '<div class="picker topics" aria-label="Topics">' + (allPill ? '<button class="pill" data-a="topic" data-v="-1" aria-pressed="' + (S.ti < 0) + '">All topics</button>' : "") + tp.map(function(t, i){ return '<button class="pill" data-a="topic" data-v="' + i + '" aria-pressed="' + (S.ti === i) + '">' + t + "</button>"; }).join("") + "</div>" : "") +
+    (S.tab === "study" ? '<nav class="tabs sub" role="tablist" aria-label="Study views">' + VIEWS.map(function(t){ return '<button class="tab" role="tab" data-a="view" data-v="' + t[0] + '" aria-selected="' + (S.view === t[0]) + '">' + t[1] + "</button>"; }).join("") + "</nav>" : "") +
+    '<div id="ctab" class="ctab"></div>';
+  if (S.tab === "study") ({ learn: rLearn, watch: rWatch, calc: rCalc })[S.view]();
+  else if (S.tab === "examples") rExamplesTab();
+  else if (S.tab === "practice") rPracticeTab();
+  else rQuizTab();
 }
+  function lessonCard(l){
+    var id = IDEAS[l.t];
+    return '<section class="card lesson"><h2>' + l.t + "</h2>" + (id ? '<p class="idea"><b>In plain words.</b> ' + id.i + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" +
+      (l.f ? '<div class="fl">' + l.f.map(function(f){ return '<span class="formula">' + fmtMath(f) + "</span>"; }).join(" ") + "</div>" : "") + (l.fig ? fig(l.fig()) : "") + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + (id ? '<p class="slip"><b>Common slip.</b> ' + id.s + "</p>" : "") +
+      '<div class="btnrow"><button class="btn" data-watch="' + (id && id.w != null ? id.w : 0) + '">Watch</button><button class="btn ghost" data-a="mtab" data-v="examples">See examples</button><button class="btn ghost" data-a="mtab" data-v="practice">Practice this topic</button></div></section>';
+  }
   function rLearn(){
-    $("ctab").innerHTML = '<div class="lessons">' + LESSONS[S.ch].map(function(l){
-      var id = IDEAS[l.t];
-      return '<section class="card lesson"><h2>' + l.t + "</h2>" + (id ? '<p class="idea"><b>In plain words.</b> ' + id.i + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" +
-        (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + (l.fig ? fig(l.fig()) : "") + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + (id ? '<p class="slip"><b>Common slip.</b> ' + id.s + "</p>" + (id.w != null ? '<button class="btn sm ghost" data-watch="' + id.w + '">Watch it move</button>' : "") : "") + "</section>";
-    }).join("") + "</div>";
-    $("ctab").querySelectorAll("[data-watch]").forEach(function(b){ b.onclick = function(){ (WSIM[S.ch] = WSIM[S.ch] || {}).k = +b.dataset.watch; S.tab = "watch"; render(); window.scrollTo(0, 0); }; });
+    $("ctab").innerHTML = '<div class="lessons">' + lessonCard(LESSONS[S.ch][S.ti]) + "</div>";
+    $("ctab").querySelectorAll("[data-watch]").forEach(function(b){ b.onclick = function(){ pushHist(); (WSIM[S.ch] = WSIM[S.ch] || {}).k = +b.dataset.watch; S.view = "watch"; render(); window.scrollTo(0, 0); }; });
   }
 
   var EXS = {}, EXCH = "1";
-  function exLabel(id){ if (/^P\d+$/.test(id)) return "Practice " + id.slice(1); return /^\d+\.\d+N$/.test(id) ? "Example " + id.replace("N", "") + " (Norton)" : /^\d+\.\d+$/.test(id) ? "Example " + id : id; }
+  function exLabel(id){ if (/^[PX]\d+$/.test(id)) return "Worked example"; return /^\d+\.\d+N$/.test(id) ? "Example " + id.replace("N", "") + " (Norton)" : /^\d+\.\d+$/.test(id) ? "Example " + id : id; }
   function exSrc(ch, id, topic){
-    if (/^P\d+$/.test(id)) return "Practice example on a slide topic" + (topic && LREF[topic] ? ": " + LREF[topic] : "");
+    if (/^[PX]\d+$/.test(id)) return "Worked example on a slide topic" + (topic && LREF[topic] ? ": " + LREF[topic] : "");
     var m = /^(\d+\.\d+)/.exec(id);
     if (m && EXP[m[1]]) return "Book Example " + m[1] + ", p. " + EXP[m[1]];
     if (/^Table 5\.1/.test(id)) return "Book Table 5.1, p. 149 · Slide 23";
@@ -160,21 +189,29 @@ function pStudy0(){
     if (/^§/.test(id)) return "Book " + id;
     return CHREF[ch] || "";
   }
+  function exList(){ var l = EXAMPLES[S.ch] || []; return S.ti < 0 ? l : l.filter(function(e){ return e.topic === curTopic(); }); }
+  function genList(){ var l = GENS[S.ch] || []; return S.ti < 0 ? l : l.filter(function(g){ return g.topic === curTopic(); }); }
+  function rExamplesTab(){
+    $("ctab").innerHTML = '<div id="exbox"></div>'; EXCH = S.ch; rExamples();
+  }
   function rExamples(){
     if (!$("exbox")) return;
-    var list = EXAMPLES[EXCH] || [], st = EXS[EXCH] || (EXS[EXCH] = { k: 0, n: 0, gen: null }), ex;
-    if (st.k === "gen"){
-      if (!st.gen){ var gl = GENS[EXCH] || [], g = gl[Math.floor(Math.random() * gl.length)], r = g.make(); st.gen = { id: "New example", t: g.topic, q: r.q, steps: String(r.sol).split(/\n+/), ans: nn(r.ans) + " " + r.unit, figH: r.fig, gen: true }; }
+    var list = exList(), gl = genList(), key = S.ch + "|" + S.ti, st = EXS[key] || (EXS[key] = { k: 0, n: 0, gen: null }), ex;
+    if (!list.length && !gl.length){ $("exbox").innerHTML = '<section class="card"><p>Examples for this topic are being added.</p></section>'; return; }
+    if (st.k === "gen" && !gl.length) st.k = 0;
+    if (st.k === "gen" || !list.length){
+      st.k = "gen";
+      if (!st.gen){ var g = gl[Math.floor(Math.random() * gl.length)], r = g.make(); st.gen = { id: "New example", t: g.topic, q: r.q, steps: String(r.sol).split(/\n+/), ans: nn(r.ans) + " " + r.unit, figH: r.fig, gen: true }; }
       ex = st.gen;
     } else ex = list[st.k] || list[0];
-    var pills = list.map(function(e, i){ return '<button class="pill" data-exk="' + i + '" aria-pressed="' + (st.k === i) + '">' + exLabel(e.id) + "</button>"; }).join("") + ((GENS[EXCH] || []).length ? '<button class="pill gen" data-exk="gen" aria-pressed="' + (st.k === "gen") + '">New random example</button>' : "");
+    var pills = list.map(function(e, i){ return '<button class="pill" data-exk="' + i + '" aria-pressed="' + (st.k === i) + '">' + (/^[PX]\d+$/.test(e.id) ? "Example " + (i + 1) : exLabel(e.id)) + "</button>"; }).join("") + (gl.length ? '<button class="pill gen" data-exk="gen" aria-pressed="' + (st.k === "gen") + '">New random example</button>' : "");
     var fh = ex.figH || (ex.fig ? ex.fig() : ""), steps = ex.steps, n = Math.min(st.n, steps.length), done = n >= steps.length;
     var h = '<div class="picker">' + pills + '</div><div class="grid2 wide-left exgrid"><section class="card excard"><div class="lbl">' + (ex.gen ? "Generated example · " + ex.t : exLabel(ex.id)) + "</div><h2>" + (ex.gen ? "Worked example with new numbers" : ex.t) + '</h2><p class="exq">' + ex.q + "</p>" + (fh ? fig(fh) : "");
     if (ex.given) h += '<div class="gf"><div><b>Given</b><span>' + ex.given + "</span></div><div><b>Find</b><span>" + ex.find + "</span></div></div>";
-    h += '</section><section class="card"><h2 class="sh">Solution, step by step</h2><ol class="exsteps">' + steps.slice(0, n).map(function(s, i){ return '<li><span>Step ' + (i + 1) + "</span><div>" + s + "</div></li>"; }).join("") + "</ol>";
+    h += '</section><section class="card"><h2 class="sh">Solution, step by step</h2><ol class="exsteps">' + steps.slice(0, n).map(function(s, i){ return '<li><span>Step ' + (i + 1) + "</span><div>" + fmtMath(s) + "</div></li>"; }).join("") + "</ol>";
     if (!n) h += '<p class="mut">Try it on paper first. Then open the steps one at a time.</p>';
     h += '<div class="btnrow">' + (done ? "" : '<button class="btn" id="exNext">' + (n ? "Show next step" : "Show the first step") + '</button><button class="btn ghost" id="exAll">Show all steps</button>') + (n ? '<button class="btn ghost" id="exHide">Hide the steps</button>' : "") + "</div>";
-    if (done) h += '<div class="st2a exans">Answer: ' + ex.ans + "</div>" + (ex.gen ? '<button class="btn sm ghost" id="exNew">Another one</button>' : '<p class="srcl"><span>Source: ' + exSrc(EXCH, ex.id, ex.topic) + "</span></p>");
+    if (done) h += '<div class="st2a exans">Answer: ' + fmtMath(ex.ans) + "</div>" + (ex.gen ? '<button class="btn sm ghost" id="exNew">Another one</button>' : '<p class="srcl"><span>Source: ' + exSrc(EXCH, ex.id, ex.topic) + "</span></p>");
     h += '<p class="mut exprog">Step ' + n + " of " + steps.length + "</p></section></div>";
     $("exbox").innerHTML = h;
     $("exbox").querySelectorAll("[data-exk]").forEach(function(b){ b.onclick = function(){ var v = b.dataset.exk; st.k = v === "gen" ? "gen" : +v; st.n = 0; if (v === "gen") st.gen = null; rExamples(); }; });
@@ -208,17 +245,13 @@ function pSheet0(){
 }
 
 // ---------- practice ----------
-function pPractice0(){
-  var topics = PR.ch === "all" ? [] : topicsOf(PR.ch);
-  $("page").innerHTML = '<h1 class="ph">Exercises</h1><section class="card filters"><div class="field2"><label for="fch">Chapter</label><select id="fch" data-a="pf"><option value="all"' + (PR.ch === "all" ? " selected" : "") + ">All chapters</option>" + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (PR.ch === c ? " selected" : "") + ">" + chL(c) + " · " + CH_NAMES[c] + "</option>"; }).join("") + '</select></div>' +
-    '<div class="field2"><label for="ftp">Topic</label><select id="ftp" data-a="pf"' + (PR.ch === "all" ? " disabled" : "") + '><option value="all">All topics</option>' + topics.map(function(t){ return '<option' + (PR.topic === t ? " selected" : "") + ">" + t + "</option>"; }).join("") + '</select></div>' +
-    '<div class="field2"><label for="fty">Type</label><select id="fty" data-a="pf"><option value="mixed"' + (PR.type === "mixed" ? " selected" : "") + '>Mixed</option><option value="mcq"' + (PR.type === "mcq" ? " selected" : "") + '>Multiple choice</option><option value="num"' + (PR.type === "num" ? " selected" : "") + '>Numeric (new numbers every time)</option></select></div>' +
-    '<div class="sesbox"><b>' + PR.ses.r + " / " + PR.ses.n + '</b><span>this session</span></div></section>' +
-    (PR.ch === "all" ? '<p class="mut exnote">Choose a chapter above to see its worked examples.</p>' : '<details class="card exwrap"' + (PR.exOpen === false ? "" : " open") + '><summary><span>Worked examples · ' + chL(PR.ch) + "</span><b>" + (EXAMPLES[PR.ch] || []).length + ' examples, solved step by step</b></summary><div id="exbox"></div></details>') +
-    '<h2 class="sh">Practice questions</h2><div id="qarea"></div>';
-  if (PR.ch !== "all"){ EXCH = PR.ch; rExamples(); var dw = document.querySelector(".exwrap"); if (dw) dw.addEventListener("toggle", function(){ PR.exOpen = dw.open; }); }
-  if (!PR.q) nextPractice(); else drawQ();
+function rPracticeTab(){
+  PR.ch = S.ch; PR.topic = curTopic();
+  var n = poolPractice().length;
+  $("ctab").innerHTML = '<section class="card filters"><div class="field2"><label for="fty">Type</label><select id="fty" data-a="pf"><option value="mixed"' + (PR.type === "mixed" ? " selected" : "") + '>Mixed</option><option value="mcq"' + (PR.type === "mcq" ? " selected" : "") + '>Multiple choice</option><option value="num"' + (PR.type === "num" ? " selected" : "") + '>Numeric (new numbers every time)</option></select></div><p class="mut pcount">' + n + ' questions in ' + (S.ti < 0 ? "this chapter" : "this topic") + ', each solved step by step.</p><div class="sesbox"><b>' + PR.ses.r + " / " + PR.ses.n + '</b><span>this session</span></div></section><div id="qarea"></div>';
+  if (!PR.q || PR.q.d.ch !== S.ch || (PR.topic !== "all" && PR.q.d.topic !== PR.topic)) nextPractice(); else drawQ();
 }
+function pPractice0(){ S.page = "study"; S.tab = "practice"; render(); }
 function poolPractice(){
   var l = chDescs(PR.ch);
   if (PR.topic !== "all" && PR.ch !== "all") l = l.filter(function(d){ return d.topic === PR.topic; });
@@ -266,7 +299,7 @@ function stepsOf(text, finalLabel){
   parts = out;
   if (!parts.length) return "";
   var h = '<div class="steps2"><div class="st2h">Solution, step by step</div><ol>';
-  parts.forEach(function(p, i){ h += "<li" + (i === parts.length - 1 && parts.length > 1 ? ' class="last"' : "") + "><span>Step " + (i + 1) + "</span><div>" + esc2(p) + "</div></li>"; });
+  parts.forEach(function(p, i){ h += "<li" + (i === parts.length - 1 && parts.length > 1 ? ' class="last"' : "") + "><span>Step " + (i + 1) + "</span><div>" + fmtMath(esc2(p)) + "</div></li>"; });
   h += "</ol>";
   if (finalLabel) h += '<div class="st2a">Answer: ' + esc2(finalLabel) + "</div>";
   return h + "</div>";
@@ -309,17 +342,27 @@ var QZCH = "1", QZN = 10;
 function pQuiz0(){
   if (QZ && QZ.stage === "run") return drawQuiz();
   if (QZ && QZ.stage === "result") return drawResult();
-  $("page").innerHTML = '<h1 class="ph">Quiz</h1><section class="card"><p>A quiz mixes multiple-choice and numeric questions. A 10-question quiz is planned for 10 minutes, like the course quizzes. You see the results, the solutions and the sources at the end.</p><div class="filters2"><div class="field2"><label for="qch">Chapter</label><select id="qch">' + CHAPTER_IDS.map(function(c){ return '<option value="' + c + '"' + (QZCH === c ? " selected" : "") + ">" + chL(c) + " · " + CH_NAMES[c] + "</option>"; }).join("") + '<option value="all"' + (QZCH === "all" ? " selected" : "") + '>All chapters</option></select></div><div class="field2"><label for="qn">Questions</label><select id="qn"><option' + (QZN === 10 ? " selected" : "") + '>10</option><option' + (QZN === 20 ? " selected" : "") + '>20</option></select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
+  S.page = "study"; S.tab = "quiz"; S.ch = QZCH; render();
+}
+function quizPool(){
+  var l = chDescs(S.ch); if (S.ti >= 0) l = l.filter(function(d){ return d.topic === curTopic(); });
+  return l.filter(function(d){ return d.kind === "mcq" || d.kind === "num"; });
+}
+function rQuizTab(){
+  var n = quizPool().length, opts = [5, 10, 20].filter(function(x){ return x <= Math.max(5, n); }); if (opts.indexOf(QZN) < 0) QZN = opts[opts.length - 1];
+  $("ctab").innerHTML = '<section class="card"><h2 class="sh">' + (S.ti < 0 ? "Quiz on the whole chapter" : "Quiz: " + curTopic()) + '</h2><p>Multiple-choice and numeric questions. Ten questions are planned for ten minutes. The solutions and sources appear at the end.</p><div class="filters2"><div class="field2"><label for="qn">Questions</label><select id="qn">' + opts.map(function(x){ return "<option" + (QZN === x ? " selected" : "") + ">" + x + "</option>"; }).join("") + '</select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
 }
 function quizHistory(){
   var q = STORE.quizzes.slice(-5).reverse(); if (!q.length) return "";
-  return '<section class="card"><h2 class="sh">Recent quizzes</h2>' + q.map(function(x){ var p = Math.round(100 * x.score / x.total); return '<div class="wk"><span>' + x.date + " · " + (x.ch === "all" ? "All chapters" : "" + chL(x.ch)) + "</span><span>" + x.score + " / " + x.total + " (" + p + "%)</span>" + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + "</div>"; }).join("") + "</section>";
+  return '<section class="card"><h2 class="sh">Recent quizzes</h2>' + q.map(function(x){ var p = Math.round(100 * x.score / x.total); return '<div class="wk"><span>' + x.date + " · " + (x.ch === "all" ? "All chapters" : "" + chL(x.ch)) + (x.topic && x.topic !== "all" ? " · " + x.topic : "") + "</span><span>" + x.score + " / " + x.total + " (" + p + "%)</span>" + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + "</div>"; }).join("") + "</section>";
 }
 function startQuiz(){
-  QZCH = $("qch").value; QZN = +$("qn").value;
-  var all = chDescs(QZCH), mc = shuffle(all.filter(function(d){ return d.kind === "mcq"; })), nu = shuffle(all.filter(function(d){ return d.kind === "num"; }));
-  var nNum = Math.round(QZN * 0.3), items = mc.slice(0, QZN - nNum).concat(nu.slice(0, nNum)), qs = shuffle(items).map(instantiate);
-  QZ = { stage: "run", qs: qs, i: 0, ans: [], ch: QZCH, t0: Date.now() }; render();
+  QZN = +$("qn").value; QZCH = S.ch;
+  var all = quizPool(), mc = shuffle(all.filter(function(d){ return d.kind === "mcq"; })), nu = shuffle(all.filter(function(d){ return d.kind === "num"; }));
+  var N = Math.min(QZN, mc.length + nu.length), nNum = Math.min(nu.length, Math.round(N * 0.3)), items = mc.slice(0, N - nNum).concat(nu.slice(0, nNum));
+  if (items.length < N) items = items.concat(nu.slice(nNum, nNum + N - items.length));
+  var qs = shuffle(items).map(instantiate);
+  QZ = { stage: "run", qs: qs, i: 0, ans: [], ch: QZCH, topic: curTopic(), t0: Date.now() }; go("quiz");
 }
 function drawQuiz(){
   var q = QZ.qs[QZ.i], st = QZ.cur || {};
@@ -341,7 +384,7 @@ function qnext(){
   QZ.ans.push({ picked: st.picked, val: v, ok: ok }); record(q.d, ok); QZ.cur = null; QZ.i++;
   if (QZ.i >= QZ.qs.length){
     var sc = QZ.ans.filter(function(a){ return a.ok; }).length; QZ.stage = "result"; QZ.score = sc; QZ.secs = Math.round((Date.now() - QZ.t0) / 1000);
-    STORE.quizzes.push({ ch: QZ.ch, score: sc, total: QZ.qs.length, date: today() }); saveStore();
+    STORE.quizzes.push({ ch: QZ.ch, topic: QZ.topic, score: sc, total: QZ.qs.length, date: today() }); saveStore();
   }
   render();
 }
@@ -373,12 +416,12 @@ document.addEventListener("click", function(e){
   var a = b.dataset.a, v = b.dataset.v;
   if (a === "go") go(v);
   else if (a === "back") goBack();
-  else if (a === "study") go("study", v);
-  else if (a === "tab"){ if (S.tab !== v) pushHist(); S.tab = v; pStudy(); }
+  else if (a === "study"){ var tb = b.dataset.t || "study"; S.view = "learn"; S.ti = (tb === "study" || tb === "examples") ? 0 : -1; PR.q = null; go("study", v, tb); }
+  else if (a === "mtab"){ if (S.tab !== v){ pushHist(); S.tab = v; if (v === "study" && S.ti < 0) S.ti = 0; render(); window.scrollTo(0, 0); } }
+  else if (a === "topic"){ if (S.ti !== +v){ pushHist(); S.ti = +v; if (S.tab === "practice") { PR.q = null; PR.last = null; } render(); } }
+  else if (a === "view"){ if (S.view !== v){ pushHist(); S.view = v; render(); } }
   else if (a === "tool"){ }
-  else if (a === "prac"){ PR.ch = v; PR.topic = "all"; PR.q = null; go("practice"); }
-  else if (a === "praction"){ var p = v.split("|"); PR.ch = p[0]; PR.topic = p[1]; PR.q = null; go("practice"); }
-  else if (a === "quizch"){ QZ = null; QZCH = v; go("quiz"); }
+  else if (a === "praction"){ var p = v.split("|"); PR.q = null; PR.last = null; S.view = "learn"; S.ti = Math.max(0, LESSONS[p[0]].map(function(l){ return l.t; }).indexOf(p[1])); go("study", p[0], "practice"); render(); }
   else if (a === "setname"){ var n = $("nameIn").value.trim(), id = $("sidIn").value.trim();
     if (!n || !/^[0-9A-Za-z-]{4,20}$/.test(id)){ $("idmsg").textContent = !n ? "Enter your full name." : "Enter your university ID (digits only, at least 4)."; return; }
     STORE.name = n; STORE.sid = id; S.editId = false; saveStore(); render(); }
@@ -403,8 +446,8 @@ document.addEventListener("click", function(e){
 });
 document.addEventListener("change", function(e){
   var t = e.target;
-  if (t.dataset.a === "pf"){ pushHist(); PR.ch = $("fch").value; if (t.id === "fch") PR.topic = "all"; else PR.topic = $("ftp").value; PR.type = $("fty").value; PR.q = null; PR.last = null; pPractice(); }
-  if (t.id === "qch") QZCH = t.value; if (t.id === "qn") QZN = +t.value;
+  if (t.dataset.a === "pf"){ PR.type = $("fty").value; PR.q = null; PR.last = null; rPracticeTab(); }
+  if (t.id === "qn") QZN = +t.value;
 });
 // the Calculate tab buttons use data-tool
 document.addEventListener("click", function(e){ var b = e.target.closest("button"); if (b && b.dataset.tool != null && S.page === "study"){ CALC[S.ch] = +b.dataset.tool; rCalc(); } });
