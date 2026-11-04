@@ -1,5 +1,5 @@
 // ===== scientific calculator in the style of the Casio fx-991EX (own layout code, no Casio artwork) =====
-var FX = { open: false, shift: false, alpha: false, hyp: false, pend: null, tokens: [], cur: 0, hist: [], hi: -1, ans: null, vars: {}, angle: "deg", cfmt: "rect", eng: false, frac: false, view: "calc", out: "", err: "", menuSel: 0, mats: {}, ctx: null, x: null, y: null };
+var FX = { open: false, shift: false, alpha: false, hyp: false, pend: null, tokens: [], cur: 0, hist: [], hi: -1, ans: null, vars: {}, angle: "deg", cfmt: "rect", eng: false, frac: false, view: "calc", out: "", err: "", menuSel: 0, mats: {}, vecs: {}, mode: "comp", base: "dec", stat: null, tbl: null, sed: null, ctx: null, x: null, y: null };
 function fxErr(m){ var e = new Error(m); e.fx = m; return e; }
 // ---- complex numbers and matrices ----
 function cx(re, im){ return { t: "C", re: re, im: im || 0 }; }
@@ -53,8 +53,9 @@ function minv(A){
   var R = mat(n, n); for (i = 0; i < n; i++) for (j = 0; j < n; j++) R.a[i][j] = M[i][n + j]; return R;
 }
 // ---- tokenizer and parser ----
-var FXFUN = ["sin⁻¹(", "cos⁻¹(", "tan⁻¹(", "sinh(", "cosh(", "tanh(", "sin(", "cos(", "tan(", "log(", "ln(", "√(", "∛(", "abs(", "arg(", "conj(", "Re(", "Im(", "det(", "trn(", "iden(", "10^(", "e^("];
-var FXSYM = ["MatA", "MatB", "MatC", "Ans", "nPr", "nCr", "▶r∠θ", "▶a+bi", "ˣ√", "⁻¹", "×", "÷", "⁄", "−", "+", "^", "(", ")", ",", "²", "³", "!", "%", "°", "∠", "π", "i", "e", "A", "B", "C", "D", "F", "X", "Y", "M"];
+var FXFUN = ["∫(", "d/dx(", "Σ(", "Pol(", "Rec(", "Dot(", "Angle(", "UnitV(", "Not(", "Neg(", "sin⁻¹(", "cos⁻¹(", "tan⁻¹(", "sinh(", "cosh(", "tanh(", "sin(", "cos(", "tan(", "log(", "ln(", "√(", "∛(", "abs(", "arg(", "conj(", "Re(", "Im(", "det(", "trn(", "iden(", "10^(", "e^("];
+var FXSTATSYM = ["x̄", "ȳ", "σx", "σy", "Σx²", "Σy²", "Σxy", "Σx", "Σy", "minX", "maxX", "minY", "maxY", "RegA", "RegB", "RegC", "RegR", "Q1", "Med", "Q3"];
+var FXSYM = ["VctA", "VctB", "VctC", "xnor", "xor", "and", "or", "Ran#", "MatA", "MatB", "MatC", "Ans"].concat(FXSTATSYM).concat(["sx", "sy", "=",  "nPr", "nCr", "▶r∠θ", "▶a+bi", "ˣ√", "⁻¹", "×", "÷", "⁄", "−", "+", "^", "(", ")", ",", "²", "³", "!", "%", "°", "∠", "π", "i", "e", "A", "B", "C", "D", "F", "X", "Y", "M", "n"]);
 function fxLex(s){
   var out = [], i = 0, m, k, hit;
   while (i < s.length){
@@ -73,12 +74,12 @@ function fxEval(tokens){
   function peek(){ return T[p]; }
   function nxt(){ return T[p++]; }
   function isNum(t){ return /^[\d.]/.test(t); }
-  function startsAtom(t){ return t !== undefined && (isNum(t) || t === "(" || t === "π" || t === "i" || t === "e" || /^[ABCDEFXYM]$/.test(t) || t === "Ans" || /^Mat/.test(t) || FXFUN.indexOf(t) >= 0); }
+  function startsAtom(t){ return t !== undefined && (isNum(t) || /^Vct/.test(t) || FXSTATSYM.indexOf(t) >= 0 || t === "sx" || t === "sy" || t === "n" || t === "Ran#" || t === "(" || t === "π" || t === "i" || t === "e" || /^[ABCDEFXYM]$/.test(t) || t === "Ans" || /^Mat/.test(t) || FXFUN.indexOf(t) >= 0); }
   function toC(v){ if (v.t !== "C") throw fxErr("Math ERROR"); return v; }
-  function add(a, b){ if (a.t === "M" && b.t === "M"){ if (a.m !== b.m || a.n !== b.n) throw fxErr("Dimension ERROR"); var R = mat(a.m, a.n), i, j; for (i = 0; i < a.m; i++) for (j = 0; j < a.n; j++) R.a[i][j] = cadd(a.a[i][j], b.a[i][j]); return R; } return cadd(toC(a), toC(b)); }
-  function neg(a){ return a.t === "M" ? mscal(cx(-1, 0), a) : cx(-a.re, -a.im); }
-  function mul(a, b){ if (a.t === "M" && b.t === "M") return mmul(a, b); if (a.t === "M") return mscal(b, a); if (b.t === "M") return mscal(a, b); return cmul(a, b); }
-  function div(a, b){ if (b.t === "M") throw fxErr("Math ERROR"); if (a.t === "M") return mscal(cdiv(cx(1, 0), b), a); return cdiv(a, b); }
+  function add(a, b){ if (a.t === "V" && b.t === "V"){ if (a.a.length !== b.a.length) throw fxErr("Dimension ERROR"); return fxVec(a.a.map(function(c, i){ return cadd(c, b.a[i]); })); } if (a.t === "M" && b.t === "M"){ if (a.m !== b.m || a.n !== b.n) throw fxErr("Dimension ERROR"); var R = mat(a.m, a.n), i, j; for (i = 0; i < a.m; i++) for (j = 0; j < a.n; j++) R.a[i][j] = cadd(a.a[i][j], b.a[i][j]); return R; } return cadd(toC(a), toC(b)); }
+  function neg(a){ if (a.t === "V") return fxVec(a.a.map(function(c){ return cx(-c.re, -c.im); })); return a.t === "M" ? mscal(cx(-1, 0), a) : cx(-a.re, -a.im); }
+  function mul(a, b){ if (a.t === "V" && b.t === "V") return fxVcross(a, b); if (a.t === "V") return fxVec(a.a.map(function(c){ return cmul(c, toC(b)); })); if (b.t === "V") return fxVec(b.a.map(function(c){ return cmul(toC(a), c); })); if (a.t === "M" && b.t === "M") return mmul(a, b); if (a.t === "M") return mscal(b, a); if (b.t === "M") return mscal(a, b); return cmul(a, b); }
+  function div(a, b){ if (b.t === "M" || b.t === "V") throw fxErr("Math ERROR"); if (a.t === "V") return fxVec(a.a.map(function(c){ return cdiv(c, b); })); if (a.t === "M") return mscal(cdiv(cx(1, 0), b), a); return cdiv(a, b); }
   function sum(){ var v = term(); while (peek() === "+" || peek() === "−"){ var o = nxt(), r = term(); v = o === "+" ? add(v, r) : add(v, neg(r)); } return v; }
   function term(){ var v = perm(); while (peek() === "×" || peek() === "÷" || peek() === "⁄"){ var o = nxt(), r = perm(); v = o === "×" ? mul(v, r) : div(v, r); } return v; }
   function perm(){ var v = polar(); while (peek() === "nPr" || peek() === "nCr"){ var o = nxt(), r = polar(), n = realOf(v), k = realOf(r); if (!Number.isInteger(n) || !Number.isInteger(k) || k < 0 || n < k) throw fxErr("Math ERROR"); v = cx(o === "nPr" ? fact(n) / fact(n - k) : fact(n) / (fact(k) * fact(n - k)), 0); } return v; }
@@ -107,6 +108,17 @@ function fxEval(tokens){
     return v;
   }
   function arg(){ var v = sum(); if (peek() === ")") nxt(); return v; }
+  function rawArgs(){
+    var args = [[]], depth = 0;
+    while (p < T.length){
+      var t = T[p];
+      if (t === ")" && depth === 0){ p++; return args; }
+      if (t === "," && depth === 0){ args.push([]); p++; continue; }
+      if (t === "(" || FXFUN.indexOf(t) >= 0) depth++; else if (t === ")") depth--;
+      args[args.length - 1].push(t); p++;
+    }
+    return args;
+  }
   function atom(){
     var t = nxt();
     if (t === undefined) throw fxErr("Syntax ERROR");
@@ -117,7 +129,28 @@ function fxEval(tokens){
     if (t === "i") return cx(0, 1);
     if (/^[ABCDEFXYM]$/.test(t)) return FX.vars[t] || cx(0, 0);
     if (t === "Ans") return FX.ans || cx(0, 0);
+    if (t === "Ran#") return cx(Math.floor(Math.random() * 1000) / 1000, 0);
+    if (/^Vct[ABC]$/.test(t)){ var Vx = FX.vecs && FX.vecs[t.charAt(3)]; if (!Vx) throw fxErr("Dimension ERROR"); return Vx; }
+    if (FXSTATSYM.indexOf(t) >= 0 || t === "sx" || t === "sy" || t === "n") return fxStatVal(t);
     if (/^Mat[ABC]$/.test(t)){ var Mx = FX.mats[t.charAt(3)]; if (!Mx) throw fxErr("Dimension ERROR"); return Mx; }
+    if (t === "∫(" || t === "d/dx(" || t === "Σ(" || t === "Pol(" || t === "Rec(" || t === "Dot(" || t === "Angle("){
+      var ar = rawArgs(), ev = function(k){ if (!ar[k] || !ar[k].length) throw fxErr("Syntax ERROR"); return fxEval(ar[k]).v; };
+      if (t === "∫("){ if (ar.length !== 3) throw fxErr("Syntax ERROR"); return cx(fxIntegrate(fxFnOfX(ar[0]), realOf(ev(1)), realOf(ev(2))), 0); }
+      if (t === "d/dx("){ if (ar.length < 2) throw fxErr("Syntax ERROR"); return cx(fxDeriv(fxFnOfX(ar[0]), realOf(ev(1))), 0); }
+      if (t === "Σ("){
+        if (ar.length !== 3) throw fxErr("Syntax ERROR");
+        var lo = Math.round(realOf(ev(1))), hi = Math.round(realOf(ev(2))), f = fxFnOfX(ar[0]), sm = 0, q;
+        if (hi - lo > 100000) throw fxErr("Math ERROR");
+        for (q = lo; q <= hi; q++) sm += f(q);
+        return cx(sm, 0);
+      }
+      if (t === "Pol("){ var px = realOf(ev(0)), py = realOf(ev(1)), pr = Math.hypot(px, py), pth = fromRadA(Math.atan2(py, px)); FX.vars.X = cx(pr, 0); FX.vars.Y = cx(pth, 0); return { t: "L", items: [["r", cx(pr, 0)], ["θ", cx(pth, 0)]] }; }
+      if (t === "Rec("){ var rr = realOf(ev(0)), rth = toRadA(realOf(ev(1))), rx = rr * Math.cos(rth), ry = rr * Math.sin(rth); FX.vars.X = cx(rx, 0); FX.vars.Y = cx(ry, 0); return { t: "L", items: [["x", cx(rx, 0)], ["y", cx(ry, 0)]] }; }
+      var va = ev(0), vb = ev(1); if (va.t !== "V" || vb.t !== "V") throw fxErr("Math ERROR");
+      if (t === "Dot(") return fxVdot(va, vb);
+      var den = fxVnorm(va) * fxVnorm(vb); if (den === 0) throw fxErr("Math ERROR");
+      return cx(fromRadA(Math.acos(Math.max(-1, Math.min(1, fxVdot(va, vb).re / den)))), 0);
+    }
     if (FXFUN.indexOf(t) >= 0){
       var a = arg(), r;
       switch (t){
@@ -134,7 +167,8 @@ function fxEval(tokens){
         case "ln(": r = cln(toC(a)); break;
         case "√(": r = csqrt(toC(a)); break;
         case "∛(": { var cv = realOf(a); r = cx(Math.cbrt(cv), 0); break; }
-        case "abs(": r = cx(cabsv(toC(a)), 0); break;
+        case "abs(": r = a.t === "V" ? cx(fxVnorm(a), 0) : cx(cabsv(toC(a)), 0); break;
+        case "UnitV(": if (a.t !== "V") throw fxErr("Math ERROR"); { var un = fxVnorm(a); if (un === 0) throw fxErr("Math ERROR"); r = fxVec(a.a.map(function(c){ return cx(c.re / un, c.im / un); })); } break;
         case "arg(": r = cx(fromRadA(cargv(toC(a))), 0); break;
         case "conj(": r = cx(toC(a).re, -toC(a).im); break;
         case "Re(": r = cx(toC(a).re, 0); break;
@@ -144,6 +178,7 @@ function fxEval(tokens){
         case "iden(": { var n = realOf(a); if (!Number.isInteger(n) || n < 1 || n > 4) throw fxErr("Math ERROR"); r = mat(n, n); for (var z = 0; z < n; z++) r.a[z][z] = cx(1, 0); break; }
         case "10^(": r = cx(Math.pow(10, realOf(a)), 0); break;
         case "e^(": r = cexp(toC(a)); break;
+        default: throw fxErr("Syntax ERROR");
       }
       return r;
     }
@@ -156,6 +191,8 @@ function fxEval(tokens){
 }
 // ---- display ----
 function fxClean(v){
+  if (v.t === "V") return fxVec(v.a.map(fxClean));
+  if (v.t === "L") return { t: "L", items: v.items.map(function(it){ return [it[0], fxClean(it[1])]; }) };
   if (v.t === "M"){ var R = mat(v.m, v.n), i, j; for (i = 0; i < v.m; i++) for (j = 0; j < v.n; j++) R.a[i][j] = fxClean(v.a[i][j]); return R; }
   var s = Math.max(Math.abs(v.re), Math.abs(v.im)), re = Math.abs(v.re) < 1e-12 * s ? 0 : v.re, im = Math.abs(v.im) < 1e-12 * s ? 0 : v.im;
   if (!isFinite(re) || !isFinite(im)) throw fxErr("Math ERROR");
@@ -194,6 +231,8 @@ function fxShowC(v, mode){
   return (re + (v.im < 0 ? "−" : (re ? "+" : "")) + im).replace(/-/g, "−");
 }
 function fxShow(v, mode){
+  if (v.t === "V"){ return '<table class="fxm"><tr>' + v.a.map(function(c){ return "<td>" + fxShowC(c, mode) + "</td>"; }).join("") + "</tr></table>"; }
+  if (v.t === "L"){ return v.items.map(function(it){ return it[0] + " = " + fxShowC(it[1], mode); }).join("<br>"); }
   if (v.t === "M"){ return '<table class="fxm">' + v.a.map(function(r){ return "<tr>" + r.map(function(c){ return "<td>" + fxShowC(c, mode) + "</td>"; }).join("") + "</tr>"; }).join("") + "</table>"; }
   return fxShowC(v, mode);
 }

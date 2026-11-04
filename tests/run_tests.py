@@ -35,7 +35,16 @@ def content_checks(pg):
         if(DONE.indexOf(c)>=0 && qz<5) bad.push("quiz pool "+c+" "+l.t+": "+qz); }); });
       if(__X('WHYBAD')!==0) bad.push("WHY mismatch "+__X('WHYBAD'));
       return {bad:bad,counts:counts}; }''')
-    fails.extend(r["bad"]); return r["counts"]
+    fails.extend(r["bad"])
+    # drawings: every worked-example figure, random-question figure and quiz figure must be well formed
+    r2 = pg.evaluate("""()=>{ var bad=[],E=__X('EXFIG'),F=__X('GENFIG'),G=__X('GENS'),M=__X('MCQ'),Q=function(q){return __X('MQ')(q)||__X('MQ2')(q)},ex=__X('EXAMPLES'),nm=0,ne=0;
+      Object.keys(E).forEach(function(k){ var f=E[k](); if(!/<svg/.test(f)||/NaN|undefined|null/.test(f)) bad.push("example figure "+k); });
+      Object.keys(ex).forEach(function(c){ ex[c].forEach(function(e){ if(E[c+"|"+e.id]){ ne++; if(!e.fig) bad.push("figure not attached "+c+" "+e.id); } }); });
+      Object.keys(G).forEach(function(c){ G[c].forEach(function(g){ if(!F[g.id]) return; for(var k=0;k<150;k++){ var r=g.make(); if(!r.fig||/NaN|undefined|null/.test(r.fig)){ bad.push("generator figure "+g.id); break; } } }); });
+      Object.keys(M).forEach(function(c){ M[c].forEach(function(m,i){ var f=Q(m.q); if(f){ nm++; if(!/<svg/.test(f)||/NaN|undefined|null/.test(f)) bad.push("quiz figure "+c+"-"+i); } }); });
+      return {bad:bad,nm:nm,ne:ne}; }""")
+    fails.extend(r2["bad"]); print("drawings: examples", r2["ne"], "quiz questions", r2["nm"])
+    return r["counts"]
 
 def ui_checks(pg, w):
     errs = []
@@ -56,10 +65,14 @@ def ui_checks(pg, w):
     for ch in ids:
         pg.click('[data-a="go"][data-v="dash"]'); pg.click(f'[data-a="study"][data-v="{ch}"][data-t="study"]'); pg.wait_for_timeout(50)
         nt = pg.evaluate(f'__X("LESSONS[\\"{ch}\\"].length")')
-        if len(pg.query_selector_all(".lesson")) != nt or pg.query_selector(".topics") or pg.query_selector(".tabs.sub"): errs.append(f"study layout {ch}")
+        if len(pg.query_selector_all(".lesson")) != 1 or len(pg.query_selector_all(".topicbar [data-a=topic]")) != nt or pg.query_selector(".topics") or pg.query_selector(".tabs.sub"): errs.append(f"study layout {ch}")
+        if not pg.query_selector('.topicfoot [data-a="tstep"][data-v="1"]') and ch != ids[-1]: errs.append(f"next topic button missing {ch}")
         if pg.query_selector('[data-a="mtab"][data-v="examples"]'): errs.append(f"examples tab still present {ch}")
         if any(b in pg.inner_html("#ctab") for b in BAD): errs.append(f"study {ch}")
         for k in range(nt):
+            if k:
+                pg.click('.topicfoot [data-a="tstep"][data-v="1"]'); pg.wait_for_timeout(40)
+                if pg.evaluate('__X("S.ti")') != k or len(pg.query_selector_all(".lesson")) != 1: errs.append(f"next topic {ch} {k}")
             w = pg.evaluate(f'(()=>{{var i=__X("IDEAS")[__X("LESSONS[\\"{ch}\\"][{k}].t")];return i&&i.w!=null}})()')
             has = pg.query_selector(f'[data-les="{k}"]') is not None
             if w != has: errs.append(f"Watch button rule {ch} topic {k}")
@@ -135,8 +148,30 @@ def calc_checks(pg):
     pg.click('[data-a="fx"]')
     for k in ["1", "2", "add", "3", "eq"]: pg.click(f'#fxwin [data-k="{k}"]')
     if "15" not in pg.inner_text("#fxlcd"): fails.append("calc 12+3 failed")
-    for k in ["ac", "menu", "2", "eq", "2", "eq", "1", "eq", "5", "eq", "1", "eq", "sub", "1", "eq", "1", "eq"]: pg.click(f'#fxwin [data-k="{k}"]')
+    for k in ["ac", "menu", "8", "eq", "2", "eq", "1", "eq", "5", "eq", "1", "eq", "sub", "1", "eq", "1", "eq"]: pg.click(f'#fxwin [data-k="{k}"]')
     if "X = 2" not in pg.inner_text("#fxlcd"): fails.append("calc EQN failed")
+    def fxk(*keys):
+        for k in keys:
+            if k.startswith("S:"): pg.click('#fxwin [data-k="shift"]'); k = k[2:]
+            elif k.startswith("A:"): pg.click('#fxwin [data-k="alpha"]'); k = k[2:]
+            pg.click(f'#fxwin [data-k="{k}"]')
+        return pg.inner_text("#fxlcd").replace(chr(10), " | ")
+    def fxexpect(name, got, want):
+        if want not in got: fails.append(f"calc {name}: wanted {want!r}, got {got!r}")
+    fxk("ac", "ac", "ac", "ac", "menu", "1")
+    fxk("ac"); fxexpect("integral", fxk("integ", "A:rp", "sq", "S:rp", "0", "S:rp", "3", "rp", "eq"), "| 9")
+    fxk("ac"); fxexpect("derivative", fxk("S:integ", "A:rp", "S:sq", "S:rp", "2", "rp", "eq"), "| 12")
+    fxk("ac"); fxk("A:rp", "sq", "add", "1", "calc"); fxexpect("CALC", fxk("3", "eq"), "| 10")
+    fxk("ac"); fxk("A:rp", "sq", "sub", "4", "A:calc", "0", "S:calc"); fxexpect("SOLVE", fxk("1", "eq"), "X = 2")
+    fxk("ac", "ac", "menu", "3", "pow", "1", "A:neg", "add", "5", "eq"); fxexpect("hex", pg.inner_text("#fxlcd"), "1F")
+    fxexpect("bin", fxk("log"), "1 1111"); fxexpect("dec", fxk("sq"), "31"); fxk("ac", "ac", "menu", "1")
+    fxk("ac", "menu", "5", "eq", "eq", "1", "eq", "2", "eq", "3", "eq", "ac", "menu", "5", "2", "eq", "4", "eq", "5", "eq", "6", "eq", "ac")
+    fxk("S:5", "7", "S:5", "4", "S:rp", "S:5", "5", "rp"); fxexpect("dot product", fxk("eq"), "| 32")
+    fxk("ac"); fxk("S:5", "4", "mul", "S:5", "5"); fxexpect("cross product", fxk("eq"), "−3")
+    fxk("ac", "menu", "6", "2", "1", "eq", "2", "eq", "3", "eq", "4", "eq", "up", "up", "up", "up", "right", "2", "eq", "4", "eq", "6", "eq", "8", "eq", "ac", "optn", "4")
+    fxexpect("regression a", pg.inner_text("#fxlcd"), "a = 0"); fxexpect("regression b", fxk("down"), "b = 2")
+    fxk("ac", "ac", "menu", "7", "A:rp", "sq", "eq", "1", "eq", "3", "eq", "1", "eq"); fxexpect("table", pg.inner_text("#fxlcd").replace(chr(10), " | "), "3" + chr(9) + "9")
+    fxk("ac", "ac", "menu", "1")
     pg.click('#fxwin [data-fxc="close"]')
     if pg.is_visible("#fxwin"): fails.append("calc did not close")
 
