@@ -5422,7 +5422,7 @@ function addBack(){
 function pStudy(){ pStudy0(); addBack(); } function pSheet(){ pSheet0(); addBack(); } function pPractice(){ pPractice0(); addBack(); } function pQuiz(){ pQuiz0(); addBack(); } function pProgress(){ pProgress0(); addBack(); }
 // Feedback: set FEEDBACK.form to the Google Form link (the .../viewform address) and the three entry ids to send reports to a form.
 // With no form set, the links open the e-mail program instead.
-var FEEDBACK = { form: "https://docs.google.com/forms/d/e/1FAIpQLScXgL7jvUNWovkCAGVkBa_X1fpwor7uyTXwT1qT__GCpZVzyw/viewform", eText: "entry.277130461", eWhere: "", eVer: "", eName: "entry.868138370", eSid: "entry.988915593", mail: "Mohammad.alghweri@gju.edu.jo" };
+var FEEDBACK = { form: "https://docs.google.com/forms/d/e/1FAIpQLScXgL7jvUNWovkCAGVkBa_X1fpwor7uyTXwT1qT__GCpZVzyw/viewform", eText: "", eWhere: "", eVer: "", eName: "entry.868138370", eSid: "entry.988915593", mail: "Mohammad.alghweri@gju.edu.jo" };
 function feedbackLink(subject, where, body){
   if (FEEDBACK.form){
     var u = FEEDBACK.form + (FEEDBACK.form.indexOf("?") < 0 ? "?" : "&") + "usp=pp_url";
