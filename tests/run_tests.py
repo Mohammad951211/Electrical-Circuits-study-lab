@@ -1,4 +1,4 @@
-"""Automated checks for the ME0212 Study Lab.
+"""Automated checks for Circuit Hub (ME0212).
 Run: python3 build.py --test && python3 tests/run_tests.py
 Needs: pip install playwright && playwright install chromium. Optional: npm i axe-core (accessibility check).
 """

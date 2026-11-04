@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.12.0 (2026-11-04)
+- The platform is now called Circuit Hub. Under the name: ME0212 Electrical Circuits & Machines, German Jordanian University, and the instructor.
+- The new GJU logo and the SATS logo sit side by side in the header, on a white plate so they stay clear in the dark theme.
+- Two themes only, light and dark, with colours taken from the GJU logo (sky blue and orange). A button in the header switches them. The first visit follows the device setting and the choice is remembered.
+- Footer: "Developed by: Mohammad Alghweri, German Jordanian University" with a link to the portfolio.
+- Quiz numeric questions have no Check button: type the number and press Next or Enter.
+- Calculator menus show the selected line with an arrow, and the lines can be clicked.
+- Report a problem and Send feedback open the Google Form, with the student's name and ID filled in when entered.
+- The version number in the page code is now filled in at build time.
+
 ## 1.11.0 (2026-11-04)
 - One topic at a time: Study, Practice and Quiz now show a single topic with a topic bar on top. Previous topic and Next topic buttons sit at the end of the page. After the last topic, Next goes to the first topic of the next chapter.
 - Circuit drawings: 72 worked examples, 13 random question types and 125 quiz questions that describe a circuit now show it as a drawing. Drawings of random questions use the numbers of the question.

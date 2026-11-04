@@ -1,22 +1,22 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ME0212 Study Lab</title>
-<script>try{var th=localStorage.getItem("me0212-theme");if(!th||th==="light")th=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"slate";document.documentElement.setAttribute("data-theme",th)}catch(e){}</script>
+<title>Circuit Hub · ME0212 Electrical Circuits and Machines</title>
+<script>try{var th=localStorage.getItem("circuithub-theme");if(th!=="dark"&&th!=="light")th=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",th)}catch(e){}</script>
 <style>
 /*@@CSS@@*/
 </style></head><body>
 <div class="letterhead" aria-hidden="true"></div>
 <header class="top"><div class="wrap">
-  <div class="brand"><img alt="German Jordanian University" src="@@LOGO@@"></div>
-  <div class="tb"><h1>ME0212 Study Lab</h1><p>Electrical Circuits &amp; Machines</p><p class="inst">Instructor: <b>Mohammad Alghweri</b></p></div>
-  <div class="who"><b>Student</b><span id="who"></span><br><select class="theme" id="themeBtn" aria-label="Colour theme"><option value="slate">Slate</option><option value="paper">Paper</option><option value="mint">Mint</option><option value="dark">Dark</option></select></div>
+  <div class="brand"><img class="lg-gju" alt="German Jordanian University" src="@@LOGO@@"><span class="lg-sep" aria-hidden="true"></span><img class="lg-sats" alt="School of Applied Technical Sciences" src="@@SATS@@"></div>
+  <div class="tb"><h1>Circuit Hub</h1><p class="course">ME0212 Electrical Circuits &amp; Machines</p><p class="uni">German Jordanian University</p><p class="inst">Instructor: <b>Mohammad Alghweri</b></p></div>
+  <div class="who"><b>Student</b><span id="who"></span><br><button type="button" class="theme" id="themeBtn" aria-pressed="false" aria-label="Switch between light and dark theme"><span class="ic" aria-hidden="true"></span><span class="tl">Dark</span></button></div>
   <nav id="nav" aria-label="Main"></nav>
 </div></header>
 <main class="main wrap" id="page" aria-live="polite"></main>
-<footer class="foot wrap"><span>ME0212 Study Lab · version @@VERSION@@ (@@DATE@@)</span><a href="mailto:Mohammad.alghweri@gju.edu.jo?subject=ME0212%20Study%20Lab%20feedback">Send feedback</a></footer>
+<footer class="foot wrap"><span class="dev">Developed by: <a class="devlink" href="https://malghweri.site/" target="_blank" rel="noopener">Mohammad Alghweri</a>, German Jordanian University</span><span class="ver">Circuit Hub · version @@VERSION@@ (@@DATE@@)</span><a id="fbLink" href="#">Send feedback</a></footer>
 <script>
 (function(){
 //@@JS@@
 })();
 </script>
-<script>(function(){var s=document.getElementById("themeBtn"),r=document.documentElement;s.value=r.getAttribute("data-theme")||"slate";s.onchange=function(){r.setAttribute("data-theme",s.value);try{localStorage.setItem("me0212-theme",s.value)}catch(e){}}})();</script></body></html>
+<script>(function(){var b=document.getElementById("themeBtn"),r=document.documentElement;function sync(){var d=r.getAttribute("data-theme")==="dark";b.setAttribute("aria-pressed",d);b.querySelector(".tl").textContent=d?"Light":"Dark";b.querySelector(".ic").textContent=d?"☀":"☾"}sync();b.onclick=function(){var n=r.getAttribute("data-theme")==="dark"?"light":"dark";r.setAttribute("data-theme",n);try{localStorage.setItem("circuithub-theme",n)}catch(e){}sync()}})();</script></body></html>
