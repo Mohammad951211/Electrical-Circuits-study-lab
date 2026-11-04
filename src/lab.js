@@ -136,7 +136,7 @@ function feedbackLink(subject, where, body){
   }
   return "mailto:" + FEEDBACK.mail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(where + String.fromCharCode(10) + body);
 }
-function footLink(){ var a = document.querySelector(".foot a"); if (a){ a.href = feedbackLink("ME0212 Study Lab feedback", "Feedback (App version " + APP_VERSION + ")", ""); if (FEEDBACK.form){ a.target = "_blank"; a.rel = "noopener"; } } }
+function footLink(){ var a = document.getElementById("fbLink"); if (a){ a.href = feedbackLink("Circuit Hub feedback", "Feedback (App version " + APP_VERSION + ")", ""); if (FEEDBACK.form){ a.target = "_blank"; a.rel = "noopener"; } } }
 function render(){
   $("nav").innerHTML = NAV.map(function(n){ return '<button class="nv" data-a="go" data-v="' + n[0] + '" aria-current="' + (S.page === n[0]) + '">' + n[1] + "</button>"; }).join("");
   $("who").innerHTML = STORE.name ? esc2(STORE.name) + (STORE.sid ? '<small class="sid">ID ' + esc2(STORE.sid) + "</small>" : "") + ' <button class="linkb" data-a="editid">Edit</button>' : '<button class="linkb" data-a="editid">Enter your name</button>';
@@ -153,8 +153,8 @@ function trace(f, label){
 // ---------- dashboard ----------
 function pDash(){
   var s = allStats(), w = weak(), h = "";
-  if (!STORE.name || !STORE.sid || S.editId) h += '<section class="card hello"><h2>Welcome to the ME0212 Study Lab</h2><p>Enter your name and your university ID. They stay on this device only and appear on your progress report.</p><div class="idrow"><label class="idf"><span>Full name</span><input id="nameIn" type="text" placeholder="Your full name" autocomplete="name" maxlength="60" value="' + esc2(STORE.name || "") + '"></label><label class="idf"><span>University ID</span><input id="sidIn" type="text" inputmode="numeric" placeholder="e.g. 20231234" maxlength="20" value="' + esc2(STORE.sid || "") + '"></label><button class="btn" data-a="setname">Save</button></div><p class="msg" id="idmsg" role="alert"></p></section>';
-  if (STORE.help) h += '<section class="card howto"><h2 class="sh">How to use the Study Lab</h2><ol><li><b>Pick a chapter</b> from the cards below.</li><li><b>Study:</b> pick a topic, read it and press Watch to see the animation.</li><li><b>Examples:</b> worked examples of the topic, one step at a time.</li><li><b>Practice:</b> questions with the solution after every answer.</li><li><b>Quiz:</b> test one topic or the whole chapter.</li></ol><p class="mut">Your progress is saved on this device only. Each answer shows its source in the book or the slides.</p><button class="btn sm ghost" data-a="hidehelp">Hide this</button></section>';
+  if (!STORE.name || !STORE.sid || S.editId) h += '<section class="card hello"><h2>Welcome to Circuit Hub</h2><p>Enter your name and your university ID. They stay on this device only and appear on your progress report.</p><div class="idrow"><label class="idf"><span>Full name</span><input id="nameIn" type="text" placeholder="Your full name" autocomplete="name" maxlength="60" value="' + esc2(STORE.name || "") + '"></label><label class="idf"><span>University ID</span><input id="sidIn" type="text" inputmode="numeric" placeholder="e.g. 20231234" maxlength="20" value="' + esc2(STORE.sid || "") + '"></label><button class="btn" data-a="setname">Save</button></div><p class="msg" id="idmsg" role="alert"></p></section>';
+  if (STORE.help) h += '<section class="card howto"><h2 class="sh">How to use Circuit Hub</h2><ol><li><b>Pick a chapter</b> from the cards below.</li><li><b>Study:</b> pick a topic, read it and press Watch to see the animation.</li><li><b>Examples:</b> worked examples of the topic, one step at a time.</li><li><b>Practice:</b> questions with the solution after every answer.</li><li><b>Quiz:</b> test one topic or the whole chapter.</li></ol><p class="mut">Your progress is saved on this device only. Each answer shows its source in the book or the slides.</p><button class="btn sm ghost" data-a="hidehelp">Hide this</button></section>';
   var f = s.total ? s.seen / s.total : 0;
   h += '<section class="card trace"><div class="trace-top"><h1>' + (STORE.name ? "Hello, " + esc2(STORE.name.split(" ")[0]) : "Dashboard") + '</h1><div class="read"><b>' + s.seen + "</b> of " + s.total + " questions seen</div></div>" + trace(f, s.seen + " of " + s.total + " questions seen") + "</section>";
   h += '<div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(streak(), "Day streak") + stat(CHAPTER_IDS.length, "Chapters") + "</div>";
@@ -286,7 +286,7 @@ function pStudy0(){
 function pSheet0(){
   var h = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">Formula sheet · ' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn" data-a="print">Print or save as PDF</button></div></div><section class="card sheet">';
   h += LESSONS[S.ch].map(function(l){ return '<div class="srow"><h2>' + l.t + "</h2>" + (l.f ? "<p>" + l.f.map(function(f){ return '<span class="formula">' + f + "</span>"; }).join(" ") + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + "</div>"; }).join("");
-  $("page").innerHTML = h + '</section><p class="mut printnote">ME0212 Study Lab · version ' + APP_VERSION + "</p>";
+  $("page").innerHTML = h + '</section><p class="mut printnote">Circuit Hub · version ' + APP_VERSION + "</p>";
 }
 
 // ---------- practice ----------
@@ -352,7 +352,7 @@ function stepsOf(text, finalLabel){
 function srcLine(q){
   var s = srcOf(q.d.ch, q.d.topic, q.text + " " + (q.sol || "") + " " + (q.why || ""));
   var body = "" + chL(q.d.ch) + " · " + q.d.topic + "\nQuestion: " + q.text + "\n\nWhat is wrong:\n\n(App version " + APP_VERSION + ")";
-  var mail = feedbackLink("ME0212 Study Lab: problem in " + chL(q.d.ch), chL(q.d.ch) + " · " + q.d.topic, body);
+  var mail = feedbackLink("Circuit Hub: problem in " + chL(q.d.ch), chL(q.d.ch) + " · " + q.d.topic, body);
   return '<p class="srcl">' + (s ? "<span>Source: " + s + "</span>" : "") + '<a href="' + mail + '"' + (FEEDBACK.form ? ' target="_blank" rel="noopener"' : "") + '>Report a problem</a></p>';
 }
 function feedback(q, st){
@@ -449,7 +449,7 @@ function pProgress0(){
   $("page").innerHTML = h;
 }
 function summaryText(){
-  var s = allStats(), t = "ME0212 Study Lab progress\nName: " + (STORE.name || "(not set)") + "\nUniversity ID: " + (STORE.sid || "(not set)") + "\nDate: " + today() + "\nAnswers: " + s.n + ", accuracy: " + (s.acc == null ? "-" : s.acc + "%") + ", questions seen: " + s.seen + " of " + s.total + "\n";
+  var s = allStats(), t = "Circuit Hub progress\nName: " + (STORE.name || "(not set)") + "\nUniversity ID: " + (STORE.sid || "(not set)") + "\nDate: " + today() + "\nAnswers: " + s.n + ", accuracy: " + (s.acc == null ? "-" : s.acc + "%") + ", questions seen: " + s.seen + " of " + s.total + "\n";
   CHAPTER_IDS.forEach(function(c){ var x = chStats(c); t += "" + chL(c) + ": " + x.seen + "/" + x.total + " seen, accuracy " + (x.acc == null ? "-" : x.acc + "%") + "\n"; });
   STORE.quizzes.slice(-10).forEach(function(q){ t += "Quiz " + q.date + " " + chL(q.ch) + ": " + q.score + "/" + q.total + "\n"; });
   return t;

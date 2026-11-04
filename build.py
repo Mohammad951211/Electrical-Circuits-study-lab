@@ -42,7 +42,7 @@ def build(test=False):
     js = "\n".join([cat(FIGS), cat(CONTENT), cat(WATCH), cat(IDEAS), lab])
     fonts = "".join('@font-face{font-family:"%s";font-weight:%s;font-style:normal;font-display:swap;src:url(data:font/woff2;base64,%s) format("woff2")}\n' % (f, w, b64("assets/fonts/" + n)) for f, w, n in FONTS)
     css = fonts + rd("src/lab.css").replace("@@BACKDROP@@", "data:image/jpeg;base64," + b64("assets/gju-backdrop.jpg"))
-    out = rd("src/template.html").replace("/*@@CSS@@*/", css).replace("@@LOGO@@", "data:image/jpeg;base64," + b64("assets/gju-logo.jpg"))
+    out = rd("src/template.html").replace("/*@@CSS@@*/", css).replace("@@LOGO@@", "data:image/webp;base64," + b64("assets/gju-logo.webp")).replace("@@SATS@@", "data:image/png;base64," + b64("assets/sats-logo.png"))
     out = out.replace("@@VERSION@@", version).replace("@@DATE@@", datetime.date.today().isoformat()).replace("//@@JS@@", js.replace("@@VERSION@@", version))
     if test: out = out.replace("(function(){\n", "(function(){ window.__X=function(n){return eval(n)};\n", 1)
     dst = os.path.join(ROOT, "build/test.html" if test else "index.html")

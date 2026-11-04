@@ -1,4 +1,4 @@
-# ME0212 Study Lab
+# Circuit Hub
 
 Interactive study platform for ME0212 Electrical Circuits and Machines, the university.
 The live site is the single file `index.html` (GitHub Pages).
