@@ -445,8 +445,19 @@ function pProgress0(){
   var s = allStats(), h = '<h1 class="ph">My progress</h1><section class="card idcard"><div><b>' + esc2(STORE.name || "Name not set") + '</b><span class="mut"> · University ID: ' + esc2(STORE.sid || "not set") + '</span></div><button class="btn sm ghost" data-a="editid">Edit name and ID</button></section><div class="stats">'  + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(STORE.quizzes.length, "Quizzes taken") + stat(streak(), "Day streak") + "</div>";
   h += CHAPTER_IDS.map(function(c){ var rows = topicsOf(c).map(function(t){ var x = STORE.t[c + "|" + t], p = x && x.n ? Math.round(100 * x.r / x.n) : null; return '<div class="trow"><span>' + t + '</span><span class="mut">' + (x ? x.r + " / " + x.n : "not tried") + "</span>" + bar(p || 0, p == null ? "" : p >= 80 ? "ok" : p < 60 ? "low" : "") + "<span>" + (p == null ? "–" : p + "%") + "</span></div>"; }).join("");
     return '<section class="card"><h2 class="sh">' + chL(c) + " · " + CHAPTERS[c].title + "</h2>" + rows + "</section>"; }).join("");
-  h += quizHistory() + '<section class="card"><h2 class="sh">Share or reset</h2><p class="mut">Your progress is stored in this browser only' + (memOnly ? " (storage is blocked, so it will be lost when you close the page)" : "") + '. To show your instructor, copy or save the summary.</p><div class="row"><button class="btn" data-a="copysum">Copy summary</button><button class="btn ghost" data-a="dlsum">Save as text file</button><button class="btn ghost danger" data-a="reset">Reset all progress</button></div><div id="sumMsg" class="mut"></div></section>';
+  h += quizHistory() + '<section class="card"><h2 class="sh">Share or reset</h2><p class="mut">Your progress is stored in this browser only' + (memOnly ? " (storage is blocked, so it will be lost when you close the page)" : "") + '. To show your instructor, copy or save the summary.</p><div class="row"><button class="btn" data-a="copysum">Copy summary</button><button class="btn ghost" data-a="dlsum">Save as text file</button><button class="btn ghost danger" data-a="reset">Reset all progress</button></div><div id="sumMsg" class="mut"></div></section>' +
+    '<section class="card"><h2 class="sh">Move your progress to another device</h2><p class="mut">Save a progress file, then load it on your phone, laptop or a new browser. The file stays with you and is not sent anywhere.</p><div class="row"><button class="btn" data-a="dlprog">Download progress file</button><button class="btn ghost" data-a="ldprog">Load progress file</button><input type="file" id="progFile" accept=".json,application/json" hidden></div><div id="progMsg" class="mut" role="status"></div></section>';
   $("page").innerHTML = h;
+}
+// progress file: save and load the whole progress of this device
+function progressFile(){ return JSON.stringify({ app: "circuit-hub", version: APP_VERSION, saved: today(), data: STORE }); }
+function loadProgressText(txt){
+  var o; try { o = JSON.parse(txt); } catch (e) { return "This is not a progress file."; }
+  var d = o && o.app === "circuit-hub" ? o.data : null;
+  if (!d || typeof d.a !== "object" || typeof d.t !== "object" || !Array.isArray(d.quizzes)) return "This is not a Circuit Hub progress file.";
+  if (!confirm("Replace the progress on this device with the file? Name: " + (d.name || "not set") + ", saved " + (o.saved || "?") + ".")) return "Nothing was changed.";
+  var keep = STORE.help; for (var k in STORE) if (d[k] != null) STORE[k] = d[k]; STORE.help = keep; saveStore(); render();
+  return "Progress loaded.";
 }
 function summaryText(){
   var s = allStats(), t = "Circuit Hub progress\nName: " + (STORE.name || "(not set)") + "\nUniversity ID: " + (STORE.sid || "(not set)") + "\nDate: " + today() + "\nAnswers: " + s.n + ", accuracy: " + (s.acc == null ? "-" : s.acc + "%") + ", questions seen: " + s.seen + " of " + s.total + "\n";
@@ -456,6 +467,10 @@ function summaryText(){
 }
 
 // ---------- events ----------
+document.addEventListener("change", function(e){
+  var f = e.target && e.target.id === "progFile" && e.target.files && e.target.files[0]; if (!f) return;
+  var rd = new FileReader(); rd.onload = function(){ var m = loadProgressText(String(rd.result)); var el = $("progMsg"); if (el) el.textContent = m; }; rd.readAsText(f); e.target.value = "";
+});
 document.addEventListener("click", function(e){
   var mi = e.target.closest && e.target.closest("#fxwin .fxi[data-i]");
   if (mi && FX.view === "menu"){ FX.menu.sel = +mi.dataset.i; FX.menu.items[FX.menu.sel].f(); fxRender(); return; }
@@ -489,6 +504,11 @@ document.addEventListener("click", function(e){
   else if (a === "againquiz"){ QZ = null; render(); }
   else if (a === "copysum"){ var t = summaryText(); function done(){ $("sumMsg").textContent = "Copied."; } if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function(){ $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }); else $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }
   else if (a === "dlsum"){ var bl = new Blob([summaryText()], { type: "text/plain" }), u = URL.createObjectURL(bl), l = document.createElement("a"); l.href = u; l.download = "ME0212_progress.txt"; document.body.appendChild(l); l.click(); l.remove(); setTimeout(function(){ URL.revokeObjectURL(u); }, 500); }
+  else if (a === "dlprog"){
+    var blob = new Blob([progressFile()], { type: "application/json" }), url = URL.createObjectURL(blob), ln = document.createElement("a");
+    ln.href = url; ln.download = "circuit-hub-progress" + (STORE.sid ? "-" + String(STORE.sid).replace(/[^0-9A-Za-z-]/g, "") : "") + ".json"; document.body.appendChild(ln); ln.click(); ln.remove(); setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    $("progMsg").textContent = "Progress file downloaded. Keep it safe."; }
+  else if (a === "ldprog"){ $("progFile").click(); }
   else if (a === "reset"){ if (confirm("Delete all your progress on this device?")){ STORE = { name: STORE.name, sid: STORE.sid, help: STORE.help, a: {}, t: {}, quizzes: [], days: [], seen: 0 }; saveStore(); render(); } }
   else if (b.dataset.tool != null){ }
 });

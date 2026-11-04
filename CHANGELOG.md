@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.13.0 (2026-11-04)
+- My progress: download your progress as a file and load it on another device or browser. The file is not sent anywhere.
+
 ## 1.12.0 (2026-11-04)
 - The platform is now called Circuit Hub. Under the name: ME0212 Electrical Circuits & Machines, German Jordanian University, and the instructor.
 - The new GJU logo and the SATS logo sit side by side in the header, on a white plate so they stay clear in the dark theme.
