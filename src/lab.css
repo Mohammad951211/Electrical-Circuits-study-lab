@@ -204,7 +204,7 @@ select.theme{padding:5px 10px;margin-top:6px;appearance:auto;text-transform:none
 #fxwin .fxr.big{font-size:20px;text-align:left}
 #fxwin .fxt{font-size:11px;opacity:.75}
 #fxwin .fxi{padding:1px 4px;font-size:13px}
-#fxwin .fxi.sel{background:#0f1d0e;color:#cfdcc7}
+#fxwin .fxi{cursor:pointer;border-radius:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#fxwin .fxi.sel{background:#0f1d0e;color:#e4f0dc;font-weight:700;box-shadow:inset 3px 0 0 #f2c94c}
 #fxwin .fxg{border-collapse:collapse;width:100%}
 #fxwin .fxg td{border:1px solid #0f1d0e55;padding:1px 4px;font-size:13px}
 #fxwin .fxg td.on,#fxwin .fxg tr.rowon td{background:#0f1d0e;color:#cfdcc7}
