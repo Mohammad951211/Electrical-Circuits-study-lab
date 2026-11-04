@@ -376,7 +376,7 @@ function fxRender(){
   document.getElementById("fxst").innerHTML = st.map(function(s){ return "<i>" + s + "</i>"; }).join("");
   var h = "", v = FX.view;
   function expr(){ var a = FX.tokens.slice(0, FX.cur).map(fxTokHtml).join(""), b = FX.tokens.slice(FX.cur).map(fxTokHtml).join(""); return '<div class="fxe">' + a + '<span class="fxcur"></span>' + b + "</div>"; }
-  if (v === "menu"){ var m = FX.menu, win = fxWin(m.items, m.sel, 4); h = '<div class="fxt">' + m.title + (m.items.length > 4 ? " (" + (m.sel + 1) + "/" + m.items.length + ")" : "") + "</div>" + m.items.slice(win[0], win[1]).map(function(it, i){ var n = win[0] + i; return '<div class="fxi' + (n === m.sel ? " sel" : "") + '">' + (n + 1) + ": " + it.l + "</div>"; }).join(""); }
+  if (v === "menu"){ var m = FX.menu, win = fxWin(m.items, m.sel, 4); h = '<div class="fxt">' + m.title + (m.items.length > 4 ? " (" + (m.sel + 1) + "/" + m.items.length + ")" : "") + "</div>" + m.items.slice(win[0], win[1]).map(function(it, i){ var n = win[0] + i; return '<div class="fxi' + (n === m.sel ? " sel" : "") + '" data-i="' + n + '">' + (n === m.sel ? "▶ " : "") + (n + 1) + ": " + it.l + "</div>"; }).join(""); }
   else if (v === "grid"){
     var g = FX.grid, sp = g.spec; h = '<div class="fxt">' + sp.title + '</div><table class="fxg">';
     for (var r = 0; r < sp.rows; r++){ h += "<tr>"; for (var c = 0; c < sp.cols; c++){ var cur = r === g.r && c === g.c; h += '<td class="' + (cur ? "on" : "") + '"><small>' + sp.lab(r, c) + "</small> " + (cur && FX.tokens.length ? FX.tokens.map(fxTokHtml).join("") : fxShowC(g.vals[r][c])) + "</td>"; } h += "</tr>"; }

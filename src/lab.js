@@ -121,10 +121,27 @@ function addBack(){
   pg.insertBefore(b, pg.firstChild);
 }
 function pStudy(){ pStudy0(); addBack(); } function pSheet(){ pSheet0(); addBack(); } function pPractice(){ pPractice0(); addBack(); } function pQuiz(){ pQuiz0(); addBack(); } function pProgress(){ pProgress0(); addBack(); }
+// Feedback: set FEEDBACK.form to the Google Form link (the .../viewform address) and the three entry ids to send reports to a form.
+// With no form set, the links open the e-mail program instead.
+var FEEDBACK = { form: "https://docs.google.com/forms/d/e/1FAIpQLScXgL7jvUNWovkCAGVkBa_X1fpwor7uyTXwT1qT__GCpZVzyw/viewform", eText: "entry.277130461", eWhere: "", eVer: "", eName: "entry.868138370", eSid: "entry.988915593", mail: "Mohammad.alghweri@gju.edu.jo" };
+function feedbackLink(subject, where, body){
+  if (FEEDBACK.form){
+    var u = FEEDBACK.form + (FEEDBACK.form.indexOf("?") < 0 ? "?" : "&") + "usp=pp_url";
+    if (FEEDBACK.eWhere) u += "&" + FEEDBACK.eWhere + "=" + encodeURIComponent(where);
+    if (FEEDBACK.eText) u += "&" + FEEDBACK.eText + "=" + encodeURIComponent((FEEDBACK.eWhere ? "" : where + " (version " + APP_VERSION + ")" + String.fromCharCode(10)) + body);
+    if (FEEDBACK.eVer) u += "&" + FEEDBACK.eVer + "=" + encodeURIComponent(APP_VERSION);
+    if (FEEDBACK.eName && STORE.name) u += "&" + FEEDBACK.eName + "=" + encodeURIComponent(STORE.name);
+    if (FEEDBACK.eSid && STORE.sid) u += "&" + FEEDBACK.eSid + "=" + encodeURIComponent(STORE.sid);
+    return u;
+  }
+  return "mailto:" + FEEDBACK.mail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(where + String.fromCharCode(10) + body);
+}
+function footLink(){ var a = document.querySelector(".foot a"); if (a){ a.href = feedbackLink("ME0212 Study Lab feedback", "Feedback (App version " + APP_VERSION + ")", ""); if (FEEDBACK.form){ a.target = "_blank"; a.rel = "noopener"; } } }
 function render(){
   $("nav").innerHTML = NAV.map(function(n){ return '<button class="nv" data-a="go" data-v="' + n[0] + '" aria-current="' + (S.page === n[0]) + '">' + n[1] + "</button>"; }).join("");
   $("who").innerHTML = STORE.name ? esc2(STORE.name) + (STORE.sid ? '<small class="sid">ID ' + esc2(STORE.sid) + "</small>" : "") + ' <button class="linkb" data-a="editid">Edit</button>' : '<button class="linkb" data-a="editid">Enter your name</button>';
   ({ dash: pDash, study: pStudy, practice: pPractice, quiz: pQuiz, progress: pProgress, sheet: pSheet })[S.page]();
+  footLink();
 }
 function trace(f, label){
   var W = 1000, H = 80, N = 160, pts = [], k, x, y;
@@ -298,7 +315,7 @@ function qbody(q, st){
   if (q.kind === "mcq"){
     h += '<div class="opts">' + q.opts.map(function(o, i){ var c = ""; if (st.done){ if (i === q.correct) c = " right"; else if (i === st.picked) c = " wrong"; } else if (st.picked === i) c = " pick"; return '<button class="opt" data-a="opt" data-v="' + i + '"' + (st.done ? " disabled" : "") + ">" + esc2(o) + "</button>"; }).join("") + "</div>";
   } else if (q.kind === "num"){
-    h += '<div class="numrow"><input id="numIn" type="text" inputmode="decimal" autocomplete="off" placeholder="Your answer" aria-label="Your answer" value="' + esc2(st.val || "") + '"' + (st.done ? " disabled" : "") + '><span class="un">' + (q.unit || "") + "</span>" + (st.done ? "" : '<button class="btn" data-a="check">Check</button>') + "</div>" + (st.done ? "" : '<p class="numhint">Answers within 1.5% are accepted. A prefix may be typed, for example 0.71 mA or 710 µA.</p>');
+    h += '<div class="numrow"><input id="numIn" type="text" inputmode="decimal" autocomplete="off" placeholder="Your answer" aria-label="Your answer" value="' + esc2(st.val || "") + '"' + (st.done ? " disabled" : "") + '><span class="un">' + (q.unit || "") + "</span>" + (st.done || st.quiz ? "" : '<button class="btn" data-a="check">Check</button>') + "</div>" + (st.done || st.quiz ? "" : '<p class="numhint">Answers within 1.5% are accepted. A prefix may be typed, for example 0.71 mA or 710 µA.</p>');
   }
   return h;
 }
@@ -335,8 +352,8 @@ function stepsOf(text, finalLabel){
 function srcLine(q){
   var s = srcOf(q.d.ch, q.d.topic, q.text + " " + (q.sol || "") + " " + (q.why || ""));
   var body = "" + chL(q.d.ch) + " · " + q.d.topic + "\nQuestion: " + q.text + "\n\nWhat is wrong:\n\n(App version " + APP_VERSION + ")";
-  var mail = "mailto:Mohammad.alghweri@gju.edu.jo?subject=" + encodeURIComponent("ME0212 Study Lab: problem in " + chL(q.d.ch)) + "&body=" + encodeURIComponent(body);
-  return '<p class="srcl">' + (s ? "<span>Source: " + s + "</span>" : "") + '<a href="' + mail + '">Report a problem</a></p>';
+  var mail = feedbackLink("ME0212 Study Lab: problem in " + chL(q.d.ch), chL(q.d.ch) + " · " + q.d.topic, body);
+  return '<p class="srcl">' + (s ? "<span>Source: " + s + "</span>" : "") + '<a href="' + mail + '"' + (FEEDBACK.form ? ' target="_blank" rel="noopener"' : "") + '>Report a problem</a></p>';
 }
 function feedback(q, st){
   if (q.kind === "bank") return '<div class="fb" role="status"><b>Worked answer</b>' + stepsOf(q.ans) + '</div><div class="row"><span class="mut">Did you get it?</span><button class="btn" data-a="self" data-v="1">I got it</button><button class="btn ghost" data-a="self" data-v="0">Not yet</button></div>' + srcLine(q);
@@ -394,7 +411,7 @@ function startQuiz(){
 }
 function drawQuiz(){
   var q = QZ.qs[QZ.i], st = QZ.cur || {};
-  $("page").innerHTML = '<div class="qzbar"><b>Question ' + (QZ.i + 1) + " of " + QZ.qs.length + "</b>" + bar(Math.round(100 * QZ.i / QZ.qs.length)) + '<span class="clock" id="qzclock"></span><button class="btn sm ghost" data-a="quitquiz">Quit</button></div><section class="card qcard">' + qbody(q, { done: false, picked: st.picked, val: st.val }) +
+  $("page").innerHTML = '<div class="qzbar"><b>Question ' + (QZ.i + 1) + " of " + QZ.qs.length + "</b>" + bar(Math.round(100 * QZ.i / QZ.qs.length)) + '<span class="clock" id="qzclock"></span><button class="btn sm ghost" data-a="quitquiz">Quit</button></div><section class="card qcard">' + qbody(q, { done: false, quiz: true, picked: st.picked, val: st.val }) +
     '<div class="row"><button class="btn" data-a="qnext">' + (QZ.i === QZ.qs.length - 1 ? "Finish" : "Next") + "</button></div></section>";
   qclock(); var inp = $("numIn"); if (inp){ inp.focus(); inp.addEventListener("keydown", function(e){ if (e.key === "Enter") qnext(); }); }
   if (q.kind === "mcq" && st.picked != null) document.querySelectorAll(".opt")[st.picked].classList.add("pick");
@@ -440,6 +457,8 @@ function summaryText(){
 
 // ---------- events ----------
 document.addEventListener("click", function(e){
+  var mi = e.target.closest && e.target.closest("#fxwin .fxi[data-i]");
+  if (mi && FX.view === "menu"){ FX.menu.sel = +mi.dataset.i; FX.menu.items[FX.menu.sel].f(); fxRender(); return; }
   var b = e.target.closest("[data-a]"); if (!b || b.tagName === "SELECT") return;
   var a = b.dataset.a, v = b.dataset.v;
   if (a === "go") go(v);
