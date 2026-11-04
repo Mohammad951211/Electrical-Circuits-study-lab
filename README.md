@@ -16,5 +16,7 @@ Content: chapters 1, 2, 3, 4, 5, 6, 8, 9 and 11 of the textbook, plus the motors
 - `src/content*.js`: lessons, calculators.
 - `src/watch*.js`: animations.
 - `src/mcq*.js`, `src/gens*.js`: multiple-choice questions and number generators.
+- `src/exfigs.js`, `src/mcqfigs.js`, `src/mcqfigs2.js`: circuit drawings for worked examples, random questions and quiz questions (the quiz drawings are built from the numbers in the question text).
+- `src/fxcalc.js`, `src/fxmodes.js`, `src/fxui.js`: the calculator (engine, extra modes, keys and screen).
 - `src/ideas*.js`: "In plain words" and "Common slip" notes.
 - `tests/run_tests.py`: content, interface, animation and accessibility checks.

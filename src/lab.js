@@ -34,7 +34,7 @@ function topicsOf(c){ var s = []; POOL[c].forEach(function(d){ if (s.indexOf(d.t
 function instantiate(d){
   if (d.kind === "mcq"){
     var m = d.ref, opts = shuffle([m.ok].concat(m.wrong));
-    return { d: d, kind: "mcq", text: m.q, opts: opts, correct: opts.indexOf(m.ok), why: m.why, fig: null };
+    return { d: d, kind: "mcq", text: m.q, opts: opts, correct: opts.indexOf(m.ok), why: m.why, fig: MQ(m.q) || MQ2(m.q) };
   }
   if (d.kind === "num"){ var r = d.ref.make(); return { d: d, kind: "num", text: r.q, unit: r.unit, ans: r.ans, sol: r.sol, fig: r.fig }; }
   var q = d.ref; return { d: d, kind: "bank", text: q.q, ans: q.a, fig: q.fig() };
@@ -164,6 +164,23 @@ function pStudy0(){
   else if (S.tab === "practice") rPracticeTab();
   else rQuizTab();
 }
+
+  function topicBar(){
+    var tp = tpcs(), all = S.tab !== "study";
+    return '<nav class="topicbar" aria-label="Topics of this chapter">' + (all ? '<button class="pill" data-a="topic" data-v="-1" aria-pressed="' + (S.ti < 0) + '">All topics</button>' : "") +
+      tp.map(function(t, i){ return '<button class="pill" data-a="topic" data-v="' + i + '" aria-pressed="' + (S.ti === i) + '">' + (i + 1) + ". " + t + "</button>"; }).join("") + "</nav>";
+  }
+  function nextCh(d){ var k = CHAPTER_IDS.indexOf(S.ch) + d; return k >= 0 && k < CHAPTER_IDS.length ? CHAPTER_IDS[k] : null; }
+  function topicFoot(){
+    var tp = tpcs(), i = S.ti; if (i < 0) return "";
+    var prev = i > 0 ? "Previous topic" : (nextCh(-1) ? "Previous chapter" : null), next = i < tp.length - 1 ? "Next topic" : (nextCh(1) ? "Next chapter" : null);
+    return '<div class="topicfoot"><div>' + (prev ? '<button class="btn ghost" data-a="tstep" data-v="-1">&larr; ' + prev + '</button>' : "") + '</div><span class="mut">Topic ' + (i + 1) + " of " + tp.length + '</span><div>' + (next ? '<button class="btn" data-a="tstep" data-v="1">' + next + ' &rarr;</button>' : "") + "</div></div>";
+  }
+  function tstep(d){
+    var i = S.ti + d, n = tpcs().length; pushHist();
+    if (i < 0 || i >= n){ var c = nextCh(d); if (!c) return; S.ch = c; i = d > 0 ? 0 : LESSONS[c].length - 1; }
+    S.ti = i; if (S.tab === "practice"){ PR.q = null; PR.last = null; } render(); window.scrollTo(0, 0);
+  }
   function lessonCard(l, i){
     var id = IDEAS[l.t], hasW = id && id.w != null, hasX = exList(i).length || genList(i).length;
     return '<section class="card lesson" id="les' + i + '"><h2>' + l.t + "</h2>" + (id ? '<p class="idea"><b>In plain words.</b> ' + id.i + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" +
@@ -171,8 +188,9 @@ function pStudy0(){
       '<div class="btnrow">' + (hasW ? '<button class="btn" data-watch="' + id.w + '" data-les="' + i + '" aria-expanded="false">Watch</button>' : "") + (hasX ? '<button class="btn ghost" data-exb="' + i + '" aria-expanded="false">Examples</button>' : "") + '</div><div class="wpanel" id="wp' + i + '"></div><div class="wpanel" id="ep' + i + '"></div></section>';
   }
   function rLearn(){
-    $("ctab").innerHTML = '<div class="lessons">' + LESSONS[S.ch].map(lessonCard).join("") + '</div>' +
-      (TOOLS[S.ch] && TOOLS[S.ch].length ? '<details class="card calcwrap"><summary><span>Chapter tools</span><b>Try your own numbers</b></summary><div id="calcbox"></div></details>' : "");
+    if (S.ti < 0) S.ti = 0;
+    $("ctab").innerHTML = topicBar() + '<div class="lessons">' + lessonCard(LESSONS[S.ch][S.ti], S.ti) + '</div>' +
+      (TOOLS[S.ch] && TOOLS[S.ch].length ? '<details class="card calcwrap"><summary><span>Chapter tools</span><b>Try your own numbers</b></summary><div id="calcbox"></div></details>' : "") + topicFoot();
     var open = null, openX = null;
     function closeW(){ if (open != null){ var o = $("wp" + open); if (o) o.innerHTML = ""; var ob = document.querySelector('[data-les="' + open + '"]'); if (ob){ ob.setAttribute("aria-expanded", "false"); ob.textContent = "Watch"; } open = null; WHOST = null; } }
     function closeX(){ if (openX != null){ var o = $("ep" + openX); if (o) o.innerHTML = ""; var ob = document.querySelector('[data-exb="' + openX + '"]'); if (ob){ ob.setAttribute("aria-expanded", "false"); ob.textContent = "Examples"; } openX = null; EXHOST = null; } }
@@ -258,7 +276,7 @@ function pSheet0(){
 function rPracticeTab(){
   PR.ch = S.ch; PR.topic = curTopic();
   var n = poolPractice().length;
-  $("ctab").innerHTML = '<section class="card filters"><div class="field2"><label for="fty">Type</label><select id="fty" data-a="pf"><option value="mixed"' + (PR.type === "mixed" ? " selected" : "") + '>Mixed</option><option value="mcq"' + (PR.type === "mcq" ? " selected" : "") + '>Multiple choice</option><option value="num"' + (PR.type === "num" ? " selected" : "") + '>Numeric (new numbers every time)</option></select></div><p class="mut pcount">' + n + ' questions in ' + (S.ti < 0 ? "this chapter, mixed from all topics" : "the topic " + curTopic()) + ', each solved step by step.' + (S.ti < 0 ? "" : ' <button class="linkb" data-a="topic" data-v="-1">Show the whole chapter</button>') + '</p><div class="sesbox"><b>' + PR.ses.r + " / " + PR.ses.n + '</b><span>this session</span></div></section><div id="qarea"></div>';
+  $("ctab").innerHTML = topicBar() + '<section class="card filters"><div class="field2"><label for="fty">Type</label><select id="fty" data-a="pf"><option value="mixed"' + (PR.type === "mixed" ? " selected" : "") + '>Mixed</option><option value="mcq"' + (PR.type === "mcq" ? " selected" : "") + '>Multiple choice</option><option value="num"' + (PR.type === "num" ? " selected" : "") + '>Numeric (new numbers every time)</option></select></div><p class="mut pcount">' + n + ' questions in ' + (S.ti < 0 ? "this chapter, mixed from all topics" : "the topic " + curTopic()) + ', each solved step by step.' + (S.ti < 0 ? "" : ' <button class="linkb" data-a="topic" data-v="-1">Show the whole chapter</button>') + '</p><div class="sesbox"><b>' + PR.ses.r + " / " + PR.ses.n + '</b><span>this session</span></div></section><div id="qarea"></div>' + topicFoot();
   if (!PR.q || PR.q.d.ch !== S.ch || (PR.topic !== "all" && PR.q.d.topic !== PR.topic)) nextPractice(); else drawQ();
 }
 function pPractice0(){ S.page = "study"; S.tab = "practice"; render(); }
@@ -360,7 +378,7 @@ function quizPool(){
 }
 function rQuizTab(){
   var n = quizPool().length, opts = [5, 10, 20].filter(function(x){ return x <= Math.max(5, n); }); if (opts.indexOf(QZN) < 0) QZN = opts[opts.length - 1];
-  $("ctab").innerHTML = '<section class="card"><h2 class="sh">' + (S.ti < 0 ? "Quiz on the whole chapter" : "Quiz: " + curTopic()) + '</h2><p>Multiple-choice and numeric questions. Ten questions are planned for ten minutes. The solutions and sources appear at the end.</p><div class="filters2"><div class="field2"><label for="qn">Questions</label><select id="qn">' + opts.map(function(x){ return "<option" + (QZN === x ? " selected" : "") + ">" + x + "</option>"; }).join("") + '</select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory();
+  $("ctab").innerHTML = topicBar() + '<section class="card"><h2 class="sh">' + (S.ti < 0 ? "Quiz on the whole chapter" : "Quiz: " + curTopic()) + '</h2><p>Multiple-choice and numeric questions. Ten questions are planned for ten minutes. The solutions and sources appear at the end.</p><div class="filters2"><div class="field2"><label for="qn">Questions</label><select id="qn">' + opts.map(function(x){ return "<option" + (QZN === x ? " selected" : "") + ">" + x + "</option>"; }).join("") + '</select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory() + topicFoot();
 }
 function quizHistory(){
   var q = STORE.quizzes.slice(-5).reverse(); if (!q.length) return "";
@@ -426,9 +444,10 @@ document.addEventListener("click", function(e){
   var a = b.dataset.a, v = b.dataset.v;
   if (a === "go") go(v);
   else if (a === "back") goBack();
-  else if (a === "study"){ var tb = b.dataset.t || "study"; S.view = "learn"; S.ti = -1; PR.q = null; go("study", v, tb); }
-  else if (a === "mtab"){ if (S.tab !== v){ pushHist(); S.tab = v; S.ti = -1; render(); window.scrollTo(0, 0); } }
+  else if (a === "study"){ var tb = b.dataset.t || "study"; S.view = "learn"; S.ti = tb === "study" ? 0 : -1; PR.q = null; go("study", v, tb); }
+  else if (a === "mtab"){ if (S.tab !== v){ pushHist(); S.tab = v; if (v === "study" && S.ti < 0) S.ti = 0; render(); window.scrollTo(0, 0); } }
   else if (a === "topic"){ if (S.ti !== +v){ pushHist(); S.ti = +v; if (S.tab === "practice") { PR.q = null; PR.last = null; } render(); } }
+  else if (a === "tstep") tstep(+v);
   else if (a === "tool"){ }
   else if (a === "praction"){ var p = v.split("|"); PR.q = null; PR.last = null; S.view = "learn"; S.ti = Math.max(0, LESSONS[p[0]].map(function(l){ return l.t; }).indexOf(p[1])); go("study", p[0], "practice"); render(); }
   else if (a === "setname"){ var n = $("nameIn").value.trim(), id = $("sidIn").value.trim();

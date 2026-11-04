@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.11.0 (2026-11-04)
+- One topic at a time: Study, Practice and Quiz now show a single topic with a topic bar on top. Previous topic and Next topic buttons sit at the end of the page. After the last topic, Next goes to the first topic of the next chapter.
+- Circuit drawings: 72 worked examples, 13 random question types and 125 quiz questions that describe a circuit now show it as a drawing. Drawings of random questions use the numbers of the question.
+- Calculator redesigned to look and behave like a real scientific calculator: metal body, round REPLAY pad, gold SHIFT and red ALPHA functions, pressed-key feel.
+- Calculator modes (MENU): Calculate, Complex, Base-N (DEC, HEX, BIN, OCT, and, or, xor, xnor, Not, Neg), Matrix, Vector (VctA, VctB, VctC, dot, cross, angle, unit vector), Statistics (1-variable and 7 regression types), Table, Equation.
+- New functions: CALC (ask values of variables), SOLVE, definite integral, derivative, sum, Pol and Rec, Ran#, physical constants (CONST), CLR menu. Not included: CONV, spreadsheet, distribution, inequality, ratio.
+- Tests check the new navigation, the drawings and the calculator modes.
+
 ## 1.10.0 (2026-11-04)
 - Chapter pages now have three main tabs: Study, Practice and Quiz. Practice and Quiz mix questions from the whole chapter.
 - Study: every topic has its own Examples drop-down. A Watch button appears only when an animation exists for that topic and shows that circuit only.
