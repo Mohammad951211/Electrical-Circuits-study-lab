@@ -149,39 +149,41 @@ function pDash(){
 function stat(v, l){ return '<div class="stat"><b>' + v + "</b><span>" + l + "</span></div>"; }
 
 // ---------- study ----------
-var MTABS = [["study", "Study"], ["examples", "Examples"], ["practice", "Practice"], ["quiz", "Quiz"]];
+var MTABS = [["study", "Study"], ["practice", "Practice"], ["quiz", "Quiz"]];
 var VIEWS = [["learn", "Explanation"], ["watch", "Watch"], ["calc", "Calculator"]];
 function tpcs(){ return LESSONS[S.ch].map(function(l){ return l.t; }); }
 function curTopic(){ return S.ti < 0 ? "all" : tpcs()[S.ti]; }
 function topicCount(c, t){ return POOL[c].filter(function(d){ return d.topic === t; }).length; }
 function pStudy0(){
-  var tp = tpcs(); if (S.ti >= tp.length) S.ti = 0; if (S.tab !== "study" && S.ti >= tp.length) S.ti = 0;
-  var showPills = S.tab !== "study", allPill = true;
-  WHOST = null; CHOST = null;
-  $("page").innerHTML = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button></div></div>' +
+  var tp = tpcs(); if (S.ti >= tp.length) S.ti = -1;
+  WHOST = null; CHOST = null; EXHOST = null;
+  $("page").innerHTML = '<div class="chead"><div><div class="lbl">' + chL(S.ch) + '</div><h1 class="ph">' + CHAPTERS[S.ch].title + '</h1></div><div class="row"><button class="btn ghost" data-a="sheet" data-v="' + S.ch + '">Formula sheet</button><button class="btn ghost" data-a="fx">Calculator</button></div></div>' +
     '<nav class="tabs main" role="tablist" aria-label="Chapter sections">' + MTABS.map(function(t){ return '<button class="tab" role="tab" data-a="mtab" data-v="' + t[0] + '" aria-selected="' + (S.tab === t[0]) + '">' + t[1] + "</button>"; }).join("") + "</nav>" +
-    (showPills ? '<div class="picker topics" aria-label="Topics">' + (allPill ? '<button class="pill" data-a="topic" data-v="-1" aria-pressed="' + (S.ti < 0) + '">All topics</button>' : "") + tp.map(function(t, i){ return '<button class="pill" data-a="topic" data-v="' + i + '" aria-pressed="' + (S.ti === i) + '">' + t + "</button>"; }).join("") + "</div>" : "") +
     '<div id="ctab" class="ctab"></div>';
   if (S.tab === "study") rLearn();
-  else if (S.tab === "examples") rExamplesTab();
   else if (S.tab === "practice") rPracticeTab();
   else rQuizTab();
 }
   function lessonCard(l, i){
-    var id = IDEAS[l.t];
+    var id = IDEAS[l.t], hasW = id && id.w != null, hasX = exList(i).length || genList(i).length;
     return '<section class="card lesson" id="les' + i + '"><h2>' + l.t + "</h2>" + (id ? '<p class="idea"><b>In plain words.</b> ' + id.i + "</p>" : "") + "<ul>" + l.pts.map(function(p){ return "<li>" + p + "</li>"; }).join("") + "</ul>" +
       (l.f ? '<div class="fl">' + l.f.map(function(f){ return '<span class="formula">' + fmtMath(f) + "</span>"; }).join(" ") + "</div>" : "") + (l.fig ? fig(l.fig()) : "") + (LREF[l.t] ? '<p class="srcl"><span>Source: ' + LREF[l.t] + "</span></p>" : "") + (id ? '<p class="slip"><b>Common slip.</b> ' + id.s + "</p>" : "") +
-      '<div class="btnrow"><button class="btn" data-watch="' + (id && id.w != null ? id.w : 0) + '" data-les="' + i + '" aria-expanded="false">Watch</button></div><div class="wpanel" id="wp' + i + '"></div></section>';
+      '<div class="btnrow">' + (hasW ? '<button class="btn" data-watch="' + id.w + '" data-les="' + i + '" aria-expanded="false">Watch</button>' : "") + (hasX ? '<button class="btn ghost" data-exb="' + i + '" aria-expanded="false">Examples</button>' : "") + '</div><div class="wpanel" id="wp' + i + '"></div><div class="wpanel" id="ep' + i + '"></div></section>';
   }
   function rLearn(){
     $("ctab").innerHTML = '<div class="lessons">' + LESSONS[S.ch].map(lessonCard).join("") + '</div>' +
-      (TOOLS[S.ch] && TOOLS[S.ch].length ? '<details class="card calcwrap"><summary><span>Calculator</span><b>Try your own numbers</b></summary><div id="calcbox"></div></details>' : "");
-    var open = null;
+      (TOOLS[S.ch] && TOOLS[S.ch].length ? '<details class="card calcwrap"><summary><span>Chapter tools</span><b>Try your own numbers</b></summary><div id="calcbox"></div></details>' : "");
+    var open = null, openX = null;
     function closeW(){ if (open != null){ var o = $("wp" + open); if (o) o.innerHTML = ""; var ob = document.querySelector('[data-les="' + open + '"]'); if (ob){ ob.setAttribute("aria-expanded", "false"); ob.textContent = "Watch"; } open = null; WHOST = null; } }
+    function closeX(){ if (openX != null){ var o = $("ep" + openX); if (o) o.innerHTML = ""; var ob = document.querySelector('[data-exb="' + openX + '"]'); if (ob){ ob.setAttribute("aria-expanded", "false"); ob.textContent = "Examples"; } openX = null; EXHOST = null; } }
     $("ctab").querySelectorAll("[data-watch]").forEach(function(b){ b.onclick = function(){
       var i = +b.dataset.les, was = open === i; closeW(); if (was) return;
       open = i; b.setAttribute("aria-expanded", "true"); b.textContent = "Hide animation"; WHOST = $("wp" + i);
       (WSIM[S.ch] = WSIM[S.ch] || {}).k = +b.dataset.watch; rWatch();
+    }; });
+    $("ctab").querySelectorAll("[data-exb]").forEach(function(b){ b.onclick = function(){
+      var i = +b.dataset.exb, was = openX === i; closeX(); if (was) return;
+      openX = i; b.setAttribute("aria-expanded", "true"); b.textContent = "Hide examples"; EXHOST = $("ep" + i); EXCH = S.ch; rExamples(EXHOST, i);
     }; });
     var cw = document.querySelector(".calcwrap"); if (cw) cw.addEventListener("toggle", function(){ if (cw.open) rCalc($("calcbox")); else { $("calcbox").innerHTML = ""; CHOST = null; } });
   }
@@ -197,15 +199,13 @@ function pStudy0(){
     if (/^§/.test(id)) return "Book " + id;
     return CHREF[ch] || "";
   }
-  function exList(){ var l = EXAMPLES[S.ch] || []; return S.ti < 0 ? l : l.filter(function(e){ return e.topic === curTopic(); }); }
-  function genList(){ var l = GENS[S.ch] || []; return S.ti < 0 ? l : l.filter(function(g){ return g.topic === curTopic(); }); }
-  function rExamplesTab(){
-    $("ctab").innerHTML = '<div id="exbox"></div>'; EXCH = S.ch; rExamples();
-  }
-  function rExamples(){
-    if (!$("exbox")) return;
-    var list = exList(), gl = genList(), key = S.ch + "|" + S.ti, st = EXS[key] || (EXS[key] = { k: 0, n: 0, gen: null }), ex;
-    if (!list.length && !gl.length){ $("exbox").innerHTML = '<section class="card"><p>Examples for this topic are being added.</p></section>'; return; }
+  var EXHOST = null;
+  function exList(ti){ var l = EXAMPLES[S.ch] || [], t = LESSONS[S.ch][ti].t; return l.filter(function(e){ return e.topic === t; }); }
+  function genList(ti){ var l = GENS[S.ch] || [], t = LESSONS[S.ch][ti].t; return l.filter(function(g){ return g.topic === t; }); }
+  function rExamples(host, ti){
+    if (!host) return;
+    var list = exList(ti), gl = genList(ti), key = S.ch + "|" + ti, st = EXS[key] || (EXS[key] = { k: 0, n: 0, gen: null }), ex;
+    if (!list.length && !gl.length){ host.innerHTML = '<section class="card"><p>Examples for this topic are being added.</p></section>'; return; }
     if (st.k === "gen" && !gl.length) st.k = 0;
     if (st.k === "gen" || !list.length){
       st.k = "gen";
@@ -221,10 +221,10 @@ function pStudy0(){
     h += '<div class="btnrow">' + (done ? "" : '<button class="btn" id="exNext">' + (n ? "Show next step" : "Show the first step") + '</button><button class="btn ghost" id="exAll">Show all steps</button>') + (n ? '<button class="btn ghost" id="exHide">Hide the steps</button>' : "") + "</div>";
     if (done) h += '<div class="st2a exans">Answer: ' + fmtMath(ex.ans) + "</div>" + (ex.gen ? '<button class="btn sm ghost" id="exNew">Another one</button>' : '<p class="srcl"><span>Source: ' + exSrc(EXCH, ex.id, ex.topic) + "</span></p>");
     h += '<p class="mut exprog">Step ' + n + " of " + steps.length + "</p></section></div>";
-    $("exbox").innerHTML = h;
-    $("exbox").querySelectorAll("[data-exk]").forEach(function(b){ b.onclick = function(){ var v = b.dataset.exk; st.k = v === "gen" ? "gen" : +v; st.n = 0; if (v === "gen") st.gen = null; rExamples(); }; });
-    var f = function(id, fn){ var e = $(id); if (e) e.onclick = fn; };
-    f("exNext", function(){ st.n++; rExamples(); }); f("exAll", function(){ st.n = steps.length; rExamples(); }); f("exHide", function(){ st.n = 0; rExamples(); }); f("exNew", function(){ st.gen = null; st.n = 0; rExamples(); });
+    host.innerHTML = h;
+    host.querySelectorAll("[data-exk]").forEach(function(b){ b.onclick = function(){ var v = b.dataset.exk; st.k = v === "gen" ? "gen" : +v; st.n = 0; if (v === "gen") st.gen = null; rExamples(host, ti); }; });
+    var f = function(id, fn){ var e = host.querySelector("#" + id); if (e) e.onclick = fn; };
+    f("exNext", function(){ st.n++; rExamples(host, ti); }); f("exAll", function(){ st.n = steps.length; rExamples(host, ti); }); f("exHide", function(){ st.n = 0; rExamples(host, ti); }); f("exNew", function(){ st.gen = null; st.n = 0; rExamples(host, ti); });
   }
 
   var CHOST = null;
@@ -258,7 +258,7 @@ function pSheet0(){
 function rPracticeTab(){
   PR.ch = S.ch; PR.topic = curTopic();
   var n = poolPractice().length;
-  $("ctab").innerHTML = '<section class="card filters"><div class="field2"><label for="fty">Type</label><select id="fty" data-a="pf"><option value="mixed"' + (PR.type === "mixed" ? " selected" : "") + '>Mixed</option><option value="mcq"' + (PR.type === "mcq" ? " selected" : "") + '>Multiple choice</option><option value="num"' + (PR.type === "num" ? " selected" : "") + '>Numeric (new numbers every time)</option></select></div><p class="mut pcount">' + n + ' questions in ' + (S.ti < 0 ? "this chapter" : "this topic") + ', each solved step by step.</p><div class="sesbox"><b>' + PR.ses.r + " / " + PR.ses.n + '</b><span>this session</span></div></section><div id="qarea"></div>';
+  $("ctab").innerHTML = '<section class="card filters"><div class="field2"><label for="fty">Type</label><select id="fty" data-a="pf"><option value="mixed"' + (PR.type === "mixed" ? " selected" : "") + '>Mixed</option><option value="mcq"' + (PR.type === "mcq" ? " selected" : "") + '>Multiple choice</option><option value="num"' + (PR.type === "num" ? " selected" : "") + '>Numeric (new numbers every time)</option></select></div><p class="mut pcount">' + n + ' questions in ' + (S.ti < 0 ? "this chapter, mixed from all topics" : "the topic " + curTopic()) + ', each solved step by step.' + (S.ti < 0 ? "" : ' <button class="linkb" data-a="topic" data-v="-1">Show the whole chapter</button>') + '</p><div class="sesbox"><b>' + PR.ses.r + " / " + PR.ses.n + '</b><span>this session</span></div></section><div id="qarea"></div>';
   if (!PR.q || PR.q.d.ch !== S.ch || (PR.topic !== "all" && PR.q.d.topic !== PR.topic)) nextPractice(); else drawQ();
 }
 function pPractice0(){ S.page = "study"; S.tab = "practice"; render(); }
@@ -426,8 +426,8 @@ document.addEventListener("click", function(e){
   var a = b.dataset.a, v = b.dataset.v;
   if (a === "go") go(v);
   else if (a === "back") goBack();
-  else if (a === "study"){ var tb = b.dataset.t || "study"; S.view = "learn"; S.ti = (tb === "study" || tb === "examples") ? 0 : -1; PR.q = null; go("study", v, tb); }
-  else if (a === "mtab"){ if (S.tab !== v){ pushHist(); S.tab = v; if (v === "study" && S.ti < 0) S.ti = 0; render(); window.scrollTo(0, 0); } }
+  else if (a === "study"){ var tb = b.dataset.t || "study"; S.view = "learn"; S.ti = -1; PR.q = null; go("study", v, tb); }
+  else if (a === "mtab"){ if (S.tab !== v){ pushHist(); S.tab = v; S.ti = -1; render(); window.scrollTo(0, 0); } }
   else if (a === "topic"){ if (S.ti !== +v){ pushHist(); S.ti = +v; if (S.tab === "practice") { PR.q = null; PR.last = null; } render(); } }
   else if (a === "tool"){ }
   else if (a === "praction"){ var p = v.split("|"); PR.q = null; PR.last = null; S.view = "learn"; S.ti = Math.max(0, LESSONS[p[0]].map(function(l){ return l.t; }).indexOf(p[1])); go("study", p[0], "practice"); render(); }
@@ -446,6 +446,7 @@ document.addEventListener("click", function(e){
   else if (a === "quitquiz"){ QZ = null; render(); }
   else if (a === "hidehelp"){ STORE.help = 0; saveStore(); render(); }
   else if (a === "sheet"){ go("sheet", v); }
+  else if (a === "fx"){ fxToggle(); }
   else if (a === "print"){ window.print(); }
   else if (a === "againquiz"){ QZ = null; render(); }
   else if (a === "copysum"){ var t = summaryText(); function done(){ $("sumMsg").textContent = "Copied."; } if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function(){ $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }); else $("sumMsg").textContent = "Copy is blocked here. Use Save as text file."; }

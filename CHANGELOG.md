@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.10.0 (2026-11-04)
+- Chapter pages now have three main tabs: Study, Practice and Quiz. Practice and Quiz mix questions from the whole chapter.
+- Study: every topic has its own Examples drop-down. A Watch button appears only when an animation exists for that topic and shows that circuit only.
+- The instructor name is shown under the course name.
+- New Calculator button next to Formula sheet. It opens a floating fx-991EX style scientific calculator with SHIFT, ALPHA, STO, RCL, S⇔D, complex numbers (polar and rectangular), equation solving (2 and 3 unknowns, quadratic and cubic), matrices and determinants. Calculus, statistics, base-n, vector and table modes are not included.
+
 ## 1.9.0 (2026-11-03)
 - New chapter layout with four tabs: Study, Examples, Practice and Quiz. Each tab shows the topics of the chapter as buttons, so the student works on one topic at a time.
 - Study: all topics of the chapter are listed under each other. Each topic has a Watch button that opens the circuit and the animation in a panel inside the topic, without leaving the page. The calculator is a drop-down at the end of the page.

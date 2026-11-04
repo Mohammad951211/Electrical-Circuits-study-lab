@@ -183,3 +183,46 @@ select.theme{padding:5px 10px;margin-top:6px;appearance:auto;text-transform:none
 .calcwrap{margin-top:16px}
 .calcwrap summary{display:flex;justify-content:space-between;cursor:pointer;font-weight:700}
 .tab[aria-selected="true"]{color:#084a78}
+.tb .inst{margin:0;font-size:.95rem}
+#fxwin{display:none;position:fixed;right:16px;bottom:16px;width:340px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);overflow:auto;z-index:60;background:#1f2a33;color:#e8eef2;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.35);padding:8px;outline:none;font-size:13px}
+#fxwin .fxh{display:flex;align-items:center;gap:8px;cursor:move;padding:2px 4px 6px;touch-action:none}
+#fxwin .fxh span{opacity:.6;font-size:11px;flex:1}
+#fxwin .fxx{background:#33414c;color:#fff;border:0;border-radius:6px;width:28px;height:28px;font-size:18px;cursor:pointer}
+#fxwin .fxlcdw{background:#c9d6c0;color:#10200f;border-radius:8px;padding:4px 8px;min-height:104px}
+#fxwin .fxst{display:flex;gap:4px;min-height:16px}
+#fxwin .fxst i{font-style:normal;font-size:10px;background:#10200f;color:#c9d6c0;padding:0 4px;border-radius:3px}
+#fxwin .fxlcd{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px}
+#fxwin .fxe{min-height:24px;word-break:break-all}
+#fxwin .fxcur{display:inline-block;width:1px;height:1em;background:#10200f;vertical-align:text-bottom;animation:fxb 1s steps(2) infinite}
+@keyframes fxb{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){#fxwin .fxcur{animation:none}}
+#fxwin .fxr{text-align:right;font-size:18px;min-height:26px}
+#fxwin .fxr.err{color:#7a1010}
+#fxwin .fxr.big{font-size:20px;text-align:left}
+#fxwin .fxt{font-size:11px;opacity:.75}
+#fxwin .fxi{padding:2px 4px}
+#fxwin .fxi.sel{background:#10200f;color:#c9d6c0}
+#fxwin .fxg{border-collapse:collapse;width:100%}
+#fxwin .fxg td{border:1px solid #10200f55;padding:2px 4px;font-size:13px}
+#fxwin .fxg td.on{background:#10200f;color:#c9d6c0}
+#fxwin .fxg small{opacity:.6}
+#fxwin .fxkeys{margin-top:8px}
+#fxwin .fxrow{display:grid;gap:5px;margin-bottom:5px}
+#fxwin .fxrow.n6{grid-template-columns:repeat(6,1fr)}
+#fxwin .fxrow.n5{grid-template-columns:repeat(5,1fr)}
+#fxwin .fxgap{height:6px}
+#fxwin .fxk{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:38px;background:#3a4955;color:#fff;border:0;border-radius:6px;padding:12px 1px 3px;cursor:pointer;font-size:12px}
+#fxwin .fxrow.n5 .fxk{background:#566672;font-size:15px}
+#fxwin .fxk.mod{background:#c9a227;color:#1a1a1a}
+#fxwin .fxk.del{background:#b04a3a}
+#fxwin .fxk.eq{background:#2a7fb8}
+#fxwin .fxk.on{outline:2px solid #fff}
+#fxwin .fxk.dis{opacity:.4;cursor:not-allowed}
+#fxwin .fxk:focus-visible{outline:2px solid #fff;outline-offset:1px}
+#fxwin .fs,#fxwin .fa{position:absolute;top:1px;font-size:9px;line-height:1}
+#fxwin .fs{left:3px;color:#f0c53d}
+#fxwin .fa{right:3px;color:#ff8f8f}
+#fxwin .fs.dis{opacity:.4}
+#fxwin.shifted .fs{font-weight:700;font-size:10px}
+#fxwin .fxnote{font-size:10px;opacity:.65;margin:4px 2px 0}
+@media (max-width:480px){#fxwin{left:8px!important;right:8px!important;width:auto}}
