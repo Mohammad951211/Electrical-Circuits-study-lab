@@ -29,7 +29,7 @@
   add("8", "X101", "Average and RMS value", "Peak and average from the socket voltage", "A household socket gives V_rms = 230 V. Find the peak value V_m and the average value over a half cycle.",
     "V_rms = 230 V", "V_m, V_avg (half cycle)",
     "Idea: the rms value is V_m / √2, so V_m = √2 V_rms. The half-cycle average of a sine wave is 2 V_m / π.",
-    ["V_m = √2 × 230 V = 1.414 × 230 ≈ 325 V.", "V_avg = 2 V_m / π = 2 × 325 / 3.1416 ≈ 207 V.", "Check: V_rms / V_avg = 230 / 207 ≈ 1.11, the form factor of a sine wave ✓"],
+    ["V_m = √2 × 230 V = 1.414 × 230 ≈ 325 V.", "V_avg = 2 V_m / π = 2 × 325 / 3.1416 ≈ 207 V.", "Check: the average (207 V) is smaller than the peak (325 V), as it must be ✓"],
     "V_m ≈ 325 V, V_avg ≈ 207 V", function(){ return waveFig({ waves: [{ lab: "v" }], T: "V_rms = 230 V" }); });
   add("8", "8.2", "Phase difference", "Phase difference of two functions", "Find the phase difference of (a) v = 20 sin(ωt + 30°) V and i = 12 sin(ωt + 60°) A, and (b) v = 5 sin(ωt + 60°) V and i = 2.5 sin(ωt + 20°) A. Say which one leads.",
     "(a) ψ_v = 30°, ψ_i = 60°  (b) ψ_v = 60°, ψ_i = 20°", "φ for (a) and (b)",
@@ -122,8 +122,8 @@
     "A steady DC gives a constant flux, so no voltage is induced. Only AC works.");
   add("11", "X107", "The transformer", "Choosing the core", "Choose the core type, air or iron, for (a) a radio-frequency circuit and (b) a 50 Hz power supply, and give the reason.",
     "(a) radio frequencies  (b) 50 Hz power supply", "core type",
-    "Idea: the core decides how well the flux links the two coils. Iron gives near-full coupling at low frequency but wastes energy at high frequency.",
-    ["(a) High frequency (radio, TV, instruments): an air-core transformer. An iron core would waste too much energy at these frequencies.", "(b) 50 Hz power supply: an iron-core transformer. Iron has a high permeability, so almost all the flux links both windings (k ≈ 1) and the transformer is close to ideal.", "Iron-core transformers are also used in audio circuits."],
+    "Idea: the core decides how well the flux links the two coils. Air-core transformers are used at high frequency, and iron-core transformers in audio circuits and power systems.",
+    ["(a) High frequency (radio, TV, instruments): an air-core transformer.", "(b) 50 Hz power supply: an iron-core transformer. Iron has a high permeability, so almost all the flux links both windings (k ≈ 1) and the transformer is close to ideal.", "Iron-core transformers are also used in audio circuits."],
     "(a) air core  (b) iron core");
   add("11", "X108", "The transformer", "Induced voltage in the secondary", "The flux linking a secondary coil with N_S = 200 turns changes steadily from 0 to 5 mWb in 10 ms. Find the voltage induced in the secondary.",
     "N_S = 200, ΔΦ = 5 mWb, Δt = 10 ms", "induced voltage",

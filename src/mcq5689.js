@@ -21,7 +21,7 @@ M("Norton","I_N = 1 mA, R_N = 250 Ω, R_L = 100 Ω. What is I_L?","0.71 mA",["1 
 M("Maximum power","When does a source deliver maximum power to the load?","When R_L = R_TH",["When R_L = 0","When R_L is very large","When R_L = 2 R_TH"],"The load must match the source resistance."),
 M("Maximum power","What is the maximum load power?","P_max = V_TH² / (4 R_TH)",["P_max = V_TH² / R_TH","P_max = V_TH R_TH / 4","P_max = 4 V_TH² R_TH"],"At R_L = R_TH, the load voltage is V_TH / 2."),
 M("Maximum power","V_TH = 16 V and R_TH = 4 Ω. What is P_max?","16 W",["64 W","4 W","32 W"],"P_max = 16² / (4 × 4) = 16 W."),
-M("Maximum power","At maximum power transfer, what is the efficiency of the source and its resistance?","50 %",["100 %","25 %","75 %"],"Half of the power is lost in R_TH."),
+M("Maximum power","A source has V_S = 12 V and R_S = 3 Ω. The maximum power it can deliver to a load is","12 W",["48 W","24 W","6 W"],"The maximum power is V_S² / (4 R_S)."),
 M("Maximum power","If R_L is larger than R_TH, what happens to the load power compared with P_max?","It is lower",["It is higher","It is the same","It is infinite"],"The power curve has one peak at R_L = R_TH.")
 ];
 MCQ["6"] = [

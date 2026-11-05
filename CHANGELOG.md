@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.14.1 (2026-11-05)
+- Content check against the slides: removed the efficiency at maximum power transfer (chapter 5) and the numeric force on a wire F = B I ℓ (motors), which the slides do not cover. Two sentences in new examples that went beyond the slides were also removed.
+- The README now says that chapters 7 and 10 are not part of the course.
+
 ## 1.14.0 (2026-11-05)
 - Chapters 8, 9 and 11 are now complete: at least three worked examples, ten practice questions and a quiz pool for every topic.
 - All slide examples of these chapters are added with their circuits and waveforms: 8.1 to 8.5, 8.9 to 8.12, 9.1, 9.3 to 9.6 and 11.1 to 11.3. Extra examples on the same topics were written for the course.
