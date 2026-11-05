@@ -50,8 +50,8 @@ SIMS["5"] = [
       o += '<line class="dash" x1="' + (x0 + gx * v.rt / 20) + '" y1="' + y0 + '" x2="' + (x0 + gx * v.rt / 20) + '" y2="' + (y0 - gy * 1 / 1.12) + '"/><circle class="nd big" cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="5.5"/>' + tx(x0 + gx / 2, 250, "R_L (Ω)") + tx(x0 + 4, y0 - gy - 8, "P_L (W)", "start") + tx(x0 + gx * v.rt / 20 + 10, y0 - gy * 1 / 1.12 - 10, "R_L = R_TH", "start", "a");
       return o;
     },
-    out: function(v){ var P = this.PL(v, v.rl), Pm = v.V * v.V / (4 * v.rt); return ["P_L = V_TH² R_L / (R_TH + R_L)² = " + nf(P, 3) + " W", "P_max = V_TH² / (4 R_TH) = " + nf(Pm, 3) + " W at R_L = " + v.rt + " Ω", "This load gets " + nf(100 * P / Pm, 3) + "% of P_max", "Efficiency = R_L / (R_TH + R_L) = " + nf(100 * v.rl / (v.rt + v.rl), 3) + "%"]; },
-    look: ["The curve rises, peaks at R_L = R_TH and then falls.", "At the peak the efficiency is 50%.", "A larger R_TH lowers P_max."],
+    out: function(v){ var P = this.PL(v, v.rl), Pm = v.V * v.V / (4 * v.rt); return ["P_L = V_TH² R_L / (R_TH + R_L)² = " + nf(P, 3) + " W", "P_max = V_TH² / (4 R_TH) = " + nf(Pm, 3) + " W at R_L = " + v.rt + " Ω", "This load gets " + nf(100 * P / Pm, 3) + "% of P_max"]; },
+    look: ["The curve rises, peaks at R_L = R_TH and then falls.", "At the peak the load receives the maximum power, P_max = V_TH² / (4 R_TH).", "A larger R_TH lowers P_max."],
     tryit: [["V_TH = 16 V and R_TH = 4 Ω. Set R_L = 4 Ω. What is P_L?", "P_max = 16 W."], ["Set R_L = 1 Ω. Is P_L larger or smaller than P_max?", "Smaller: 10.2 W."]] },
   { t: "Superposition", d: "Example 5.1: E₁ and E₂ feed the middle resistor R₅. Each source alone gives a partial current I_c′ and I_c″. The two are added.",
     ctl: [{ id: "e1", label: "E₁", min: 0, max: 60, step: 6, val: 48, unit: "V" }, { id: "e2", label: "E₂", min: 0, max: 48, step: 6, val: 24, unit: "V" }],

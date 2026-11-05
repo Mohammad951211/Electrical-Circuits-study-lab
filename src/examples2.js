@@ -268,12 +268,11 @@
     "The Norton circuit is a 2 A source in parallel with 2 Ω. Connect the load.",
     "CDR: I_L = I_N R_N / (R_N + R_L) = 2 A × 2 Ω / 6 Ω = 0.667 A.",
     "Check with Thevenin: V_TH = 12 × 3 / 9 = 4 V, and I_L = 4 V / (2 + 4) Ω = 0.667 A ✓"], "I_N = 2 A, R_N = 2 Ω, I_L = 0.667 A");
-  ex("5", "Maximum power transfer", "Maximum power and efficiency", "A source has V_TH = 20 V and R_TH = 5 Ω. Find the load that receives the maximum power, the maximum power, and the efficiency at that point.", "V_TH = 20 V, R_TH = 5 Ω", "R_L, P_max, η", [
+  ex("5", "Maximum power transfer", "Maximum power from a source", "A source has V_TH = 20 V and R_TH = 5 Ω. Find the load that receives the maximum power and the maximum power.", "V_TH = 20 V, R_TH = 5 Ω", "R_L, P_max", [
     "Maximum power transfer: the load equals the source resistance, R_L = R_TH = 5 Ω.",
     "The current is I = V_TH / (R_TH + R_L) = 20 V / 10 Ω = 2 A.",
     "P_max = I² R_L = 4 × 5 = 20 W. The formula P_max = V_TH² / (4 R_TH) = 400 / 20 = 20 W gives the same value.",
-    "The source gives P_total = V_TH I = 20 × 2 = 40 W, so the efficiency is 20 / 40 = 50 %.",
-    "Meaning: the best power transfer wastes half of the energy in R_TH."], "R_L = 5 Ω, P_max = 20 W, η = 50 %");
+    "Any other load, larger or smaller than 5 Ω, receives less than 20 W."], "R_L = 5 Ω, P_max = 20 W");
   ex("5", "Maximum power transfer", "Find R_TH first, then the load", "E = 24 V is in series with R₁ = 6 Ω. R₂ = 12 Ω is connected across the terminals a and b. Find the load for maximum power and the power it receives.", "E = 24 V, R₁ = 6 Ω, R₂ = 12 Ω", "R_L, P_max", [
     "Remove the load and find V_TH across R₂ with the divider rule: V_TH = 24 V × 12 / (6 + 12) = 16 V.",
     "Find R_TH: shorted source, R₁ // R₂ = 6 × 12 / 18 = 4 Ω.",
@@ -324,11 +323,11 @@
     "The rotor (armature) carries the coil windings and turns the shaft.",
     "The brushes are fixed graphite contacts. They slide on the commutator and feed current into the rotating coil.",
     "The commutator reverses the connection each half turn, so the force keeps the same turning direction."], "Field: stator. Turning part: rotor. Current to the coil: brushes and commutator.");
-  ex("M", "How a DC motor works", "Force on a wire in a magnetic field", "A straight wire of length 0.2 m carries 5 A at right angles to a field of 0.4 T. Find the force on the wire. (Prerequisite: PHYS104, F = I × B.)", "ℓ = 0.2 m, I = 5 A, B = 0.4 T", "F", [
-    "The force on a current-carrying wire is F = B I ℓ when the wire is at right angles to the field.",
-    "F = 0.4 T × 5 A × 0.2 m = 0.4 N.",
-    "The force acts normal to the plane of the field and the current. This force on the two coil sides makes the torque of the motor.",
-    "Reversing the current reverses the force. This is why the commutator is needed."], "F = 0.4 N");
+  ex("M", "How a DC motor works", "Direction of the force on a wire", "A wire carries a current in a magnetic field (F = I × B). In which direction is the force on the wire? What happens when the current is reversed?", "wire with current I in a field B", "direction of F, effect of reversing I", [
+    "The force is F = I × B, so it is normal to the plane formed by the magnetic field B and the current I.",
+    "The two coil sides of the armature carry currents in opposite directions, so the two forces are opposite and make the armature turn.",
+    "Reversing the current reverses the force, because the cross product changes sign.",
+    "This is why the commutator is needed: it reverses the current at the right moment so that the rotation continues."], "F is normal to B and I; reversing I reverses F");
   ex("M", "How a DC motor works", "Why the commutator is needed", "The armature of a brushed motor becomes horizontal. What does the commutator do, and what would happen without it?", "armature in the horizontal position", "the effect of the commutator", [
     "The torque is largest when the coil is parallel to the field and falls to zero when it is perpendicular.",
     "When the coil passes the horizontal position, the commutator swaps the connection to the brushes.",
