@@ -48,3 +48,17 @@
 47|Example 9.6. P_T = 7000 W and |Rule: Q′ = P tan φ′.\nApply: Q′ = 7000 W × tan 29.5° = 7000 × 0.566 ≈ 3960 var.\nCheck: 5790 var is the old Q, 7000 var is P, 1830 var is a wrong product.
 48|After PF correction, what happ|Rule: I = S / V and P = S cos φ.\nApply: P stays the same and S falls, so the source current falls.\nCheck: it does not rise, stay the same or become zero.
 49|Slide 33. Q₁ = 3000 var and Q₂|Rule: Q_C = Q1 − Q2.\nApply: Q_C = 3000 var − 1315 var = 1685 var.\nCheck: 4315 var adds, 3000 var and 1315 var are single values.
+50|Z₁ = 3 + j4 Ω and Z₂ = 5 − j2 |Rule: series impedances add, real parts with real parts and imaginary parts with imaginary parts.\nApply: (3 + 5) + j(4 − 2) = 8 + j2 Ω.\nCheck: 8 + j6 adds the imaginary parts as if both were positive, 2 + j6 subtracts the real parts, 15 − j8 is a product.
+51|Two equal impedances of 10∠30°|Rule: two equal impedances in parallel give half of one, and the angle does not change.\nApply: 10∠30° / 2 = 5∠30° Ω.\nCheck: 20∠30° is the series value, 5∠60° changes the angle, 10∠15° changes both.
+52|j10 Ω and −j10 Ω are in series|Rule: an inductor and a capacitor have opposite signs.\nApply: j10 + (−j10) = 0 Ω.\nCheck: j20 and −j20 add equal signs, 10 Ω is only a magnitude.
+53|R = 4 Ω is in parallel with Z |Rule: Z_eq = Z₁ Z₂ / (Z₁ + Z₂).\nApply: (4)(j4) / (4 + j4) = j16 / (4 + j4) = 2 + j2 Ω, so |Z_eq| = 2.83 Ω.\nCheck: 8 Ω is the sum of the magnitudes, 5.66 Ω doubles the answer, 4 Ω is just R.
+54|A series circuit has E = 50∠0°|Rule: voltage divider: V₂ = E Z₂ / (Z₁ + Z₂).\nApply: |Z_T| = 10 Ω at 53.13°, so V₂ = 50 × (8∠90°) / (10∠53.13°) = 40∠36.87° V.\nCheck: 30∠−53.13° is the voltage across Z₁, the angle −53.13° forgets the 90° of Z₂, and 50 V is the whole source.
+55|Which rule gives the current I|Rule: the current divider puts the other impedance on top.\nApply: I₁ = I_T Z₂ / (Z₁ + Z₂).\nCheck: putting Z₁ on top gives I₂, and the other two forms are not a divider.
+56|Z₁ = 2 Ω and Z₂ = j3 Ω are in |Rule: I = E / Z with Z = Z₁ + Z₂.\nApply: Z = 2 + j3 Ω, |Z| = 3.61 Ω, and I = 10 / 3.61 = 2.77 A.\nCheck: 2 A, 3.33 A and 5 A use only one part of the impedance.
+57|Z = 6 + j8 Ω. The impedance an|Rule: φ = tan⁻¹(X / R).\nApply: tan⁻¹(8 / 6) = 53.13°.\nCheck: 36.87° is tan⁻¹(6 / 8), −53.13° belongs to a capacitive load, 8° is just the reactance.
+58|In the impedance triangle, the|Rule: R and X are the two sides at the right angle.\nApply: |Z|² = R² + X², so |Z| is the hypotenuse.\nCheck: R and X are the sides and φ is an angle.
+59|R = 5 Ω and X_L = 12 Ω are in |Rule: |Z| = √(R² + X²).\nApply: √(5² + 12²) = √169 = 13 Ω.\nCheck: 17 Ω adds the sides, 7 Ω subtracts them, 60 Ω multiplies them.
+60|A circuit has Z = 10∠−30° Ω. I|Rule: a negative angle means that the net reactance X is negative.\nApply: φ = −30° < 0, so X_C is larger than X_L: the circuit is capacitive.\nCheck: inductive needs φ > 0, purely resistive needs φ = 0 and resonance means X = 0.
+61|Z = 10∠60° Ω. The resistance R|Rule: R = |Z| cos φ.\nApply: 10 × cos 60° = 5 Ω.\nCheck: 8.66 Ω is |Z| sin φ (the reactance), 10 Ω is |Z|, 17.3 Ω is |Z| tan φ.
+62|R = 3 Ω and X_L = 4 Ω are in s|Rule: PF = cos φ = R / |Z|.\nApply: |Z| = 5 Ω, so PF = 3 / 5 = 0.6, and X_L > 0 means lagging.\nCheck: 0.8 is sin φ, leading needs a capacitive load, 1 needs X = 0.
+63|In a series RLC circuit X_L = |Rule: X = X_L − X_C.\nApply: X = 0, so Z = R and φ = 0°.\nCheck: ±90° belongs to a pure L or C, 45° needs X = R.

@@ -24,7 +24,7 @@ def content_checks(pg):
         CH[c].questions.forEach(function(q,i){ var f=q.fig(); if(/NaN|undefined|Infinity/.test(f)) bad.push("fig "+c+"."+i); });
         L[c].forEach(function(l){ if(!I[l.t]) bad.push("no idea for lesson "+l.t); if(l.fig&&/NaN|undefined/.test(l.fig())) bad.push("lesson fig "+l.t); });
       });
-      var DONE=["1","2","3","4","5","6","M"];  /* chapters whose per-topic content is complete: 3 examples, 10 practice, 5 quiz items per topic */
+      var DONE=["1","2","3","4","5","6","8","9","11","M"];  /* chapters whose per-topic content is complete: 3 examples, 10 practice, 5 quiz items per topic */
       if(__X('TOPICMAP.unmapped.length')!==0) bad.push("unmapped topics");
       __X('CHAPTER_IDS').forEach(function(c){ __X('LESSONS["'+c+'"]').forEach(function(l){
         var ex=__X('EXAMPLES["'+c+'"]').filter(function(e){return e.topic===l.t;}).length;
@@ -61,7 +61,7 @@ def ui_checks(pg, w):
     if pg.evaluate('__X("S.tab")') != "study": errs.append("back did not return to the Study tab")
     pg.click(".back")
     if pg.evaluate('__X("S.page")') != "dash": errs.append("back did not end on the chapter list")
-    done = ("1", "2", "3", "4", "5", "6", "M")
+    done = ("1", "2", "3", "4", "5", "6", "8", "9", "11", "M")
     for ch in ids:
         pg.click('[data-a="go"][data-v="dash"]'); pg.click(f'[data-a="study"][data-v="{ch}"][data-t="study"]'); pg.wait_for_timeout(50)
         nt = pg.evaluate(f'__X("LESSONS[\\"{ch}\\"].length")')
