@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.0 (2026-11-05)
+- Chapters 8, 9 and 11 are now complete: at least three worked examples, ten practice questions and a quiz pool for every topic.
+- All slide examples of these chapters are added with their circuits and waveforms: 8.1 to 8.5, 8.9 to 8.12, 9.1, 9.3 to 9.6 and 11.1 to 11.3. Extra examples on the same topics were written for the course.
+- Impedance triangles and power triangles are drawn in the examples.
+- 33 new multiple-choice questions for these chapters, each with a step-by-step explanation.
+- Quiz questions about Example 3.3 now show the circuit.
+- The tests now require the full set for chapters 8, 9 and 11.
+
 ## 1.13.0 (2026-11-04)
 - My progress: download your progress as a file and load it on another device or browser. The file is not sent anywhere.
 

@@ -17,6 +17,7 @@ var MQ2 = (function(){
   var s24 = function(){ return fSer("24 V", ["2 Ω", "4 Ω", "6 Ω"]); };
   var sp8 = function(){ return fSP("8 V", "2 Ω", "6 Ω", "3 Ω"); };
 
+  each(["In Example 3.3, point e is ground", "In Example 3.3 (E = 120 V, RT = 60 kΩ)", "In Example 3.3, Vc"], function(){ return gndFig(120, [10, 20, 20, 10]); });
   at("Which three parts form a basic electric circuit?", function(){ return svg(rect(XL, XR, YT, YB, { l: [B("source")], r: [{ t: "lamp", c: YM, lab: "load", side: "l" }] }) + P.t(190, 26, "wires", "middle")); });
   at("A switch is open. What is the current in the loop?", switchCkt);
   at("A switch in a simple lamp circuit is open.", switchCkt);

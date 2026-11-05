@@ -44,3 +44,8 @@
 43|Example 8.12. X_C = 63.65 Ω an|Rule: I_Cm = V_Cm / X_C.\nApply: I_Cm = 50√2 V / 63.65 Ω = 1.111 A = 786√2 mA.\nCheck: 50√2 mA and 63.65 mA copy the inputs, 3.18√2 A has the wrong value.
 44|In an inductor, what happens t|Rule: X_L = 2π f L.\nApply: f becomes 2f, so X_L doubles and I = V / X_L is halved.\nCheck: the current does not double, stay the same or become zero.
 45|In a resistor with R = 10 Ω, V|Rule: for a resistor I = V / R and the phase is 0°.\nApply: I = 60 V / 10 Ω = 6 A rms, in phase with v.\nCheck: 90° behind belongs to an inductor, 600 A multiplies, 0.6 A is a wrong ratio.
+46|A sine current has I_m = 10 A.|Rule: I_rms = I_m / √2.\nApply: 10 / 1.414 = 7.07 A.\nCheck: 14.1 A multiplies instead of dividing, 6.37 A is the half-cycle average (2 I_m / π), 5 A is half the peak.
+47|A sine wave has V_m = 50 V. It|Rule: V_avg = 2 V_m / π ≈ 0.637 V_m.\nApply: 0.637 × 50 = 31.8 V.\nCheck: 35.4 V is the rms value, 70.7 V is V_m × √2, 25 V is half the peak.
+48|i = 5 sin(ωt + 90°) A and v = |Rule: φ = ψ_v − ψ_i, and φ < 0 means v lags i.\nApply: φ = 0° − 90° = −90°, so the voltage lags the current: the current leads by 90°.\nCheck: Lagging needs φ > 0, in phase needs φ = 0°, opposite needs φ = ±180°.
+49|Two sine waves of 50 Hz are 60|Rule: time shift = (φ / 360°) × T.\nApply: T = 1 / 50 = 20 ms, so (60 / 360) × 20 ms = 3.33 ms.\nCheck: 1.67 ms belongs to 30°, 6.67 ms to 120°, and 20 ms is one full period.
+50|Which phasor represents v = 30|Rule: a peak phasor has the magnitude V_m and the angle ψ.\nApply: V_m = 30 V and ψ = −40°, so V = 30∠−40° V.\nCheck: 30∠40° has the wrong sign of the angle, 30√2 would be an rms-to-peak mix-up, and −30∠40° changes both.

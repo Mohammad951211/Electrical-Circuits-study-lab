@@ -44,20 +44,20 @@ var TOPICMAP = (function(){
       mcq: { "Sine wave": 0, "RMS value": 1, "Phase": 2, "Phasor": 3, "R, L, C": 4 },
       gen: { "Frequency": 0, "Instantaneous value": 0, "RMS value": 1, "Reactance": 4, "Phase": 2 },
       bank: [0, 0, 1, 2, 4, 4, 3],
-      ex: { "P1": 0, "P2": 0, "P3": 2, "P4": 1, "P5": 0, "P6": 3, "P7": 4, "P8": 4 }
+      ex: { "P1": 0, "P2": 0, "P3": 2, "P4": 1, "P5": 0, "P6": 3, "P7": 4, "P8": 4, "8.1": 0, "8.2": 2, "8.3": 1, "8.4": 3, "8.5": 3, "8.9": 3, "8.10": 4, "8.11": 4, "8.12": 4 }
     },
     "9": {
       mcq: { "Impedance": function(m){ return rx(/series|parallel|divider|Z_T|KVL/, m.q) ? 1 : rx(/triangle|φ|angle|polar|rectangular/, m.q) ? 2 : 0; },
              "Power": function(m){ return rx(/PF|power factor|correct|capacitor|Example 9\.6|Slide 33|Q_C/i, m.q) ? 4 : 3; } },
       gen: { "Impedance": function(g, id){ return id === "g9-1" || id === "g9-2" ? 2 : id === "g9-4" ? 1 : 0; }, "Power": function(g, id){ return id === "g9-8" ? 4 : 3; }, "Power factor": 4 },
       bank: [0, 1, 1, 3, 4, 2, 3],
-      ex: { "Slide 33": 4, "P1": 0, "P2": 0, "P3": 0, "P4": 1, "P5": 1, "P6": 3, "P7": 4 }
+      ex: { "Slide 33": 4, "P1": 0, "P2": 0, "P3": 0, "P4": 1, "P5": 1, "P6": 3, "P7": 4, "9.1": 2, "9.3": 1, "9.4": 1, "9.5": 3, "9.6": 4 }
     },
     "11": {
       mcq: { "Transformer": 0, "Ideal transformer": 1, "Step-up and step-down": 2, "Transformer types": 3, "Impedance matching": 4 },
       gen: { "Ideal transformer": 1, "Step-up and step-down": 2, "Impedance matching": 4 },
       bank: [1, 1, 1, 2, 4, 2],
-      ex: { "P1": 1, "P2": 1, "P3": 1, "P4": 1, "P5": 2, "P6": 2, "P7": 4, "P8": 3 }
+      ex: { "P1": 1, "P2": 1, "P3": 1, "P4": 1, "P5": 2, "P6": 2, "P7": 4, "P8": 3, "11.1": 1, "11.2": 2, "11.3": 4 }
     },
     "M": {
       mcq: { "DC motor basics": 0, "Motor types": 1, "Motor model": 2, "Torque and power": 3, "AC motors": 4 },
