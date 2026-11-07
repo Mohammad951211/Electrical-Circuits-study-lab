@@ -10,9 +10,10 @@ var PR = { ch: "all", topic: "all", type: "mixed", q: null, done: false, ses: { 
 var QZ = null;
 
 // ---------- store (this device only) ----------
-var STORE = { name: "", sid: "", a: {}, t: {}, quizzes: [], days: [], seen: 0, help: 1 };
+var STORE = { name: "", sid: "", a: {}, t: {}, quizzes: [], days: [], seen: 0, help: 1, welcomed: 0, joined: null };
 var memOnly = false;
-function loadStore(){ try { var o = JSON.parse(localStorage.getItem("me0212-lab-v2") || "null"); if (o) for (var k in STORE) if (o[k] != null) STORE[k] = o[k]; } catch (e) { memOnly = true; } }
+function loadStore(){ try { var o = JSON.parse(localStorage.getItem("me0212-lab-v2") || "null"); if (o) for (var k in STORE) if (o[k] != null) STORE[k] = o[k]; } catch (e) { memOnly = true; }
+  if (!STORE.welcomed && (STORE.name || STORE.sid || Object.keys(STORE.a).length)) STORE.welcomed = 1; }
 function saveStore(){ try { localStorage.setItem("me0212-lab-v2", JSON.stringify(STORE)); } catch (e) { memOnly = true; } }
 function today(){ var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
 function record(d, correct){
@@ -141,6 +142,7 @@ function render(){
   $("nav").innerHTML = NAV.map(function(n){ return '<button class="nv" data-a="go" data-v="' + n[0] + '" aria-current="' + (S.page === n[0]) + '">' + n[1] + "</button>"; }).join("");
   $("who").innerHTML = STORE.name ? esc2(STORE.name) + (STORE.sid ? '<small class="sid">ID ' + esc2(STORE.sid) + "</small>" : "") + ' <button class="linkb" data-a="editid">Edit</button>' : '<button class="linkb" data-a="editid">Enter your name</button>';
   ({ dash: pDash, study: pStudy, practice: pPractice, quiz: pQuiz, progress: pProgress, sheet: pSheet })[S.page]();
+  document.body.classList.toggle("landing", S.page === "dash" && showLanding());
   footLink();
 }
 function trace(f, label){
@@ -150,10 +152,39 @@ function trace(f, label){
   return '<svg viewBox="-8 0 1016 ' + H + '" role="img" aria-label="' + label + '"><line class="axis" x1="0" y1="40" x2="' + W + '" y2="40"/><path class="base" d="' + d + '"/><path class="on reveal" pathLength="1000" stroke-dasharray="' + (1000 * f).toFixed(1) + ' 1000" d="' + d + '"/><circle class="cur" cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="6"/></svg>';
 }
 
+
+// ---------- class list (optional): the student can choose to send the name and ID to the instructor ----------
+// Create a Google Form with two short-answer questions (full name, university ID), then put its address (.../viewform)
+// and the two entry ids below. While REG.form is empty the class-list choice is hidden.
+var REG = { form: "", eName: "", eSid: "" };
+var REG_TEXT = "Share my name and university ID with the instructor so that I am counted in the class list. Only the name and the ID are sent. My answers and progress stay on this device. To leave the list later, I will ask the instructor.";
+function regReady(){ return !!(REG.form && REG.eName && REG.eSid); }
+function regSend(name, sid){
+  var url = REG.form.replace(/\/viewform.*$/, "/formResponse"), body = new URLSearchParams();
+  body.append(REG.eName, name); body.append(REG.eSid, sid);
+  return fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: body.toString() }).then(function(){
+    STORE.joined = { sid: sid, date: today() }; saveStore(); return true;
+  });
+}
+function onList(){ return !!(STORE.joined && STORE.joined.sid && STORE.joined.sid === STORE.sid); }
+function showLanding(){ return !STORE.welcomed || !!S.editId; }
+function pWelcome(){
+  var first = !STORE.welcomed, edit = !!S.editId, joined = onList();
+  var consent = !regReady() ? "" : joined ? '<p class="mut wjoined">You are on the class list since ' + esc2(STORE.joined.date) + ". To leave the list, ask the instructor.</p>"
+    : '<label class="wconsent"><input type="checkbox" id="regIn"><span>' + REG_TEXT + "</span></label>";
+  $("page").innerHTML = '<section class="card welcome"><h1 class="wtitle">Circuit Hub</h1><p class="wsub">ME0212 Electrical Circuits &amp; Machines · German Jordanian University</p>' +
+    (first ? '<p class="wtext">Study each topic, watch the animations, work through solved examples, then practise with questions and test yourself with quizzes. Everything follows the course slides.</p>' +
+      '<ul class="wlist"><li><b>Study</b><span>short lessons with animations</span></li><li><b>Practice</b><span>questions solved step by step</span></li><li><b>Quiz</b><span>test one topic or a whole chapter</span></li></ul>' : "") +
+    '<h2 class="sh">' + (edit ? "Your details" : "Your details (optional)") + '</h2><p class="mut">They stay on this device and appear on your progress report. You can use the site without them.</p>' +
+    '<div class="idrow"><label class="idf"><span>Full name</span><input id="nameIn" type="text" placeholder="Your full name" autocomplete="name" maxlength="60" value="' + esc2(STORE.name || "") + '"></label>' +
+    '<label class="idf"><span>University ID</span><input id="sidIn" type="text" inputmode="numeric" placeholder="e.g. 20231234" maxlength="20" value="' + esc2(STORE.sid || "") + '"></label></div>' +
+    consent + '<p class="msg" id="idmsg" role="alert"></p><div class="row"><button class="btn wstart" data-a="start">' + (edit ? "Save" : "Start") + "</button>" + (edit ? '<button class="btn ghost" data-a="canceledit">Cancel</button>' : "") + "</div></section>";
+}
+
 // ---------- dashboard ----------
 function pDash(){
+  if (showLanding()) return pWelcome();
   var s = allStats(), w = weak(), h = "";
-  if (!STORE.name || !STORE.sid || S.editId) h += '<section class="card hello"><h2>Welcome to Circuit Hub</h2><p>Enter your name and your university ID. They stay on this device only and appear on your progress report.</p><div class="idrow"><label class="idf"><span>Full name</span><input id="nameIn" type="text" placeholder="Your full name" autocomplete="name" maxlength="60" value="' + esc2(STORE.name || "") + '"></label><label class="idf"><span>University ID</span><input id="sidIn" type="text" inputmode="numeric" placeholder="e.g. 20231234" maxlength="20" value="' + esc2(STORE.sid || "") + '"></label><button class="btn" data-a="setname">Save</button></div><p class="msg" id="idmsg" role="alert"></p></section>';
   if (STORE.help) h += '<section class="card howto"><h2 class="sh">How to use Circuit Hub</h2><ol><li><b>Pick a chapter</b> from the cards below.</li><li><b>Study:</b> pick a topic, read it and press Watch to see the animation.</li><li><b>Examples:</b> worked examples of the topic, one step at a time.</li><li><b>Practice:</b> questions with the solution after every answer.</li><li><b>Quiz:</b> test one topic or the whole chapter.</li></ol><p class="mut">Your progress is saved on this device only. Each answer shows its source in the book or the slides.</p><button class="btn sm ghost" data-a="hidehelp">Hide this</button></section>';
   var f = s.total ? s.seen / s.total : 0;
   h += '<section class="card trace"><div class="trace-top"><h1>' + (STORE.name ? "Hello, " + esc2(STORE.name.split(" ")[0]) : "Dashboard") + '</h1><div class="read"><b>' + s.seen + "</b> of " + s.total + " questions seen</div></div>" + trace(f, s.seen + " of " + s.total + " questions seen") + "</section>";
@@ -442,7 +473,7 @@ function drawResult(){
 
 // ---------- progress ----------
 function pProgress0(){
-  var s = allStats(), h = '<h1 class="ph">My progress</h1><section class="card idcard"><div><b>' + esc2(STORE.name || "Name not set") + '</b><span class="mut"> · University ID: ' + esc2(STORE.sid || "not set") + '</span></div><button class="btn sm ghost" data-a="editid">Edit name and ID</button></section><div class="stats">'  + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(STORE.quizzes.length, "Quizzes taken") + stat(streak(), "Day streak") + "</div>";
+  var s = allStats(), h = '<h1 class="ph">My progress</h1><section class="card idcard"><div><b>' + esc2(STORE.name || "Name not set") + '</b><span class="mut"> · University ID: ' + esc2(STORE.sid || "not set") + '</span>' + (regReady() && onList() ? '<div class="mut">On the class list since ' + esc2(STORE.joined.date) + '</div>' : '') + '</div><div class="row">' + (regReady() && !onList() ? '<button class="btn sm" data-a="joinclass">Join the class list</button>' : '') + '<button class="btn sm ghost" data-a="editid">Edit name and ID</button></div></section><div class="stats">'  + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(STORE.quizzes.length, "Quizzes taken") + stat(streak(), "Day streak") + "</div>";
   h += CHAPTER_IDS.map(function(c){ var rows = topicsOf(c).map(function(t){ var x = STORE.t[c + "|" + t], p = x && x.n ? Math.round(100 * x.r / x.n) : null; return '<div class="trow"><span>' + t + '</span><span class="mut">' + (x ? x.r + " / " + x.n : "not tried") + "</span>" + bar(p || 0, p == null ? "" : p >= 80 ? "ok" : p < 60 ? "low" : "") + "<span>" + (p == null ? "–" : p + "%") + "</span></div>"; }).join("");
     return '<section class="card"><h2 class="sh">' + chL(c) + " · " + CHAPTERS[c].title + "</h2>" + rows + "</section>"; }).join("");
   h += quizHistory() + '<section class="card"><h2 class="sh">Share or reset</h2><p class="mut">Your progress is stored in this browser only' + (memOnly ? " (storage is blocked, so it will be lost when you close the page)" : "") + '. To show your instructor, copy or save the summary.</p><div class="row"><button class="btn" data-a="copysum">Copy summary</button><button class="btn ghost" data-a="dlsum">Save as text file</button><button class="btn ghost danger" data-a="reset">Reset all progress</button></div><div id="sumMsg" class="mut"></div></section>' +
@@ -484,9 +515,18 @@ document.addEventListener("click", function(e){
   else if (a === "tstep") tstep(+v);
   else if (a === "tool"){ }
   else if (a === "praction"){ var p = v.split("|"); PR.q = null; PR.last = null; S.view = "learn"; S.ti = Math.max(0, LESSONS[p[0]].map(function(l){ return l.t; }).indexOf(p[1])); go("study", p[0], "practice"); render(); }
-  else if (a === "setname"){ var n = $("nameIn").value.trim(), id = $("sidIn").value.trim();
-    if (!n || !/^[0-9A-Za-z-]{4,20}$/.test(id)){ $("idmsg").textContent = !n ? "Enter your full name." : "Enter your university ID (digits only, at least 4)."; return; }
-    STORE.name = n; STORE.sid = id; S.editId = false; saveStore(); render(); }
+  else if (a === "start"){
+    var n = $("nameIn").value.trim(), id = $("sidIn").value.trim(), want = $("regIn") && $("regIn").checked, msg = $("idmsg");
+    if (id && !/^[0-9A-Za-z-]{4,20}$/.test(id)){ msg.textContent = "The university ID needs at least 4 letters or digits."; return; }
+    if (want && (!n || !id)){ msg.textContent = "To join the class list, enter both your name and your ID, or untick the box."; return; }
+    STORE.name = n; STORE.sid = id; STORE.welcomed = 1; S.editId = false; saveStore();
+    var go1 = function(){ render(); window.scrollTo(0, 0); };
+    if (want && regReady() && !(STORE.joined && STORE.joined.sid === id)){ b.disabled = true; regSend(n, id).then(go1, function(){ STORE.joined = null; go1(); }); } else go1(); }
+  else if (a === "canceledit"){ S.editId = false; render(); }
+  else if (a === "joinclass"){
+    if (!STORE.name || !STORE.sid){ S.editId = true; go("dash"); return; }
+    if (confirm(REG_TEXT + "\n\nName: " + STORE.name + "\nID: " + STORE.sid)) regSend(STORE.name, STORE.sid).then(function(){ render(); });
+  }
   else if (a === "editid"){ S.editId = true; go("dash"); }
   else if (a === "opt"){ var i = +v; if (S.page === "quiz"){ QZ.cur = { picked: i }; document.querySelectorAll(".opt").forEach(function(o, k){ o.classList.toggle("pick", k === i); }); }
     else if (!PR.done){ var ok = i === PR.q.correct; PR.done = true; PR.res = { ok: ok, picked: i }; PR.ses.n++; if (ok) PR.ses.r++; record(PR.q.d, ok); drawQ(); } }

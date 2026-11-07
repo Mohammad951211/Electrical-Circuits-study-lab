@@ -51,7 +51,32 @@ def ui_checks(pg, w):
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.on("console", lambda m: errs.append(m.text) if m.type == "error" else None)
     pg.goto(URL); pg.wait_for_timeout(200)
-    if pg.query_selector("#nameIn"): pg.fill("#nameIn", "Test"); pg.fill("#sidIn", "20231234"); pg.click('[data-a="setname"]')
+    # first visit: the entry screen, optional fields, then the chapter list
+    if not pg.query_selector(".welcome") or "Circuit Hub" not in pg.inner_text(".welcome"): fails.append("entry screen missing")
+    if pg.query_selector("#regIn"): fails.append("class-list box shown while no form is set")
+    if pg.is_visible("#nav"): fails.append("menu visible on the entry screen")
+    pg.fill("#sidIn", "12"); pg.click('[data-a="start"]')
+    if not pg.inner_text("#idmsg"): fails.append("short ID was accepted")
+    pg.fill("#sidIn", ""); pg.click('[data-a="start"]'); pg.wait_for_timeout(50)
+    if pg.query_selector(".welcome") or not pg.query_selector(".chgrid"): fails.append("Start without details did not open the chapters")
+    pg.reload(); pg.wait_for_timeout(150)
+    if pg.query_selector(".welcome"): fails.append("entry screen shown again after Start")
+    def edit(): pg.click('[data-a="go"][data-v="progress"]'); pg.click('.idcard [data-a="editid"]'); pg.wait_for_timeout(30)
+    edit(); pg.fill("#nameIn", "Test"); pg.fill("#sidIn", "20231234"); pg.click('[data-a="start"]'); pg.wait_for_timeout(50)
+    if pg.evaluate('__X("STORE.name")') != "Test" or pg.evaluate('__X("STORE.sid")') != "20231234": fails.append("name and ID were not saved")
+    # class list: send only when the box is ticked
+    sent = []
+    pg.route("https://forms.example.test/**", lambda route: (sent.append(route.request.post_data), route.fulfill(status=200, body="ok")))
+    pg.evaluate("()=>{var r=__X('REG'); r.form='https://forms.example.test/forms/d/e/ABC/viewform'; r.eName='entry.11'; r.eSid='entry.22';}")
+    edit()
+    if not pg.query_selector("#regIn") or pg.is_checked("#regIn"): fails.append("class-list box missing or ticked by default")
+    pg.click('[data-a="start"]'); pg.wait_for_timeout(200)
+    if sent: fails.append("data sent without consent")
+    edit(); pg.check("#regIn"); pg.click('[data-a="start"]'); pg.wait_for_timeout(300)
+    if len(sent) != 1 or "entry.11=Test" not in sent[0] or "entry.22=20231234" not in sent[0]: fails.append(f"class list request wrong: {sent}")
+    edit()
+    if pg.query_selector("#regIn"): fails.append("box shown again after joining")
+    pg.click('[data-a="canceledit"]')
     ids = pg.evaluate('__X("CHAPTER_IDS")')
     # Back must return to the previous page and tab, step by step
     pg.click('[data-a="study"][data-v="2"][data-t="study"]'); pg.click('[data-a="mtab"][data-v="practice"]'); pg.click('[data-a="mtab"][data-v="quiz"]')
@@ -135,14 +160,14 @@ def ui_checks(pg, w):
 def axe_checks(pg):
     if not AXE: print("axe-core not found, accessibility check skipped"); return
     src = open(AXE).read(); pg.goto(URL); pg.wait_for_timeout(200)
-    for name, act in [("dashboard", None), ("study", '[data-a="study"][data-v="8"][data-t="study"]'), ("watch", '[data-les="0"]'), ("examples", '[data-exb="0"]'), ("calc", '.calcwrap summary'), ("practice", '[data-a="mtab"][data-v="practice"]'), ("quiz", '[data-a="mtab"][data-v="quiz"]'), ("progress", '[data-a="go"][data-v="progress"]')]:
+    for name, act in [("entry screen", None), ("dashboard", '[data-a="start"]'), ("study", '[data-a="study"][data-v="8"][data-t="study"]'), ("watch", '[data-les="0"]'), ("examples", '[data-exb="0"]'), ("calc", '.calcwrap summary'), ("practice", '[data-a="mtab"][data-v="practice"]'), ("quiz", '[data-a="mtab"][data-v="quiz"]'), ("progress", '[data-a="go"][data-v="progress"]')]:
         if act: pg.click(act); pg.mouse.move(5, 5); pg.wait_for_timeout(500)
         pg.add_script_tag(content=src)
         v = pg.evaluate('async()=>(await axe.run(document,{resultTypes:["violations"]})).violations.map(v=>v.id+" ("+v.nodes.length+")")')
         fails.extend(f"axe {name}: {x}" for x in v)
 
 def calc_checks(pg):
-    pg.goto(URL); pg.wait_for_timeout(200)
+    pg.goto(URL); pg.wait_for_timeout(200); pg.click('[data-a="start"]'); pg.wait_for_timeout(100)
     pg.evaluate("localStorage.setItem('x','1')")
     pg.click('[data-a="study"][data-v="1"][data-t="study"]'); pg.wait_for_timeout(200)
     pg.click('[data-a="fx"]')

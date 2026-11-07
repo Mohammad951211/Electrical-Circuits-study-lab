@@ -243,3 +243,19 @@ details.try{border-top:1px solid var(--edge);padding:8px 0}details.try:first-of-
 
 .foot .dev{flex:1 1 100%;color:var(--ink)}.foot .devlink{color:var(--accent);font-weight:700}
 .foot .ver{color:var(--mut)}
+
+body.landing #nav,body.landing .who{display:none}
+.welcome{max-width:680px;margin:24px auto;padding:clamp(18px,4vw,34px)}
+.welcome .wtitle{font-family:var(--f-disp);font-size:clamp(2rem,6vw,2.8rem);line-height:1;margin:0 0 6px}
+.welcome .wsub{margin:0 0 14px;font-weight:700;color:var(--accent)}
+.welcome .wtext{font-size:1.05rem;margin:0 0 12px}
+.welcome .wlist{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:8px}
+.welcome .wlist li{display:flex;gap:10px;align-items:baseline;background:var(--surf2);border-left:4px solid var(--amber);border-radius:0 8px 8px 0;padding:8px 12px}
+.welcome .wlist b{min-width:78px}.welcome .wlist span{color:var(--mut)}
+.welcome .idrow{display:flex;flex-wrap:wrap;gap:12px;margin:10px 0}
+.welcome .idf{display:flex;flex-direction:column;gap:4px;flex:1 1 220px}.welcome .idf span{font-weight:700;font-size:.9rem}
+.welcome .idf input{padding:10px 12px;border:1px solid var(--edge);border-radius:9px;background:var(--paper);color:var(--ink);font:inherit}
+.welcome .wconsent{display:flex;gap:10px;align-items:flex-start;margin:12px 0;padding:10px 12px;border:1px solid var(--edge);border-radius:10px;background:var(--surf);font-size:.92rem}
+.welcome .wconsent input{margin-top:4px;width:18px;height:18px;flex:none}
+.welcome .wstart{padding:12px 34px;font-size:1.05rem}
+body.landing .tb{display:none}
