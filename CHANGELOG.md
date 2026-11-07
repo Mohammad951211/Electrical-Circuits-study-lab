@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.15.1 (2026-11-07)
+- The light theme is always the default, whatever the device setting. The button in the header still switches to dark and the choice is remembered.
+
 ## 1.15.0 (2026-11-07)
 - New entry screen on the first visit: the site name, a short description, and two optional fields (full name and university ID). Start opens the chapters, with or without details. The screen is not shown again on the same device; details can be changed from My progress.
 - Optional class list: an unticked box lets the student share the name and ID with the instructor. Nothing is sent unless the box is ticked. The registration form is set in `REG` (src/lab.js); the box is hidden if it is empty. My progress shows the status and a Join button for students who decide later.
