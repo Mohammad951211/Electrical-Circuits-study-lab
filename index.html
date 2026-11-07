@@ -5665,7 +5665,7 @@ function trace(f, label){
 // ---------- class list (optional): the student can choose to send the name and ID to the instructor ----------
 // Create a Google Form with two short-answer questions (full name, university ID), then put its address (.../viewform)
 // and the two entry ids below. While REG.form is empty the class-list choice is hidden.
-var REG = { form: "", eName: "", eSid: "" };
+var REG = { form: "https://docs.google.com/forms/d/e/1FAIpQLSfvTY4rQbyLXEhrzTKrpOnvKXdQPrUw6PjT9DVftGHYivK2Xg/viewform", eName: "entry.90797002", eSid: "entry.790649759" };
 var REG_TEXT = "Share my name and university ID with the instructor so that I am counted in the class list. Only the name and the ID are sent. My answers and progress stay on this device. To leave the list later, I will ask the instructor.";
 function regReady(){ return !!(REG.form && REG.eName && REG.eSid); }
 function regSend(name, sid){
