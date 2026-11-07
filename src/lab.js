@@ -138,11 +138,16 @@ function feedbackLink(subject, where, body){
   return "mailto:" + FEEDBACK.mail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(where + String.fromCharCode(10) + body);
 }
 function footLink(){ var a = document.getElementById("fbLink"); if (a){ a.href = feedbackLink("Circuit Hub feedback", "Feedback (App version " + APP_VERSION + ")", ""); if (FEEDBACK.form){ a.target = "_blank"; a.rel = "noopener"; } } }
+// anonymous visit counts (GoatCounter, loaded only on the real site): no names, no IDs, no cookies
+function track(path, title, isEvent){ try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: path, title: title, event: !!isEvent }); } catch (e) {} }
+var LASTVIEW = "";
 function render(){
   $("nav").innerHTML = NAV.map(function(n){ return '<button class="nv" data-a="go" data-v="' + n[0] + '" aria-current="' + (S.page === n[0]) + '">' + n[1] + "</button>"; }).join("");
   $("who").innerHTML = STORE.name ? esc2(STORE.name) + (STORE.sid ? '<small class="sid">ID ' + esc2(STORE.sid) + "</small>" : "") + ' <button class="linkb" data-a="editid">Edit</button>' : '<button class="linkb" data-a="editid">Enter your name</button>';
   ({ dash: pDash, study: pStudy, practice: pPractice, quiz: pQuiz, progress: pProgress, sheet: pSheet })[S.page]();
   document.body.classList.toggle("landing", S.page === "dash" && showLanding());
+  var vk = S.page + "|" + (S.page === "study" ? S.ch + "|" + S.tab : "");
+  if (vk !== LASTVIEW){ LASTVIEW = vk; if (S.page === "study") track("/ch" + S.ch + "/" + S.tab, "Chapter " + S.ch + " " + S.tab); else if (S.page !== "dash") track("/" + S.page, S.page); }
   footLink();
 }
 function trace(f, label){
@@ -163,7 +168,7 @@ function regSend(name, sid){
   var url = REG.form.replace(/\/viewform.*$/, "/formResponse"), body = new URLSearchParams();
   body.append(REG.eName, name); body.append(REG.eSid, sid);
   return fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: body.toString() }).then(function(){
-    STORE.joined = { sid: sid, date: today() }; saveStore(); return true;
+    STORE.joined = { sid: sid, date: today() }; saveStore(); track("class-list-join", "Joined the class list", true); return true;
   });
 }
 function onList(){ return !!(STORE.joined && STORE.joined.sid && STORE.joined.sid === STORE.sid); }
@@ -459,7 +464,7 @@ function qnext(){
   if (q.kind === "mcq") ok = st.picked === q.correct; else ok = isRight(parseNum(v, q.unit), q.ans);
   QZ.ans.push({ picked: st.picked, val: v, ok: ok }); record(q.d, ok); QZ.cur = null; QZ.i++;
   if (QZ.i >= QZ.qs.length){
-    var sc = QZ.ans.filter(function(a){ return a.ok; }).length; QZ.stage = "result"; QZ.score = sc; QZ.secs = Math.round((Date.now() - QZ.t0) / 1000);
+    var sc = QZ.ans.filter(function(a){ return a.ok; }).length; QZ.stage = "result"; QZ.score = sc; track("quiz-done", "Quiz finished", true); QZ.secs = Math.round((Date.now() - QZ.t0) / 1000);
     STORE.quizzes.push({ ch: QZ.ch, topic: QZ.topic, score: sc, total: QZ.qs.length, date: today() }); saveStore();
   }
   render();
@@ -519,7 +524,7 @@ document.addEventListener("click", function(e){
     var n = $("nameIn").value.trim(), id = $("sidIn").value.trim(), want = $("regIn") && $("regIn").checked, msg = $("idmsg");
     if (id && !/^[0-9A-Za-z-]{4,20}$/.test(id)){ msg.textContent = "The university ID needs at least 4 letters or digits."; return; }
     if (want && (!n || !id)){ msg.textContent = "To join the class list, enter both your name and your ID, or untick the box."; return; }
-    STORE.name = n; STORE.sid = id; STORE.welcomed = 1; S.editId = false; saveStore();
+    var firstStart = !STORE.welcomed; STORE.name = n; STORE.sid = id; STORE.welcomed = 1; S.editId = false; saveStore(); if (firstStart) track("start", "Start pressed", true);
     var go1 = function(){ render(); window.scrollTo(0, 0); };
     if (want && regReady() && !(STORE.joined && STORE.joined.sid === id)){ b.disabled = true; regSend(n, id).then(go1, function(){ STORE.joined = null; go1(); }); } else go1(); }
   else if (a === "canceledit"){ S.editId = false; render(); }

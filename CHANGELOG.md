@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.16.0 (2026-11-07)
+- Anonymous visit counts with GoatCounter (https://circuithub.goatcounter.com). It is loaded only on circuithub-gju.com, sets no cookies and collects no names or IDs.
+- Counted: visits, the chapter and tab that are opened, the Start button on the entry screen, finished quizzes and joining the class list.
+
 ## 1.15.1 (2026-11-07)
 - The light theme is always the default, whatever the device setting. The button in the header still switches to dark and the choice is remembered.
 
