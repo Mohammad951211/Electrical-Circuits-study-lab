@@ -53,7 +53,7 @@ def ui_checks(pg, w):
     pg.goto(URL); pg.wait_for_timeout(200)
     # first visit: the entry screen, optional fields, then the chapter list
     if not pg.query_selector(".welcome") or "Circuit Hub" not in pg.inner_text(".welcome"): fails.append("entry screen missing")
-    if pg.query_selector("#regIn"): fails.append("class-list box shown while no form is set")
+    if not pg.query_selector("#regIn") or pg.is_checked("#regIn"): fails.append("class-list box missing or ticked on the entry screen")
     if pg.is_visible("#nav"): fails.append("menu visible on the entry screen")
     pg.fill("#sidIn", "12"); pg.click('[data-a="start"]')
     if not pg.inner_text("#idmsg"): fails.append("short ID was accepted")
