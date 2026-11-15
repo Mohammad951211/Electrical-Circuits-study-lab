@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.17.1 (2026-11-15)
+- The background photo is back as before.
+- The header, the entry screen and the browser tab show only "Circuit Hub", without the course name and the instructor.
+
 ## 1.17.0 (2026-11-15)
 - The university and school logos, the university name and the campus photo are removed. The header shows a simple Circuit Hub mark, and the background is a light dot pattern.
 - The calculator no longer uses a brand name. The fallback e-mail address is removed; reports go to the feedback form.

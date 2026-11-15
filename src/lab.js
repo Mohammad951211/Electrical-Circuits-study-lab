@@ -178,7 +178,7 @@ function pWelcome(){
   var first = !STORE.welcomed, edit = !!S.editId, joined = onList();
   var consent = !regReady() ? "" : joined ? '<p class="mut wjoined">You are on the class list since ' + esc2(STORE.joined.date) + ". To leave the list, ask the instructor.</p>"
     : '<label class="wconsent"><input type="checkbox" id="regIn"><span>' + REG_TEXT + "</span></label>";
-  $("page").innerHTML = '<section class="card welcome"><h1 class="wtitle">Circuit Hub</h1><p class="wsub">ME0212 Electrical Circuits &amp; Machines</p>' +
+  $("page").innerHTML = '<section class="card welcome"><h1 class="wtitle">Circuit Hub</h1>' +
     (first ? '<p class="wtext">Study each topic, watch the animations, work through solved examples, then practise with questions and test yourself with quizzes. Everything follows the course slides.</p>' +
       '<ul class="wlist"><li><b>Study</b><span>short lessons with animations</span></li><li><b>Practice</b><span>questions solved step by step</span></li><li><b>Quiz</b><span>test one topic or a whole chapter</span></li></ul>' : "") +
     '<h2 class="sh">' + (edit ? "Your details" : "Your details (optional)") + '</h2><p class="mut">They stay on this device and appear on your progress report. You can use the site without them.</p>' +

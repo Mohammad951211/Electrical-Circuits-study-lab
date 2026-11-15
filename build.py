@@ -41,7 +41,7 @@ def build(test=False):
     lab = rd("src/lab.js").replace("//@@MCQ@@", cat(MCQ) + "\n" + why_js()).replace("//@@GENS@@", cat(GENS))
     js = "\n".join([cat(FIGS), cat(CONTENT), cat(WATCH), cat(IDEAS), lab])
     fonts = "".join('@font-face{font-family:"%s";font-weight:%s;font-style:normal;font-display:swap;src:url(data:font/woff2;base64,%s) format("woff2")}\n' % (f, w, b64("assets/fonts/" + n)) for f, w, n in FONTS)
-    css = fonts + rd("src/lab.css")
+    css = fonts + rd("src/lab.css").replace("@@BACKDROP@@", "data:image/jpeg;base64," + b64("assets/backdrop.jpg"))
     out = rd("src/template.html").replace("/*@@CSS@@*/", css)
     out = out.replace("@@VERSION@@", version).replace("@@DATE@@", datetime.date.today().isoformat()).replace("//@@JS@@", js.replace("@@VERSION@@", version))
     if test: out = out.replace("(function(){\n", "(function(){ window.__X=function(n){return eval(n)};\n", 1)
