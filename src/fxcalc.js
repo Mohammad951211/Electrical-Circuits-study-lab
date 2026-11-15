@@ -1,4 +1,4 @@
-// ===== scientific calculator in the style of the Casio fx-991EX (own layout code, no Casio artwork) =====
+// ===== scientific calculator engine (own design) =====
 var FX = { open: false, shift: false, alpha: false, hyp: false, pend: null, tokens: [], cur: 0, hist: [], hi: -1, ans: null, vars: {}, angle: "deg", cfmt: "rect", eng: false, frac: false, view: "calc", out: "", err: "", menuSel: 0, mats: {}, vecs: {}, mode: "comp", base: "dec", stat: null, tbl: null, sed: null, ctx: null, x: null, y: null };
 function fxErr(m){ var e = new Error(m); e.fx = m; return e; }
 // ---- complex numbers and matrices ----

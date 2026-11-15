@@ -1,6 +1,6 @@
 # Circuit Hub
 
-Interactive study platform for ME0212 Electrical Circuits and Machines, the university.
+Interactive study platform for ME0212 Electrical Circuits and Machines.
 The live site is the single file `index.html` (GitHub Pages), served at https://circuithub-gju.com (the `CNAME` file keeps the domain; do not delete it).
 Content: chapters 1, 2, 3, 4, 5, 6, 8, 9 and 11 of the textbook, plus the motors part (Introduction to Motors.pdf). Chapters 7 and 10 are not part of the course. Put course files in the `materials/` folder (it is ignored by git and never published). It works offline and stores progress only on the student's device.
 

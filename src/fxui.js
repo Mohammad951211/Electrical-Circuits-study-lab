@@ -1,4 +1,4 @@
-// ===== calculator window: keys, screens and menus (fx-991EX style, own drawing) =====
+// ===== calculator window: keys, screens and menus (own design) =====
 // Key object: p = main label, s = SHIFT label (gold), a = ALPHA label (red), t/ts = token on press / with SHIFT,
 // v = variable letter on ALPHA, x = not available, sx = SHIFT function not available.
 var FXPAD = ["up", "left", "right", "down"];
@@ -413,7 +413,7 @@ function fxKeyHtml(k){
 }
 function fxBuild(){
   var w = document.createElement("div"); w.id = "fxwin"; w.setAttribute("role", "dialog"); w.setAttribute("aria-label", "Scientific calculator"); w.tabIndex = -1;
-  var h = '<div class="fxh" id="fxh"><span class="fxsolar" aria-hidden="true"></span><b>ME0212 · scientific</b><span class="fxmod">fx-991EX style</span><button class="fxx" data-fxc="close" aria-label="Close calculator">×</button></div><div class="fxbezel"><div class="fxlcdw"><div class="fxst" id="fxst"></div><div class="fxlcd" id="fxlcd" aria-live="polite"></div></div></div><div class="fxkeys">';
+  var h = '<div class="fxh" id="fxh"><span class="fxsolar" aria-hidden="true"></span><b>Scientific calculator</b><span class="fxmod">Circuit Hub</span><button class="fxx" data-fxc="close" aria-label="Close calculator">×</button></div><div class="fxbezel"><div class="fxlcdw"><div class="fxst" id="fxst"></div><div class="fxlcd" id="fxlcd" aria-live="polite"></div></div></div><div class="fxkeys">';
   FXROWS.forEach(function(row){
     if (row === "gap"){ h += '<div class="fxgap"></div>'; return; }
     if (row === "top"){ h += '<div class="fxtop">' + FXTOP.map(fxKeyHtml).join("") + "</div>"; return; }

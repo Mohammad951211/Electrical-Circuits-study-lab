@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.17.0 (2026-11-15)
+- The university and school logos, the university name and the campus photo are removed. The header shows a simple Circuit Hub mark, and the background is a light dot pattern.
+- The calculator no longer uses a brand name. The fallback e-mail address is removed; reports go to the feedback form.
+
 ## 1.16.0 (2026-11-07)
 - Anonymous visit counts with GoatCounter (https://circuithub.goatcounter.com). It is loaded only on circuithub-gju.com, sets no cookies and collects no names or IDs.
 - Counted: visits, the chapter and tab that are opened, the Start button on the entry screen, finished quizzes and joining the class list.
@@ -28,10 +32,9 @@
 - My progress: download your progress as a file and load it on another device or browser. The file is not sent anywhere.
 
 ## 1.12.0 (2026-11-04)
-- The platform is now called Circuit Hub. Under the name: ME0212 Electrical Circuits & Machines, the university, and the instructor.
-- The new GJU logo and the SATS logo sit side by side in the header, on a white plate so they stay clear in the dark theme.
-- Two themes only, light and dark, with colours taken from the GJU logo (sky blue and orange). A button in the header switches them. The first visit follows the device setting and the choice is remembered.
-- Footer: "Developed by: Mohammad Alghweri, the university" with a link to the portfolio.
+- The platform is now called Circuit Hub. Under the name: ME0212 Electrical Circuits & Machines and the instructor.
+- Two themes only, light and dark, with sky blue and orange colours. A button in the header switches them. The first visit follows the device setting and the choice is remembered.
+- Footer: "Developed by: Mohammad Alghweri" with a link to the portfolio.
 - Quiz numeric questions have no Check button: type the number and press Next or Enter.
 - Calculator menus show the selected line with an arrow, and the lines can be clicked.
 - Report a problem and Send feedback open the Google Form, with the student's name and ID filled in when entered.
@@ -49,7 +52,7 @@
 - Chapter pages now have three main tabs: Study, Practice and Quiz. Practice and Quiz mix questions from the whole chapter.
 - Study: every topic has its own Examples drop-down. A Watch button appears only when an animation exists for that topic and shows that circuit only.
 - The instructor name is shown under the course name.
-- New Calculator button next to Formula sheet. It opens a floating fx-991EX style scientific calculator with SHIFT, ALPHA, STO, RCL, S⇔D, complex numbers (polar and rectangular), equation solving (2 and 3 unknowns, quadratic and cubic), matrices and determinants. Calculus, statistics, base-n, vector and table modes are not included.
+- New Calculator button next to Formula sheet. It opens a floating scientific calculator with SHIFT, ALPHA, STO, RCL, S⇔D, complex numbers (polar and rectangular), equation solving (2 and 3 unknowns, quadratic and cubic), matrices and determinants. Calculus, statistics, base-n, vector and table modes are not included.
 
 ## 1.9.0 (2026-11-03)
 - New chapter layout with four tabs: Study, Examples, Practice and Quiz. Each tab shows the topics of the chapter as buttons, so the student works on one topic at a time.
