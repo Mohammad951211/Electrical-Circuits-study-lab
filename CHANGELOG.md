@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.18.0 (2026-11-19)
+- New Exam mode: tick any chapters, choose the number of questions (shared equally between the chapters), optional timer, answers only at the end, and a result for each chapter. Found in the Quiz tab and on the dashboard ("Take an exam").
+
 ## 1.17.1 (2026-11-15)
 - The background photo is back as before.
 - The header, the entry screen and the browser tab show only "Circuit Hub", without the course name and the instructor.

@@ -1,6 +1,6 @@
 // ================= platform =================
 var APP_VERSION = "@@VERSION@@";
-function chL(c){ return c === "M" ? "Motors" : "Chapter " + c; }
+function chL(c){ return c === "exam" ? "Exam" : c === "M" ? "Motors" : "Chapter " + c; }
 var CH_NAMES = { "1": "Basic Concepts", "2": "Basic Laws", "3": "Series–Parallel", "4": "DC Analysis Methods", "5": "Network Theorems", "6": "Capacitors & Inductors", "8": "AC Fundamentals", "9": "AC Analysis", "11": "Transformers", "M": "Electric Motors" };
 var MCQ = {}; function M(topic, q, ok, wrong, why){ return { topic: topic, q: q, ok: ok, wrong: wrong, why: why }; }
 //@@MCQ@@
@@ -195,7 +195,7 @@ function pDash(){
   var f = s.total ? s.seen / s.total : 0;
   h += '<section class="card trace"><div class="trace-top"><h1>' + (STORE.name ? "Hello, " + esc2(STORE.name.split(" ")[0]) : "Dashboard") + '</h1><div class="read"><b>' + s.seen + "</b> of " + s.total + " questions seen</div></div>" + trace(f, s.seen + " of " + s.total + " questions seen") + "</section>";
   h += '<div class="stats">' + stat(s.n, "Answers given") + stat(s.acc == null ? "–" : s.acc + "%", "Accuracy") + stat(streak(), "Day streak") + stat(CHAPTER_IDS.length, "Chapters") + "</div>";
-  h += '<h2 class="sh">Chapters</h2><div class="chgrid">' + CHAPTER_IDS.map(function(c){ var x = chStats(c); return '<section class="card chc">' + ring(x.acc, "Accuracy " + (x.acc == null ? "none" : x.acc + "%")) + "<div><h3>" + chL(c) + "</h3><p>" + CHAPTERS[c].title + '</p><p class="mut">' + x.seen + " of " + x.total + " questions seen</p>" + bar(Math.round(100 * x.seen / x.total)) +
+  h += '<div class="row exhead"><h2 class="sh">Chapters</h2><button class="btn sm" data-a="goexam">Take an exam</button></div><div class="chgrid">' + CHAPTER_IDS.map(function(c){ var x = chStats(c); return '<section class="card chc">' + ring(x.acc, "Accuracy " + (x.acc == null ? "none" : x.acc + "%")) + "<div><h3>" + chL(c) + "</h3><p>" + CHAPTERS[c].title + '</p><p class="mut">' + x.seen + " of " + x.total + " questions seen</p>" + bar(Math.round(100 * x.seen / x.total)) +
     '<div class="row">' + MTABS.map(function(t, k){ return '<button class="btn sm' + (k ? " ghost" : "") + '" data-a="study" data-v="' + c + '" data-t="' + t[0] + '">' + t[1] + "</button>"; }).join("") + '</div></div></section>'; }).join("") + "</div>";
   h += '<div class="grid2"><section class="card"><h2 class="sh">Needs work</h2>' + (w.length ? w.map(function(x){ return '<div class="wk"><span><b>' + x.topic + "</b> · " + chL(x.ch) + '</span><span>' + x.acc + '%</span><button class="btn sm ghost" data-a="praction" data-v="' + x.ch + "|" + x.topic + '">Practise</button></div>'; }).join("") : '<p class="mut">Topics below 70% appear here after a few answers.</p>') + '</section><section class="card"><h2 class="sh">Badges</h2><div class="badges">' + badges().map(function(b){ return '<div class="bdg ' + (b[2] ? "on" : "") + '" title="' + b[1] + '"><b>' + b[0] + "</b><span>" + b[1] + "</span></div>"; }).join("") + "</div></section></div>";
   $("page").innerHTML = h;
@@ -432,19 +432,50 @@ function quizPool(){
 }
 function rQuizTab(){
   var n = quizPool().length, opts = [5, 10, 20].filter(function(x){ return x <= Math.max(5, n); }); if (opts.indexOf(QZN) < 0) QZN = opts[opts.length - 1];
-  $("ctab").innerHTML = topicBar() + '<section class="card"><h2 class="sh">' + (S.ti < 0 ? "Quiz on the whole chapter" : "Quiz: " + curTopic()) + '</h2><p>Multiple-choice and numeric questions. Ten questions are planned for ten minutes. The solutions and sources appear at the end.</p><div class="filters2"><div class="field2"><label for="qn">Questions</label><select id="qn">' + opts.map(function(x){ return "<option" + (QZN === x ? " selected" : "") + ">" + x + "</option>"; }).join("") + '</select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + quizHistory() + topicFoot();
+  $("ctab").innerHTML = topicBar() + '<section class="card"><h2 class="sh">' + (S.ti < 0 ? "Quiz on the whole chapter" : "Quiz: " + curTopic()) + '</h2><p>Multiple-choice and numeric questions. Ten questions are planned for ten minutes. The solutions and sources appear at the end.</p><div class="filters2"><div class="field2"><label for="qn">Questions</label><select id="qn">' + opts.map(function(x){ return "<option" + (QZN === x ? " selected" : "") + ">" + x + "</option>"; }).join("") + '</select></div></div><div class="row"><button class="btn" data-a="startquiz">Start quiz</button></div></section>' + examCard() + quizHistory() + topicFoot();
 }
 function quizHistory(){
   var q = STORE.quizzes.slice(-5).reverse(); if (!q.length) return "";
-  return '<section class="card"><h2 class="sh">Recent quizzes</h2>' + q.map(function(x){ var p = Math.round(100 * x.score / x.total); return '<div class="wk"><span>' + x.date + " · " + (x.ch === "all" ? "All chapters" : "" + chL(x.ch)) + (x.topic && x.topic !== "all" ? " · " + x.topic : "") + "</span><span>" + x.score + " / " + x.total + " (" + p + "%)</span>" + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + "</div>"; }).join("") + "</section>";
+  return '<section class="card"><h2 class="sh">Recent quizzes</h2>' + q.map(function(x){ var p = Math.round(100 * x.score / x.total); return '<div class="wk"><span>' + x.date + " · " + (x.ch === "exam" ? "Exam: " + (x.chs || []).map(function(c){ return c === "M" ? "Motors" : c; }).join(", ") : x.ch === "all" ? "All chapters" : "" + chL(x.ch)) + (x.topic && x.topic !== "all" ? " · " + x.topic : "") + "</span><span>" + x.score + " / " + x.total + " (" + p + "%)</span>" + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + "</div>"; }).join("") + "</section>";
+}
+function pickItems(all, n){
+  var mc = shuffle(all.filter(function(d){ return d.kind === "mcq"; })), nu = shuffle(all.filter(function(d){ return d.kind === "num"; }));
+  var N = Math.min(n, mc.length + nu.length), nNum = Math.min(nu.length, Math.round(N * 0.3)), items = mc.slice(0, N - nNum).concat(nu.slice(0, nNum));
+  if (items.length < N) items = items.concat(nu.slice(nNum, nNum + N - items.length));
+  return items;
 }
 function startQuiz(){
   QZN = +$("qn").value; QZCH = S.ch;
-  var all = quizPool(), mc = shuffle(all.filter(function(d){ return d.kind === "mcq"; })), nu = shuffle(all.filter(function(d){ return d.kind === "num"; }));
-  var N = Math.min(QZN, mc.length + nu.length), nNum = Math.min(nu.length, Math.round(N * 0.3)), items = mc.slice(0, N - nNum).concat(nu.slice(0, nNum));
-  if (items.length < N) items = items.concat(nu.slice(nNum, nNum + N - items.length));
-  var qs = shuffle(items).map(instantiate);
+  var qs = shuffle(pickItems(quizPool(), QZN)).map(instantiate);
   QZ = { stage: "run", qs: qs, i: 0, ans: [], ch: QZCH, topic: curTopic(), t0: Date.now() }; go("quiz");
+}
+// ---------- exam: one test over several chapters ----------
+var EX = { chs: CHAPTER_IDS.slice(), n: 20, timer: true };
+function examAvail(chs){ var t = 0; chs.forEach(function(c){ t += POOL[c].filter(function(d){ return d.kind === "mcq" || d.kind === "num"; }).length; }); return t; }
+function examCard(){
+  var h = '<section class="card" id="examcard"><h2 class="sh">Exam</h2><p>Test yourself on several chapters at once. The questions are shared equally between the chapters you tick and mixed in random order. Answers and solutions appear only after you finish.</p><fieldset class="exch"><legend class="mut">Chapters in the exam</legend>' +
+    CHAPTER_IDS.map(function(c){ return '<label class="exopt"><input type="checkbox" data-a="exch" value="' + c + '"' + (EX.chs.indexOf(c) >= 0 ? " checked" : "") + "> " + chL(c) + "</label>"; }).join("") + '</fieldset><div class="row"><button class="btn sm ghost" data-a="exall">Select all</button><button class="btn sm ghost" data-a="exclear">Clear</button></div>' +
+    '<div class="filters2 exset"><div class="field2"><label for="exn">Questions</label><select id="exn">' + [10, 20, 30, 40, 60].map(function(x){ return "<option" + (EX.n === x ? " selected" : "") + ">" + x + "</option>"; }).join("") + '</select></div><label class="exopt"><input type="checkbox" id="ext"' + (EX.timer ? " checked" : "") + "> Timer: 1 minute per question</label></div>" +
+    '<p class="mut" id="exinfo"></p><div class="row"><button class="btn" id="exgo" data-a="startexam">Start exam</button></div></section>';
+  setTimeout(exUpdate, 0); return h;
+}
+function exUpdate(){
+  var info = $("exinfo"), go1 = $("exgo"); if (!info || !go1) return;
+  var av = examAvail(EX.chs), n = Math.min(EX.n, av);
+  go1.disabled = !EX.chs.length;
+  info.textContent = !EX.chs.length ? "Tick at least one chapter." : n + " questions from " + EX.chs.length + (EX.chs.length === 1 ? " chapter" : " chapters") + (EX.timer ? ", " + n + " minutes." : ", no time limit.") + (n < EX.n ? " (The chosen chapters have only " + av + " questions.)" : "");
+}
+function examPick(chs, N){
+  var order = shuffle(chs.slice()), cap = order.map(function(c){ return POOL[c].filter(function(d){ return d.kind === "mcq" || d.kind === "num"; }).length; }), take = order.map(function(){ return 0; }), left = N;
+  while (left > 0){ var moved = false; for (var i = 0; i < order.length && left > 0; i++) if (take[i] < cap[i]){ take[i]++; left--; moved = true; } if (!moved) break; }
+  var items = []; order.forEach(function(c, i){ if (take[i]) items = items.concat(pickItems(POOL[c], take[i])); });
+  return items;
+}
+function startExam(){
+  if (!EX.chs.length) return;
+  QZCH = S.ch; var N = Math.min(EX.n, examAvail(EX.chs)), qs = shuffle(examPick(EX.chs, N)).map(instantiate);
+  QZ = { stage: "run", qs: qs, i: 0, ans: [], ch: "exam", chs: CHAPTER_IDS.filter(function(c){ return EX.chs.indexOf(c) >= 0; }), topic: "all", exam: true, lim: EX.timer ? qs.length * 60 : 0, t0: Date.now() };
+  track("exam-start", "Exam started", true); go("quiz");
 }
 function drawQuiz(){
   var q = QZ.qs[QZ.i], st = QZ.cur || {};
@@ -456,24 +487,47 @@ function drawQuiz(){
 function qclock(){
   var el = $("qzclock"); if (!el || !QZ || QZ.stage !== "run") return;
   var lim = QZ.qs.length <= 10 ? 600 : 1200, t = Math.floor((Date.now() - QZ.t0) / 1000), f = function(x){ return Math.floor(x / 60) + ":" + ("0" + x % 60).slice(-2); };
+  if (QZ.exam){
+    if (QZ.lim && t >= QZ.lim) return examExpire();
+    el.textContent = QZ.lim ? "Time left " + f(QZ.lim - t) : "Time " + f(t); el.classList.toggle("over", !!QZ.lim && QZ.lim - t <= 60); return;
+  }
   el.textContent = t < lim ? "Time " + f(t) + " / " + f(lim) : "Time is up (" + f(t) + "). Finish when ready.";
   el.classList.toggle("over", t >= lim);
 }
 setInterval(qclock, 1000);
-function qnext(){
-  var q = QZ.qs[QZ.i], st = QZ.cur || {}, v = q.kind === "num" ? $("numIn").value : null, ok = false;
+function submitCur(){
+  var q = QZ.qs[QZ.i], st = QZ.cur || {}, inp = $("numIn"), v = q.kind === "num" ? (inp ? inp.value : "") : null, ok = false;
   if (q.kind === "mcq") ok = st.picked === q.correct; else ok = isRight(parseNum(v, q.unit), q.ans);
   QZ.ans.push({ picked: st.picked, val: v, ok: ok }); record(q.d, ok); QZ.cur = null; QZ.i++;
-  if (QZ.i >= QZ.qs.length){
-    var sc = QZ.ans.filter(function(a){ return a.ok; }).length; QZ.stage = "result"; QZ.score = sc; track("quiz-done", "Quiz finished", true); QZ.secs = Math.round((Date.now() - QZ.t0) / 1000);
-    STORE.quizzes.push({ ch: QZ.ch, topic: QZ.topic, score: sc, total: QZ.qs.length, date: today() }); saveStore();
-  }
+}
+function finishQuiz(){
+  var sc = QZ.ans.filter(function(a){ return a.ok; }).length; QZ.stage = "result"; QZ.score = sc; track(QZ.exam ? "exam-done" : "quiz-done", QZ.exam ? "Exam finished" : "Quiz finished", true); QZ.secs = Math.round((Date.now() - QZ.t0) / 1000);
+  if (QZ.lim) QZ.secs = Math.min(QZ.secs, QZ.lim);
+  var rec = { ch: QZ.ch, topic: QZ.topic, score: sc, total: QZ.qs.length, date: today() }; if (QZ.exam) rec.chs = QZ.chs; STORE.quizzes.push(rec); saveStore();
   render();
 }
+function examExpire(){
+  if (!QZ || QZ.stage !== "run") return;
+  submitCur(); while (QZ.i < QZ.qs.length){ QZ.ans.push({ picked: null, val: null, ok: false }); QZ.i++; }
+  QZ.timeUp = true; finishQuiz();
+}
+function qnext(){
+  submitCur();
+  if (QZ.i >= QZ.qs.length) finishQuiz(); else render();
+}
+function examBreakdown(){
+  if (!QZ.exam) return "";
+  var rows = QZ.chs.map(function(c){
+    var n = 0, r = 0; QZ.qs.forEach(function(q, i){ if (q.d.ch === c){ n++; if (QZ.ans[i].ok) r++; } });
+    if (!n) return ""; var p = Math.round(100 * r / n);
+    return '<div class="wk"><span><b>' + chL(c) + '</b> · ' + CHAPTERS[c].title + "</span><span>" + r + " / " + n + " (" + p + "%)</span>" + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + "</div>";
+  }).join("");
+  return '<section class="card"><h2 class="sh">Result by chapter</h2>' + rows + "</section>";
+}
 function drawResult(){
-  var p = Math.round(100 * QZ.score / QZ.qs.length), h = '<h1 class="ph">Quiz result</h1><section class="card res"><div class="big">' + QZ.score + " / " + QZ.qs.length + "</div><div>" + p + "% · " + Math.floor(QZ.secs / 60) + " min " + (QZ.secs % 60) + ' s</div>' + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + '<div class="row"><button class="btn" data-a="againquiz">New quiz</button><button class="btn ghost" data-a="go" data-v="dash">Dashboard</button></div></section><h2 class="sh">Review</h2>';
+  var p = Math.round(100 * QZ.score / QZ.qs.length), h = '<h1 class="ph">' + (QZ.exam ? "Exam result" : "Quiz result") + "</h1>" + (QZ.timeUp ? '<p class="mut">Time was up. Questions not reached count as unanswered.</p>' : "") + '<section class="card res"><div class="big">' + QZ.score + " / " + QZ.qs.length + "</div><div>" + p + "% · " + Math.floor(QZ.secs / 60) + " min " + (QZ.secs % 60) + ' s</div>' + bar(p, p >= 80 ? "ok" : p < 50 ? "low" : "") + '<div class="row"><button class="btn" data-a="againquiz">' + (QZ.exam ? "New exam" : "New quiz") + '</button><button class="btn ghost" data-a="go" data-v="dash">Dashboard</button></div></section>' + examBreakdown() + '<h2 class="sh">Review</h2>';
   h += QZ.qs.map(function(q, i){ var a = QZ.ans[i], right = q.kind === "mcq" ? q.opts[q.correct] : nn(q.ans) + " " + q.unit, mine = q.kind === "mcq" ? (a.picked == null ? "no answer" : q.opts[a.picked]) : (a.val || "no answer");
-    return '<section class="card rv ' + (a.ok ? "good" : "bad") + '"><div class="qmeta"><span class="chip">' + (a.ok ? "Correct" : "Wrong") + '</span><span class="chip alt">' + q.d.topic + '</span></div><div class="qtext2">' + (i + 1) + ". " + esc2(q.text) + "</div>" + (q.fig && !a.ok ? fig(q.fig) : "") + '<p><b>Your answer:</b> ' + esc2(mine) + "</p>" + (a.ok ? "" : "<p><b>Correct answer:</b> " + esc2(right) + "</p>") + stepsOf(q.kind === "mcq" ? q.why : q.sol, right) + srcLine(q) + "</section>"; }).join("");
+    return '<section class="card rv ' + (a.ok ? "good" : "bad") + '"><div class="qmeta"><span class="chip">' + (a.ok ? "Correct" : "Wrong") + '</span><span class="chip alt">' + (QZ.exam ? chL(q.d.ch) + " · " : "") + q.d.topic + '</span></div><div class="qtext2">' + (i + 1) + ". " + esc2(q.text) + "</div>" + (q.fig && !a.ok ? fig(q.fig) : "") + '<p><b>Your answer:</b> ' + esc2(mine) + "</p>" + (a.ok ? "" : "<p><b>Correct answer:</b> " + esc2(right) + "</p>") + stepsOf(q.kind === "mcq" ? q.why : q.sol, right) + srcLine(q) + "</section>"; }).join("");
   $("page").innerHTML = h;
 }
 
@@ -541,6 +595,10 @@ document.addEventListener("click", function(e){
   else if (a === "self"){ var okk = v === "1"; PR.ses.n++; if (okk) PR.ses.r++; record(PR.q.d, okk); nextPractice(); }
   else if (a === "next") nextPractice();
   else if (a === "startquiz") startQuiz();
+  else if (a === "startexam") startExam();
+  else if (a === "exall"){ EX.chs = CHAPTER_IDS.slice(); rQuizTab(); }
+  else if (a === "exclear"){ EX.chs = []; rQuizTab(); }
+  else if (a === "goexam"){ S.ti = -1; go("study", QZCH, "quiz"); var ec = $("examcard"); if (ec) ec.scrollIntoView(); }
   else if (a === "qnext") qnext();
   else if (a === "quitquiz"){ QZ = null; render(); }
   else if (a === "hidehelp"){ STORE.help = 0; saveStore(); render(); }
@@ -562,6 +620,9 @@ document.addEventListener("change", function(e){
   var t = e.target;
   if (t.dataset.a === "pf"){ PR.type = $("fty").value; PR.q = null; PR.last = null; rPracticeTab(); }
   if (t.id === "qn") QZN = +t.value;
+  if (t.id === "exn"){ EX.n = +t.value; exUpdate(); }
+  if (t.id === "ext"){ EX.timer = t.checked; exUpdate(); }
+  if (t.dataset.a === "exch"){ EX.chs = CHAPTER_IDS.filter(function(c){ var b = document.querySelector('input[data-a="exch"][value="' + c + '"]'); return b && b.checked; }); exUpdate(); }
 });
 // the Calculate tab buttons use data-tool
 document.addEventListener("click", function(e){ var b = e.target.closest("button"); if (b && b.dataset.tool != null && S.page === "study"){ CALC[S.ch] = +b.dataset.tool; rCalc(); } });

@@ -262,3 +262,5 @@ body.landing #nav,body.landing .who{display:none}
 body.landing .tb{display:none}
 
 .tb{align-self:center}.tb h1{margin:0}
+.exhead{justify-content:space-between;align-items:center;margin:0 0 6px}.exhead .sh{margin:0}
+.exch{border:1px solid var(--edge);border-radius:10px;padding:8px 12px;margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px 18px}.exopt{display:inline-flex;align-items:center;gap:6px;font-weight:700;cursor:pointer}.exset{margin:10px 0}

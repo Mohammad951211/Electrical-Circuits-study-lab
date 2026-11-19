@@ -146,6 +146,21 @@ def ui_checks(pg, w):
         pg.click(f'[data-a="study"][data-v="{ch}"][data-t="study"]'); pg.click(f'[data-a="sheet"][data-v="{ch}"]'); pg.wait_for_timeout(50)
         if any(b in pg.inner_html("#page") for b in BAD) or not pg.query_selector(".sheet"): errs.append(f"sheet {ch}")
         pg.click('[data-a="go"][data-v="dash"]'); pg.click(f'[data-a="study"][data-v="{ch}"][data-t="quiz"]'); pg.wait_for_timeout(50)
+        if w == 1366 and ch == "1":
+            pg.click('[data-a="exclear"]')
+            if not pg.is_disabled("#exgo"): errs.append("exam: start enabled with no chapter")
+            pg.check('input[data-a="exch"][value="1"]'); pg.check('input[data-a="exch"][value="2"]'); pg.select_option("#exn", "10"); pg.wait_for_timeout(50)
+            pg.click("#exgo"); pg.wait_for_timeout(50)
+            for _ in range(15):
+                if not pg.query_selector('[data-a="qnext"]'): break
+                if pg.query_selector("#numIn"): pg.fill("#numIn", "1")
+                elif pg.query_selector('[data-a="opt"]'): pg.click('[data-a="opt"]')
+                pg.click('[data-a="qnext"]'); pg.wait_for_timeout(40)
+            try: pg.wait_for_selector(".res", timeout=3000)
+            except Exception: pass
+            t = pg.inner_text("#page")
+            if not pg.query_selector(".res") or "Result by chapter" not in t or "Chapter 3" in t.split("Review")[0]: errs.append("exam: " + t[:200].replace(chr(10), " | "))
+            pg.click('[data-a="againquiz"]'); pg.wait_for_timeout(50)
         if w == 1366:
             pg.click('[data-a="startquiz"]'); pg.wait_for_timeout(50)
             for _ in range(40):
